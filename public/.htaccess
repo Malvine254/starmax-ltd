@@ -5,12 +5,6 @@
 
     RewriteEngine On
 
-    # GoDaddy Server Optimization
-    # Set permissions for directories and files
-    <Directory>
-        Allow from all
-    </Directory>
-
     # Disable directory listing
     <IfModule mod_dir.c>
         DirectoryIndex index.php
@@ -19,17 +13,13 @@
     # Proper MIME types
     AddType application/x-httpd-php .php
 
-    # Protect sensitive files
-    RewriteRule "(^#.*#|\.(?:htaccess|htpasswd|ini|log|sh|sql|sw[op]|~)$|composer\.(json|lock)$)" - [F]
+    # Protect sensitive files (less restrictive for shared hosting)
+    RewriteRule \.(htaccess|htpasswd|ini|log|sh|sql|sw[op]|~)$ - [F,L]
 
     # Allow access to public files and folders
     RewriteCond %{REQUEST_FILENAME} -f [OR]
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
-
-    # Rebuild tool passthrough (Node.js on 127.0.0.1:9090)
-    # Requires mod_proxy and mod_proxy_http.
-    RewriteRule ^rebuild/?(.*)$ http://127.0.0.1:9090/$1 [P,L,QSA,NC]
 
     # Handle Authorization Header (Required for API)
     RewriteCond %{HTTP:Authorization} .
