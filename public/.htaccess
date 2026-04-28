@@ -5,15 +5,13 @@
 
     RewriteEngine On
 
-    # Disable directory listing
+    # GoDaddy specific - ensure proper PHP handling
+    AddHandler application/x-httpd-php .php
     <IfModule mod_dir.c>
         DirectoryIndex index.php
     </IfModule>
 
-    # Proper MIME types
-    AddType application/x-httpd-php .php
-
-    # Protect sensitive files (less restrictive for shared hosting)
+    # Basic security - protect sensitive files
     RewriteRule \.(htaccess|htpasswd|ini|log|sh|sql|sw[op]|~)$ - [F,L]
 
     # Allow access to public files and folders
@@ -21,7 +19,7 @@
     RewriteCond %{REQUEST_FILENAME} -d
     RewriteRule ^ - [L]
 
-    # Handle Authorization Header (Required for API)
+    # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
@@ -29,15 +27,14 @@
     RewriteCond %{HTTP:x-xsrf-token} .
     RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
 
-    # Remove trailing slashes if not a directory
+    # Remove trailing slashes
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Redirect all non-existing files/folders to index.php (Laravel Front Controller)
+    # Laravel Front Controller
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} !^/index\.php
     RewriteRule ^ index.php [L]
 
 </IfModule>
