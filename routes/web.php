@@ -8,13 +8,37 @@ use App\Http\Controllers\Admin\InvoiceAdminController;
 use App\Http\Controllers\Admin\MaintenanceAdminController;
 use App\Http\Controllers\Admin\DeploymentToolsController;
 use App\Http\Controllers\Admin\ContactMessageController;
+use App\Http\Controllers\Admin\EventAdminController;
 use App\Http\Controllers\SiteController;
+use App\Mail\GraceContactNotification;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+
+// Grace Sellah portfolio
+Route::get('/grace-sellah', function () {
+    return view('grace-sellah');
+});
+
+Route::post('/grace-sellah/contact', function (Request $request) {
+    $validated = $request->validate([
+        'name'    => 'required|string|max:255',
+        'email'   => 'required|email|max:255',
+        'service' => 'nullable|string|max:255',
+        'message' => 'required|string|max:5000',
+    ]);
+
+    Mail::to('atemograce942@gmail.com', 'Grace Sellah Atemo')
+        ->send(new GraceContactNotification($validated));
+
+    return response()->json(['success' => true]);
+});
 
 // Public site routes
 Route::get('/', [SiteController::class, 'home']);
 Route::get('/about', [SiteController::class, 'about']);
 Route::get('/services', [SiteController::class, 'services']);
+Route::get('/services/{service}', [SiteController::class, 'serviceDetail'])->name('services.show');
 Route::get('/products', [SiteController::class, 'products']);
 Route::get('/portfolio', [SiteController::class, 'portfolio']);
 Route::get('/events', [SiteController::class, 'events']);
@@ -50,5 +74,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
 		Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
 		Route::get('/deployment-tools', [DeploymentToolsController::class, 'index'])->name('deployment-tools.index');
 		Route::post('/deployment-tools', [DeploymentToolsController::class, 'run'])->name('deployment-tools.run');
+		Route::resource('/events', EventAdminController::class)->parameters(['events' => 'event'])->names([
+			'index'   => 'events.index',
+			'create'  => 'events.create',
+			'store'   => 'events.store',
+			'edit'    => 'events.edit',
+			'update'  => 'events.update',
+			'destroy' => 'events.destroy',
+		]);
 	});
 });

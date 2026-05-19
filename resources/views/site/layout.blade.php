@@ -155,9 +155,9 @@
 
         /* ── LAYOUT ──────────────────────────────────── */
         .container { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); margin: 0 auto; }
-        .section { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); margin: 0 auto; padding: 80px 0; }
-        .section-sm { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); margin: 0 auto; padding: 56px 0; }
-        .section-header { text-align: center; max-width: 600px; margin: 0 auto 56px; }
+        .section { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); margin: 0 auto; padding: 56px 0; }
+        .section-sm { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); margin: 0 auto; padding: 40px 0; }
+        .section-header { text-align: center; max-width: 600px; margin: 0 auto 36px; }
         .section-header.left { text-align: left; margin-left: 0; }
 
         /* ── TYPOGRAPHY ──────────────────────────────── */
@@ -236,7 +236,7 @@
         body > .grid {
             width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w));
             margin: 0 auto;
-            padding: 80px 0;
+            padding: 56px 0;
         }
 
         /* ── HERO CAROUSEL ──────────────────────────── */
@@ -1083,7 +1083,7 @@
         @media (max-width: 640px) { .accordion-body-inner { grid-template-columns: 1fr; } }
 
         /* ── CTA BANNER ──────────────────────────────── */
-        .cta-banner { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); margin: 0 auto 80px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; padding: 72px 48px; text-align: center; position: relative; overflow: hidden; }
+        .cta-banner { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); margin: 0 auto 56px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 8px; padding: 56px 48px; text-align: center; position: relative; overflow: hidden; }
         .cta-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 80% at 50% 0%, rgba(17,24,39,0.05), transparent 70%); }
         .cta-banner h2 { color: #111827; position: relative; z-index: 1; }
         .cta-banner p { color: #475569; max-width: 480px; margin: 12px auto 32px; position: relative; z-index: 1; font-size: 16px; }
@@ -1144,7 +1144,7 @@
         .kpi-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 
         /* ── DIVIDER ──────────────────────────────────── */
-        .divider { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); height: 1px; background: var(--border); margin: 64px auto; }
+        .divider { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); height: 1px; background: var(--border); margin: 40px auto; }
 
         /* ── ANIMATIONS ──────────────────────────────── */
         .fade-up { opacity: 0; transform: translateY(24px); }
@@ -1200,8 +1200,8 @@
         @media (max-width: 768px) {
             .main-nav, .header-cta { display: none; }
             .menu-toggle { display: flex; }
-            .section { padding: 56px 0; }
-            .section-sm { padding: 44px 0; }
+            .section { padding: 40px 0; }
+            .section-sm { padding: 30px 0; }
             .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
             .cta-banner { margin-bottom: 56px; padding: 48px 28px; }
             .hero-arrow { display: none; }
@@ -1248,28 +1248,28 @@
                     Services <i data-lucide="chevron-down"></i>
                 </button>
                 <div class="nav-dropdown">
-                    <a href="/services#web" class="dropdown-item">
+                    <a href="/services/web-development" class="dropdown-item">
                         <div class="dropdown-icon purple"><i data-lucide="globe"></i></div>
                         <div class="dropdown-text"><strong>Web Development</strong><span>Laravel, Next.js, NestJS</span></div>
                     </a>
-                    <a href="/services#android" class="dropdown-item">
+                    <a href="/services/android-apps" class="dropdown-item">
                         <div class="dropdown-icon blue"><i data-lucide="smartphone"></i></div>
                         <div class="dropdown-text"><strong>Android Apps</strong><span>Kotlin & Jetpack Compose</span></div>
                     </a>
-                    <a href="/services#ai" class="dropdown-item">
+                    <a href="/services/ai-automation" class="dropdown-item">
                         <div class="dropdown-icon cyan"><i data-lucide="bot"></i></div>
                         <div class="dropdown-text"><strong>AI & Automation</strong><span>LLMs, RAG, Agents</span></div>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="/services#consulting" class="dropdown-item">
+                    <a href="/services/it-consulting" class="dropdown-item">
                         <div class="dropdown-icon amber"><i data-lucide="briefcase"></i></div>
                         <div class="dropdown-text"><strong>IT Consulting</strong><span>Strategy & architecture</span></div>
                     </a>
-                    <a href="/services#tenant" class="dropdown-item">
+                    <a href="/services/tenant-management" class="dropdown-item">
                         <div class="dropdown-icon emerald"><i data-lucide="building-2"></i></div>
                         <div class="dropdown-text"><strong>Tenant Management</strong><span>Property ops platform</span></div>
                     </a>
-                    <a href="/services#custom" class="dropdown-item">
+                    <a href="/services/custom-software" class="dropdown-item">
                         <div class="dropdown-icon rose"><i data-lucide="zap"></i></div>
                         <div class="dropdown-text"><strong>Custom Software</strong><span>CRM, ERP, integrations</span></div>
                     </a>
@@ -1321,11 +1321,11 @@
     <a href="/" class="mobile-nav-link {{ request()->is('/') ? 'active' : '' }}"><i data-lucide="home"></i> Home</a>
     <a href="/about" class="mobile-nav-link {{ request()->is('about') ? 'active' : '' }}"><i data-lucide="info"></i> About</a>
     <div class="mobile-section-label">Services</div>
-    <a href="/services#web" class="mobile-sub-link"><i data-lucide="globe"></i> Web Development</a>
-    <a href="/services#android" class="mobile-sub-link"><i data-lucide="smartphone"></i> Android Apps</a>
-    <a href="/services#ai" class="mobile-sub-link"><i data-lucide="bot"></i> AI & Automation</a>
-    <a href="/services#consulting" class="mobile-sub-link"><i data-lucide="briefcase"></i> IT Consulting</a>
-    <a href="/services#tenant" class="mobile-sub-link"><i data-lucide="building-2"></i> Tenant Management</a>
+    <a href="/services/web-development" class="mobile-sub-link"><i data-lucide="globe"></i> Web Development</a>
+    <a href="/services/android-apps" class="mobile-sub-link"><i data-lucide="smartphone"></i> Android Apps</a>
+    <a href="/services/ai-automation" class="mobile-sub-link"><i data-lucide="bot"></i> AI & Automation</a>
+    <a href="/services/it-consulting" class="mobile-sub-link"><i data-lucide="briefcase"></i> IT Consulting</a>
+    <a href="/services/tenant-management" class="mobile-sub-link"><i data-lucide="building-2"></i> Tenant Management</a>
     <a href="/services" class="mobile-nav-link"><i data-lucide="layers"></i> All Services</a>
     <div class="mobile-divider"></div>
     <a href="/products" class="mobile-nav-link {{ request()->is('products') ? 'active' : '' }}"><i data-lucide="package"></i> Products</a>
@@ -1363,11 +1363,11 @@
         <div>
             <p class="footer-heading">Solutions</p>
             <ul class="footer-links">
-                <li><a href="/services#web">Web Development</a></li>
-                <li><a href="/services#android">Android Apps</a></li>
-                <li><a href="/services#ai">AI Agents</a></li>
-                <li><a href="/services#tenant">Tenant Management</a></li>
-                <li><a href="/services#consulting">IT Consulting</a></li>
+                <li><a href="/services/web-development">Web Development</a></li>
+                <li><a href="/services/android-apps">Android Apps</a></li>
+                <li><a href="/services/ai-automation">AI Agents</a></li>
+                <li><a href="/services/tenant-management">Tenant Management</a></li>
+                <li><a href="/services/it-consulting">IT Consulting</a></li>
             </ul>
         </div>
         <div>

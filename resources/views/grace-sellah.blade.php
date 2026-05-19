@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grace Sellah Atemo – Virtual Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <meta name="csrf-token" content="{{ csrf_token() }}" />
+  <link rel="stylesheet" href="{{ asset('grace-assets/style.css') }}" />
+</head>
+<body>
+
+  <!-- ===== NAVIGATION ===== -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="logo">Grace<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#contact" class="nav-cta">Contact Me</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="home" class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Professional Virtual Assistant</p>
+      <h1 class="hero-title">
+        Save Time,<br />Stay Organized,<br />
+        <span>Grow Your Business.</span>
+      </h1>
+      <p class="hero-subtitle">
+        Supporting Entrepreneurs, Small Businesses &amp; Busy Professionals
+      </p>
+      <div class="hero-actions">
+        <a href="#services" class="btn btn-primary">Explore My Services</a>
+        <a href="#contact" class="btn btn-outline">Let's Work Together</a>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES STRIP ===== -->
+  <section class="services-strip">
+    <div class="container">
+      <div class="strip-grid">
+        <div class="strip-card">
+          <div class="strip-icon">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="28" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M6 18h36" stroke="currentColor" stroke-width="2.5"/><path d="M16 10V6M32 10V6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Admin Support</h3>
+          <p>Email, calendar, data entry &amp; document management</p>
+        </div>
+        <div class="strip-card">
+          <div class="strip-icon">
+            <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="8" stroke="currentColor" stroke-width="2.5"/><circle cx="10" cy="36" r="5" stroke="currentColor" stroke-width="2.5"/><circle cx="38" cy="36" r="5" stroke="currentColor" stroke-width="2.5"/><path d="M24 26v4M15 36h18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+          <h3>HR &amp; Office Support</h3>
+          <p>Recruitment, records, SOPs &amp; HR documentation</p>
+        </div>
+        <div class="strip-card">
+          <div class="strip-icon">
+            <svg viewBox="0 0 48 48" fill="none"><path d="M8 14a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v12a6 6 0 0 1-6 6H28l-8 8v-8h-6a6 6 0 0 1-6-6V14Z" stroke="currentColor" stroke-width="2.5"/></svg>
+          </div>
+          <h3>Client Support</h3>
+          <p>Inquiries, follow-ups, scheduling &amp; records</p>
+        </div>
+        <div class="strip-card">
+          <div class="strip-icon">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="28" rx="3" stroke="currentColor" stroke-width="2.5"/><path d="M16 24h4M28 24h4M16 30h8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><path d="M6 18h36" stroke="currentColor" stroke-width="2.5"/></svg>
+          </div>
+          <h3>Bookkeeping &amp; Invoicing</h3>
+          <p>Invoices, expense tracking &amp; transaction records</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="about">
+    <div class="container about-grid">
+      <div class="about-image-wrap">
+        <div class="about-image-frame">
+          <div class="about-image-placeholder">
+            <svg viewBox="0 0 120 160" fill="none"><rect width="120" height="160" rx="12" fill="#e8e0d8"/><circle cx="60" cy="55" r="28" fill="#c4b8a8"/><ellipse cx="60" cy="145" rx="48" ry="32" fill="#c4b8a8"/></svg>
+            <p class="placeholder-note">Add your photo here</p>
+          </div>
+        </div>
+        <div class="about-badge">
+          <span class="badge-number">3+</span>
+          <span class="badge-text">Years Experience</span>
+        </div>
+      </div>
+      <div class="about-content">
+        <p class="section-eyebrow">Meet Grace</p>
+        <h2 class="section-title">Grace Sellah Atemo</h2>
+        <div class="title-accent"></div>
+        <p class="about-body">
+          I am a professional Virtual Assistant with a background in
+          <strong>Administration and Human Resource Management</strong>. I support
+          businesses by managing daily operations, improving organization, and
+          ensuring smooth communication.
+        </p>
+        <p class="about-body">
+          I am committed to delivering <strong>reliable, efficient, and
+          detail-oriented support</strong> that allows businesses to focus on
+          growth and productivity.
+        </p>
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <div class="highlight-icon">✓</div>
+            <span>Admin &amp; HR Background</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-icon">✓</div>
+            <span>Detail-Oriented &amp; Reliable</span>
+          </div>
+          <div class="highlight-item">
+            <div class="highlight-icon">✓</div>
+            <span>Remote-Ready Professional</span>
+          </div>
+        </div>
+        <a href="#contact" class="btn btn-primary">Work With Me</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICES ===== -->
+  <section id="services" class="services">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">What I Offer</p>
+        <h2 class="section-title">My Services</h2>
+        <div class="title-accent centered"></div>
+        <p class="section-subtitle">Comprehensive virtual support tailored to your business needs</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-card-top" style="background: linear-gradient(135deg,#2d4a3e,#4a7c5f)">
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="28" rx="3" stroke="white" stroke-width="2.5"/><path d="M6 18h36M14 26h10M14 32h6" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </div>
+            <h3>Administrative Support</h3>
+          </div>
+          <ul class="service-list">
+            <li>Email management (organizing &amp; responding)</li>
+            <li>Calendar &amp; meeting scheduling</li>
+            <li>Data entry and record keeping</li>
+            <li>File organization (Google Drive &amp; Dropbox)</li>
+            <li>Document preparation (reports, letters, forms)</li>
+            <li>Travel coordination and planning</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <div class="service-card-top" style="background: linear-gradient(135deg,#3a3060,#6c5ce7)">
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="16" r="7" stroke="white" stroke-width="2.5"/><circle cx="10" cy="34" r="5" stroke="white" stroke-width="2.5"/><circle cx="38" cy="34" r="5" stroke="white" stroke-width="2.5"/><path d="M24 23v5M15 34h18" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+            </div>
+            <h3>HR &amp; Office Support</h3>
+          </div>
+          <ul class="service-list">
+            <li>Employee records management</li>
+            <li>Recruitment coordination &amp; interview scheduling</li>
+            <li>Preparation of HR documents (contracts, JDs)</li>
+            <li>Development of SOPs and HR manuals</li>
+            <li>Training support &amp; materials preparation</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <div class="service-card-top" style="background: linear-gradient(135deg,#7a2828,#c0392b)">
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" fill="none"><path d="M8 14a6 6 0 0 1 6-6h20a6 6 0 0 1 6 6v12a6 6 0 0 1-6 6H28l-8 8v-8h-6a6 6 0 0 1-6-6V14Z" stroke="white" stroke-width="2.5"/></svg>
+            </div>
+            <h3>Customer &amp; Client Support</h3>
+          </div>
+          <ul class="service-list">
+            <li>Responding to customer inquiries (email &amp; chat)</li>
+            <li>Managing client communication &amp; follow-ups</li>
+            <li>Handling customer requests</li>
+            <li>Scheduling appointments and meetings</li>
+            <li>Maintaining client records</li>
+            <li>Providing professional &amp; timely support</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <div class="service-card-top" style="background: linear-gradient(135deg,#1a4a6e,#2980b9)">
+            <div class="service-icon">
+              <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="32" height="32" rx="3" stroke="white" stroke-width="2.5"/><path d="M16 24h4M28 24h4M16 30h16" stroke="white" stroke-width="2.5" stroke-linecap="round"/><path d="M20 16l4 4 4-4" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3>Bookkeeping &amp; Invoicing</h3>
+          </div>
+          <ul class="service-list">
+            <li>Creating and sending invoices</li>
+            <li>Tracking expenses</li>
+            <li>Recording transactions</li>
+            <li>Using Zoho Books &amp; QuickBooks</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PORTFOLIO ===== -->
+  <section id="portfolio" class="portfolio">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">My Work</p>
+        <h2 class="section-title">Work Samples &amp; Projects</h2>
+        <div class="title-accent centered"></div>
+        <p class="section-subtitle">A selection of real deliverables from my virtual assistant practice</p>
+      </div>
+      <div class="portfolio-grid">
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#e8f4e8">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="32" rx="3" stroke="#2d4a3e" stroke-width="2.5"/><path d="M6 16h36M14 22h10M14 28h6M14 34h14" stroke="#2d4a3e" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h4>Calendar Management</h4>
+          <p>Organised multi-user calendars using Google Calendar with colour-coded events and automated reminders.</p>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#ede8f4">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="4" y="10" width="40" height="28" rx="3" stroke="#6c5ce7" stroke-width="2.5"/><path d="M4 18l20 12 20-12" stroke="#6c5ce7" stroke-width="2.5" stroke-linecap="round"/></svg>
+          </div>
+          <h4>Email Management</h4>
+          <p>Structured inbox with priority labels, filters and professional templates for faster response times.</p>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#fde8e8">
+            <svg viewBox="0 0 48 48" fill="none"><path d="M24 6l4 8 9 1.3-6.5 6.3 1.5 9L24 26l-8 4.6 1.5-9L11 15.3 20 14l4-8z" stroke="#c0392b" stroke-width="2.5" stroke-linejoin="round"/></svg>
+          </div>
+          <h4>Travel Planning</h4>
+          <p>Full itineraries including accommodation, flight schedules, and activity bookings for executive travel.</p>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#e8f0fe">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="28" rx="3" stroke="#2980b9" stroke-width="2.5"/><path d="M14 32V22l6 6 6-8 6 4" stroke="#2980b9" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h4>Expense Tracking</h4>
+          <p>Monthly expense reports with charts and budget summaries using Google Sheets and Zoho Books.</p>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#fff3e0">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="8" width="36" height="32" rx="3" stroke="#e67e22" stroke-width="2.5"/><path d="M14 20h20M14 26h14M14 32h8" stroke="#e67e22" stroke-width="2" stroke-linecap="round"/><circle cx="36" cy="30" r="7" fill="#fff3e0" stroke="#e67e22" stroke-width="2.5"/><path d="M36 27v4l2 2" stroke="#e67e22" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h4>Invoicing &amp; Recording</h4>
+          <p>Professional invoices and transaction logs with reconciliation reports for small businesses.</p>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#e8f8f5">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="10" y="6" width="28" height="36" rx="3" stroke="#27ae60" stroke-width="2.5"/><path d="M16 16h16M16 22h16M16 28h10" stroke="#27ae60" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h4>SOPs Preparation</h4>
+          <p>Step-by-step standard operating procedures for operational workflows and staff onboarding.</p>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#fdf2f8">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="10" y="6" width="28" height="36" rx="3" stroke="#8e44ad" stroke-width="2.5"/><path d="M16 16h16M16 22h12M16 28h8M16 34h10" stroke="#8e44ad" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h4>Job Description Preparation</h4>
+          <p>Structured JDs covering roles, responsibilities, qualifications and reporting lines.</p>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#fef9e7">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="36" rx="3" stroke="#f39c12" stroke-width="2.5"/><path d="M14 16h20M14 22h16M14 28h20M14 34h12" stroke="#f39c12" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h4>HR Manual Development</h4>
+          <p>Comprehensive HR manuals aligned with Tanzania Employment and Labour Laws.</p>
+        </div>
+        <div class="portfolio-item">
+          <div class="portfolio-icon" style="background:#eaf4fb">
+            <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="10" width="36" height="28" rx="3" stroke="#2471a3" stroke-width="2.5"/><circle cx="18" cy="24" r="5" stroke="#2471a3" stroke-width="2"/><path d="M30 20h8M30 24h6M30 28h8" stroke="#2471a3" stroke-width="2" stroke-linecap="round"/></svg>
+          </div>
+          <h4>Meeting Coordination &amp; Agenda</h4>
+          <p>End-to-end meeting setup including agenda creation, minutes documentation and follow-ups.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TOOLS ===== -->
+  <section id="tools" class="tools">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Tech Stack</p>
+        <h2 class="section-title">Tools &amp; Software</h2>
+        <div class="title-accent centered"></div>
+        <p class="section-subtitle">Industry-standard tools I use to deliver excellent results</p>
+      </div>
+      <div class="tools-grid">
+        <div class="tool-pill"><span class="tool-dot" style="background:#EA4335"></span>Gmail</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#4285F4"></span>Google Calendar</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#FBBC04"></span>Google Drive</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#006BFF"></span>Calendly</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#00C4CC"></span>Canva</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#D24726"></span>PowerPoint</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#0F9D58"></span>Google Sheets</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#4285F4"></span>Google Docs</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#00897B"></span>Google Meet</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#2D8CFF"></span>Zoom</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#E4252B"></span>Zoho Books</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#2CA01C"></span>QuickBooks</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#0061FF"></span>Dropbox</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#25D366"></span>WhatsApp Business</div>
+        <div class="tool-pill"><span class="tool-dot" style="background:#4A154B"></span>Slack</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="contact">
+    <div class="container contact-grid">
+      <div class="contact-info">
+        <p class="section-eyebrow light">Get In Touch</p>
+        <h2 class="section-title light">Let's Work Together</h2>
+        <div class="title-accent"></div>
+        <p class="contact-body">
+          I'm available for Virtual Assistant opportunities and ready to
+          support your business with efficient, reliable, and organized
+          services. Let's work together to help your business grow.
+        </p>
+        <div class="contact-details">
+          <a href="mailto:atemograce942@gmail.com" class="contact-item">
+            <div class="contact-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/><path d="M2 8l10 7 10-7" stroke="currentColor" stroke-width="2"/></svg>
+            </div>
+            <div>
+              <span class="contact-label">Email</span>
+              <span class="contact-value">atemograce942@gmail.com</span>
+            </div>
+          </a>
+          <a href="tel:0713777006" class="contact-item">
+            <div class="contact-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <span class="contact-label">Phone</span>
+              <span class="contact-value">0713 777 006</span>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/grace-atemo" target="_blank" rel="noopener" class="contact-item">
+            <div class="contact-icon-wrap">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 10v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            </div>
+            <div>
+              <span class="contact-label">LinkedIn</span>
+              <span class="contact-value">linkedin.com/in/grace-atemo</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-form-wrap">
+        <form class="contact-form" id="graceContactForm">
+          <h3>Send Me a Message</h3>
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" placeholder="Your full name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label for="service">Service Interested In</label>
+            <select id="service">
+              <option value="">Select a service...</option>
+              <option>Administrative Support</option>
+              <option>HR &amp; Office Support</option>
+              <option>Customer &amp; Client Support</option>
+              <option>Bookkeeping &amp; Invoicing</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <textarea id="message" rows="4" placeholder="Tell me about your project or needs..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary full-width">Send Message</button>
+          <p class="form-note" id="form-msg"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <a href="#home" class="logo footer-logo">Grace<span>.</span></a>
+      <p class="footer-copy">&copy; 2025 Grace Sellah Atemo. All rights reserved.</p>
+      <div class="footer-social">
+        <a href="mailto:atemograce942@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/><path d="M2 8l10 7 10-7" stroke="currentColor" stroke-width="2"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/grace-atemo" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 10v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <a href="#home" class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+
+  <script src="{{ asset('grace-assets/script.js') }}"></script>
+</body>
+</html>
