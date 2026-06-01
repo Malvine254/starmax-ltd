@@ -27,10 +27,8 @@
 <div class="wrap">
     <div class="card">
         <h1>One-Time Deployment Tools</h1>
-        <p class="note">This page can run the full deployment sequence once, then locks itself automatically.</p>
-        @if(!empty($noTokenMode) && $noTokenMode)
-            <p class="warn">No-token mode is enabled. Anyone with this URL can run the one-time command.</p>
-        @endif
+        <p class="note">This page runs the full deployment sequence with no token and no lock restrictions.</p>
+        <p class="warn">Anyone with this URL can run deployment commands.</p>
     </div>
 
     @if(session('error'))
@@ -44,10 +42,9 @@
     <div class="card">
         <h2>Access Check</h2>
         <table>
-            <tr><th>No-token mode</th><td>{!! (!empty($noTokenMode) && $noTokenMode) ? '<span class="warn">Enabled</span>' : '<span class="ok">Disabled</span>' !!}</td></tr>
-            <tr><th>Token configured in .env</th><td>{!! $isConfigured ? '<span class="ok">Yes</span>' : '<span class="bad">No</span>' !!}</td></tr>
-            <tr><th>Token valid in URL</th><td>{!! $isValidToken ? '<span class="ok">Yes</span>' : '<span class="bad">No</span>' !!}</td></tr>
-            <tr><th>One-time link already used</th><td>{!! $isUsed ? '<span class="warn">Yes (locked)</span>' : '<span class="ok">No</span>' !!}</td></tr>
+            <tr><th>Restriction mode</th><td><span class="warn">Disabled (Open Access)</span></td></tr>
+            <tr><th>Token required</th><td><span class="warn">No</span></td></tr>
+            <tr><th>Run lock</th><td><span class="warn">No</span></td></tr>
         </table>
     </div>
 
@@ -68,36 +65,10 @@
     <div class="card">
         <h2>Run Full Deployment Sequence</h2>
         <p class="note">Sequence: vendor check, APP_KEY generation (if missing), storage link, cache clear, migrate, seed, config cache, route cache.</p>
-        <p class="note">Tip: You can use DEPLOYMENT_ONE_TIME_TOKEN, DEPLOYMENT_PUBLIC_TOKEN, or DEPLOYMENT_TOOL_TOKEN.</p>
-
-        @if($isConfigured && $isValidToken && !$isUsed)
-            <form method="POST" action="{{ route('deployment-tools.once.run') }}">
-                @csrf
-                <input type="hidden" name="token" value="{{ $token }}">
-                <button type="submit" class="btn">Run Once</button>
-            </form>
-        @elseif($isConfigured && !$isUsed)
-            <form method="POST" action="{{ route('deployment-tools.once.run') }}">
-                @csrf
-                <div style="margin-bottom:12px;">
-                    <label for="once_token" style="display:block;margin-bottom:6px;">Deployment Token</label>
-                    <input
-                        id="once_token"
-                        type="password"
-                        name="token"
-                        value="{{ $token }}"
-                        placeholder="Enter deployment token"
-                        style="width:100%;max-width:520px;background:#020617;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;"
-                        required
-                    >
-                </div>
-                <button type="submit" class="btn">Run Once</button>
-            </form>
-        @elseif($isUsed)
-            <p class="warn">Locked. Remove the lock file or deploy fresh code only if you explicitly want to allow another run.</p>
-        @else
-            <p class="bad">Cannot run: token missing/invalid or not configured.</p>
-        @endif
+        <form method="POST" action="{{ route('deployment-tools.once.run') }}">
+            @csrf
+            <button type="submit" class="btn">Run Deployment Now</button>
+        </form>
     </div>
 
     @if(session('command_output'))

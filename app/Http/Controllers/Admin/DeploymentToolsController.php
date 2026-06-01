@@ -88,47 +88,23 @@ class DeploymentToolsController extends Controller
 
     public function once(Request $request): View
     {
-        $token = (string) $request->query('token', '');
-        $noTokenMode = $this->publicNoTokenEnabled();
-
         return view('deployment-tools-once', [
-            'isConfigured' => $noTokenMode ? true : $this->oneTimeTokenConfigured(),
-            'isValidToken' => $noTokenMode ? true : $this->oneTimeTokenValid($token),
-            'noTokenMode' => $noTokenMode,
-            'isUsed' => $this->oneTimeLinkUsed(),
-            'token' => $token,
+            'isConfigured' => true,
+            'isValidToken' => true,
+            'noTokenMode' => true,
+            'isUsed' => false,
+            'token' => '',
             'status' => $this->statusSnapshot(),
         ]);
     }
 
     public function runOnce(Request $request): RedirectResponse
     {
-        $noTokenMode = $this->publicNoTokenEnabled();
-
-        $request->validate([
-            'token' => $noTokenMode ? 'nullable|string' : 'required|string',
-        ]);
-
-        $token = (string) $request->input('token', '');
-
-        if (!$noTokenMode && !$this->oneTimeTokenConfigured()) {
-            return back()->with('error', 'DEPLOYMENT_ONE_TIME_TOKEN is not configured in .env.');
-        }
-
-        if (!$noTokenMode && !$this->oneTimeTokenValid($token)) {
-            return back()->with('error', 'Invalid one-time token.');
-        }
-
-        if ($this->oneTimeLinkUsed()) {
-            return back()->with('error', 'This one-time deployment link has already been used.');
-        }
-
         try {
             $output = $this->runFullDeploymentSequence();
-            $this->markOneTimeLinkAsUsed();
 
             return back()
-                ->with('success', 'Full deployment sequence completed. This one-time link is now locked.')
+                ->with('success', 'Full deployment sequence completed successfully.')
                 ->with('command_output', $output);
         } catch (\Throwable $e) {
             return back()->with('error', 'Deployment sequence failed: ' . $e->getMessage());
