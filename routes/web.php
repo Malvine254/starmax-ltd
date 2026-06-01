@@ -19,7 +19,6 @@ Route::get('/grace-sellah', [GraceSellahController::class, 'show']);
 Route::post('/grace-sellah/contact', [GraceSellahController::class, 'submitContact']);
 Route::get('/admin/login', [AuthAdminController::class, 'showLogin'])->name('login');
 
-Route::redirect('/grace-sellah/admin', '/grace-sellah/admin/login');
 Route::redirect('/grace-sellah/admin/login', '/admin/login');
 
 Route::prefix('grace-sellah/admin')->name('grace-sellah.admin.')->group(function () {
