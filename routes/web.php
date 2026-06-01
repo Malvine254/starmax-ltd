@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/grace-sellah', [GraceSellahController::class, 'show']);
 Route::post('/grace-sellah/contact', [GraceSellahController::class, 'submitContact']);
 Route::get('/admin/login', [AuthAdminController::class, 'showLogin'])->name('login');
+Route::redirect('/admin/grace-sellah/admin', '/grace-sellah/admin');
+Route::redirect('/admin/grace-sellah/admin/login', '/admin/login');
 
 Route::redirect('/grace-sellah/admin/login', '/admin/login');
 
