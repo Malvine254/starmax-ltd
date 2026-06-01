@@ -76,14 +76,18 @@
     <div class="card">
         <h2>Quick Maintenance Actions</h2>
         <p class="note">Use these to recreate routes, recreate views, clear caches, and run specific fixes individually.</p>
-        <form method="POST" action="{{ route('deployment-tools.once.action') }}">
-            @csrf
-            <div class="actions">
-                @foreach(($onceActions ?? []) as $action => $label)
-                    <button type="submit" name="action" value="{{ $action }}" class="btn">{{ $label }}</button>
-                @endforeach
-            </div>
-        </form>
+        @if(\Illuminate\Support\Facades\Route::has('deployment-tools.once.action'))
+            <form method="POST" action="{{ route('deployment-tools.once.action') }}">
+                @csrf
+                <div class="actions">
+                    @foreach(($onceActions ?? []) as $action => $label)
+                        <button type="submit" name="action" value="{{ $action }}" class="btn">{{ $label }}</button>
+                    @endforeach
+                </div>
+            </form>
+        @else
+            <p class="warn">Quick actions are not available in this deployment yet. Run full deployment below, then clear route cache.</p>
+        @endif
     </div>
 
     @if(session('command_output'))
