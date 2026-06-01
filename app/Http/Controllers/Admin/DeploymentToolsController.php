@@ -101,11 +101,27 @@ class DeploymentToolsController extends Controller
 
     public function runOnce(Request $request): RedirectResponse
     {
+        $request->validate([
+            'action' => 'nullable|string',
+        ]);
+
+        $action = (string) $request->input('action', '');
+
         try {
-            $output = $this->runFullDeploymentSequence();
+            if ($action !== '') {
+                if (!array_key_exists($action, $this->onceAvailableActions())) {
+                    return back()->with('error', 'Unsupported action requested.');
+                }
+
+                $output = $this->executeAction($action);
+                $message = $this->onceAvailableActions()[$action] . ' completed successfully.';
+            } else {
+                $output = $this->runFullDeploymentSequence();
+                $message = 'Full deployment sequence completed successfully.';
+            }
 
             return back()
-                ->with('success', 'Full deployment sequence completed successfully.')
+                ->with('success', $message)
                 ->with('command_output', $output);
         } catch (\Throwable $e) {
             return back()->with('error', 'Deployment sequence failed: ' . $e->getMessage());
