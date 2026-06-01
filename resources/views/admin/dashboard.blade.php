@@ -58,5 +58,9 @@
         <div style="font-weight:600;margin-bottom:4px;">Contact Messages</div>
         <div style="font-size:13px;color:#94a3b8;">Review website enquiries</div>
     </a>
+    <a href="{{ route('grace-sellah.admin.home') }}" class="card" style="text-decoration:none;color:inherit;display:block;">
+        <div style="font-weight:600;margin-bottom:4px;">Grace Sellah Page</div>
+        <div style="font-size:13px;color:#94a3b8;">Update the public portfolio content</div>
+    </a>
 </div>
 @endsection

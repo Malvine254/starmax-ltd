@@ -12,14 +12,16 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         $adminRole = Role::where('name', 'ADMIN')->first();
+        $adminEmail = env('ADMIN_LOGIN_EMAIL', 'admin@starmaxltd.com');
+        $adminPassword = env('ADMIN_LOGIN_PASSWORD', 'ChangeMe123!');
 
         User::updateOrCreate(
-            ['email' => 'admin@starmaxltd.com'],
+            ['email' => $adminEmail],
             [
                 'name' => 'System Admin',
                 'first_name' => 'System',
                 'last_name' => 'Admin',
-                'password' => Hash::make('ChangeMe123!'),
+                'password' => Hash::make($adminPassword),
                 'role_id' => $adminRole?->id,
                 'is_active' => true,
             ]

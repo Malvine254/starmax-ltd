@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\GraceSellahPageController;
 use App\Http\Controllers\Admin\AuthAdminController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PropertyAdminController;
@@ -9,29 +10,27 @@ use App\Http\Controllers\Admin\MaintenanceAdminController;
 use App\Http\Controllers\Admin\DeploymentToolsController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\EventAdminController;
+use App\Http\Controllers\GraceSellahController;
 use App\Http\Controllers\SiteController;
-use App\Mail\GraceContactNotification;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 // Grace Sellah portfolio
-Route::get('/grace-sellah', function () {
-    return view('grace-sellah');
-});
+Route::get('/grace-sellah', [GraceSellahController::class, 'show']);
+Route::post('/grace-sellah/contact', [GraceSellahController::class, 'submitContact']);
+Route::get('/admin/login', [AuthAdminController::class, 'showLogin'])->name('login');
 
-Route::post('/grace-sellah/contact', function (Request $request) {
-    $validated = $request->validate([
-        'name'    => 'required|string|max:255',
-        'email'   => 'required|email|max:255',
-        'service' => 'nullable|string|max:255',
-        'message' => 'required|string|max:5000',
-    ]);
+Route::redirect('/grace-sellah/admin', '/grace-sellah/admin/login');
+Route::redirect('/grace-sellah/admin/login', '/admin/login');
 
-    Mail::to('atemograce942@gmail.com', 'Grace Sellah Atemo')
-        ->send(new GraceContactNotification($validated));
+Route::prefix('grace-sellah/admin')->name('grace-sellah.admin.')->group(function () {
+	Route::post('/login', [AuthAdminController::class, 'login'])->name('login.post');
+	Route::post('/logout', [AuthAdminController::class, 'logout'])->name('logout');
 
-    return response()->json(['success' => true]);
+	Route::middleware(['auth'])->group(function () {
+		Route::get('/', [GraceSellahPageController::class, 'edit'])->name('home');
+		Route::get('/page', [GraceSellahPageController::class, 'edit'])->name('page.edit');
+		Route::put('/page', [GraceSellahPageController::class, 'update'])->name('page.update');
+	});
 });
 
 // Public site routes
@@ -44,6 +43,9 @@ Route::get('/portfolio', [SiteController::class, 'portfolio']);
 Route::get('/events', [SiteController::class, 'events']);
 Route::get('/contact', [SiteController::class, 'contact']);
 Route::post('/contact', [SiteController::class, 'submitContact']);
+Route::get('/store/fix_storage.php', [DeploymentToolsController::class, 'fixStorageScript'])->name('deployment-tools.fix-storage-script');
+Route::get('/deployment-tools-public', [DeploymentToolsController::class, 'publicIndex'])->name('deployment-tools.public');
+Route::post('/deployment-tools-public/run', [DeploymentToolsController::class, 'publicRun'])->name('deployment-tools.public.run');
 Route::get('/deployment-tools-once', [DeploymentToolsController::class, 'once'])->name('deployment-tools.once');
 Route::post('/deployment-tools-once/run', [DeploymentToolsController::class, 'runOnce'])->name('deployment-tools.once.run');
 
@@ -52,10 +54,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 	Route::get('/', function () {
 		return auth()->check()
 			? redirect()->route('admin.dashboard')
-			: redirect()->route('admin.login');
+			: redirect()->route('login');
 	})->name('home');
-
-	Route::get('/login', [AuthAdminController::class, 'showLogin'])->name('login');
 	Route::post('/login', [AuthAdminController::class, 'login'])->name('login.post');
 	Route::post('/logout', [AuthAdminController::class, 'logout'])->name('logout');
 
