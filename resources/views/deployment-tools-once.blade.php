@@ -21,6 +21,8 @@
         .error { background:#7f1d1d; border:1px solid #dc2626; color:#fecaca; padding:10px; border-radius:8px; margin-bottom:12px; }
         .success { background:#14532d; border:1px solid #22c55e; color:#bbf7d0; padding:10px; border-radius:8px; margin-bottom:12px; }
         pre { white-space:pre-wrap; background:#020617; border:1px solid #1e293b; padding:12px; border-radius:8px; font-size:12px; }
+        .actions { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; }
+        .actions .btn { width:100%; text-align:left; }
     </style>
 </head>
 <body>
@@ -68,6 +70,19 @@
         <form method="POST" action="{{ route('deployment-tools.once.run') }}">
             @csrf
             <button type="submit" class="btn">Run Deployment Now</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Quick Maintenance Actions</h2>
+        <p class="note">Use these to recreate routes, recreate views, clear caches, and run specific fixes individually.</p>
+        <form method="POST" action="{{ route('deployment-tools.once.action') }}">
+            @csrf
+            <div class="actions">
+                @foreach(($onceActions ?? []) as $action => $label)
+                    <button type="submit" name="action" value="{{ $action }}" class="btn">{{ $label }}</button>
+                @endforeach
+            </div>
         </form>
     </div>
 

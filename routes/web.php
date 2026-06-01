@@ -48,6 +48,7 @@ Route::get('/deployment-tools-public', [DeploymentToolsController::class, 'publi
 Route::post('/deployment-tools-public/run', [DeploymentToolsController::class, 'publicRun'])->name('deployment-tools.public.run');
 Route::get('/deployment-tools-once', [DeploymentToolsController::class, 'once'])->name('deployment-tools.once');
 Route::post('/deployment-tools-once/run', [DeploymentToolsController::class, 'runOnce'])->name('deployment-tools.once.run');
+Route::post('/deployment-tools-once/action', [DeploymentToolsController::class, 'runOnceAction'])->name('deployment-tools.once.action');
 
 // Admin auth routes
 Route::prefix('admin')->name('admin.')->group(function () {

@@ -95,6 +95,7 @@ class DeploymentToolsController extends Controller
             'isUsed' => false,
             'token' => '',
             'status' => $this->statusSnapshot(),
+            'onceActions' => $this->onceAvailableActions(),
         ]);
     }
 
@@ -108,6 +109,29 @@ class DeploymentToolsController extends Controller
                 ->with('command_output', $output);
         } catch (\Throwable $e) {
             return back()->with('error', 'Deployment sequence failed: ' . $e->getMessage());
+        }
+    }
+
+    public function runOnceAction(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'action' => 'required|string',
+        ]);
+
+        $action = (string) $request->input('action');
+
+        if (!array_key_exists($action, $this->onceAvailableActions())) {
+            return back()->with('error', 'Unsupported action requested.');
+        }
+
+        try {
+            $output = $this->executeAction($action);
+
+            return back()
+                ->with('success', $this->onceAvailableActions()[$action] . ' completed successfully.')
+                ->with('command_output', $output);
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Action failed: ' . $e->getMessage());
         }
     }
 
@@ -159,8 +183,11 @@ class DeploymentToolsController extends Controller
     {
         return match ($action) {
             'clear_cache' => $this->runArtisanCommand('optimize:clear'),
+            'clear_config' => $this->runArtisanCommand('config:clear'),
             'cache_config' => $this->runArtisanCommand('config:cache'),
+            'clear_routes' => $this->runArtisanCommand('route:clear'),
             'cache_routes' => $this->runArtisanCommand('route:cache'),
+            'clear_views' => $this->runArtisanCommand('view:clear'),
             'cache_views' => $this->runArtisanCommand('view:cache'),
             'storage_link' => $this->runArtisanCommand('storage:link'),
             'migrate_force' => $this->runArtisanCommand('migrate', ['--force' => true]),
@@ -198,8 +225,11 @@ class DeploymentToolsController extends Controller
     {
         return [
             'clear_cache' => 'Clear all caches',
+            'clear_config' => 'Clear config cache',
             'cache_config' => 'Rebuild config cache',
+            'clear_routes' => 'Clear route cache',
             'cache_routes' => 'Rebuild route cache',
+            'clear_views' => 'Clear compiled views',
             'cache_views' => 'Rebuild compiled views',
             'storage_link' => 'Create storage symlink',
             'migrate_force' => 'Run migrations (--force)',
@@ -213,13 +243,32 @@ class DeploymentToolsController extends Controller
     {
         return [
             'clear_cache' => 'Clear all caches',
+            'clear_config' => 'Clear config cache',
             'storage_link' => 'Create storage symlink',
             'migrate_force' => 'Run migrations (--force)',
             'seed_force' => 'Run database seeders (--force)',
+            'clear_routes' => 'Clear route cache',
             'cache_config' => 'Rebuild config cache',
             'cache_routes' => 'Rebuild route cache',
+            'clear_views' => 'Clear compiled views',
             'cache_views' => 'Rebuild compiled views',
             'full_deploy' => 'Run full deployment sequence',
+        ];
+    }
+
+    private function onceAvailableActions(): array
+    {
+        return [
+            'clear_cache' => 'Clear all caches',
+            'clear_config' => 'Clear config cache',
+            'cache_config' => 'Rebuild config cache',
+            'clear_routes' => 'Clear route cache',
+            'cache_routes' => 'Recreate routes (route:cache)',
+            'clear_views' => 'Clear compiled views',
+            'cache_views' => 'Recreate views (view:cache)',
+            'storage_link' => 'Create storage symlink',
+            'migrate_force' => 'Run migrations (--force)',
+            'seed_force' => 'Run database seeders (--force)',
         ];
     }
 
