@@ -89,7 +89,7 @@
       <div class="about-image-wrap">
         <div class="about-image-frame">
           @if(!empty($profileImageUrl))
-            <img src="{{ $profileImageUrl }}" alt="{{ $about['profile_image_alt'] ?? 'Profile image' }}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;" />
+            <img class="about-profile-image" src="{{ $profileImageUrl }}" alt="{{ $about['profile_image_alt'] ?? 'Profile image' }}" />
           @else
             <div class="about-image-placeholder">
               <svg viewBox="0 0 120 160" fill="none"><rect width="120" height="160" rx="12" fill="#e8e0d8"/><circle cx="60" cy="55" r="28" fill="#c4b8a8"/><ellipse cx="60" cy="145" rx="48" ry="32" fill="#c4b8a8"/></svg>

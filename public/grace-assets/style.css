@@ -325,6 +325,15 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   aspect-ratio: 4/5;
   background: var(--bg2);
 }
+.about-profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(240,236,228,.88));
+  padding: 16px;
+}
 .about-image-placeholder {
   width: 100%;
   height: 100%;
