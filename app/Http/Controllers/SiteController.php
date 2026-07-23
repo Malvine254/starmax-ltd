@@ -24,7 +24,30 @@ class SiteController extends Controller
 
     public function services()
     {
-        return view('site.services');
+        $services = collect($this->serviceData())
+            ->values()
+            ->map(function (array $service): array {
+                return [
+                    'slug' => $service['slug'],
+                    'title' => $service['title'],
+                    'tagline' => $service['tagline'],
+                    'description' => $service['description'],
+                    'icon' => $service['icon'],
+                    'color' => $service['color'],
+                    'category' => $service['category'],
+                    'badge' => $service['badge'] ?? null,
+                    'features' => collect($service['features'])->pluck('title')->take(3)->values()->all(),
+                    'tech' => collect($service['tech'])->take(4)->values()->all(),
+                ];
+            });
+
+        $serviceStats = [
+            'total' => $services->count(),
+            'categories' => $services->pluck('category')->unique()->count(),
+            'stacks' => $services->flatMap(fn(array $service) => $service['tech'])->unique()->count(),
+        ];
+
+        return view('site.services', compact('services', 'serviceStats'));
     }
 
     public function serviceDetail(string $service)
