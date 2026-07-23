@@ -494,7 +494,7 @@
                 <p>From invoice generation and maintenance requests to tenant communication and analytics, TenantPro helps teams run portfolios with less manual overhead.</p>
                 <div class="stack">
                     <a href="/products" class="btn btn-primary">Explore TenantPro <i data-lucide="arrow-up-right"></i></a>
-                    <a href="/events" class="btn btn-secondary">Book a Live Demo</a>
+                    <a href="https://app.starmaxltd.com" target="_blank" rel="noopener" class="btn btn-secondary">Request TenantPro Demo</a>
                 </div>
             </div>
         </div>
