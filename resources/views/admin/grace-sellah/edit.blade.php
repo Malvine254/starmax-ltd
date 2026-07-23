@@ -5,7 +5,9 @@
     $pageContent = $content ?? [];
     $meta = $pageContent['meta'] ?? [];
     $brand = $pageContent['brand'] ?? [];
+    $labels = $pageContent['labels'] ?? [];
     $hero = $pageContent['hero'] ?? [];
+    $heroActions = $hero['actions'] ?? [];
     $about = $pageContent['about'] ?? [];
     $contact = $pageContent['contact'] ?? [];
     $footer = $pageContent['footer'] ?? [];
@@ -62,6 +64,7 @@
 
     <div class="gs-tabs" role="tablist" aria-label="Grace Sellah page sections">
         <button type="button" class="gs-tab-btn active" data-tab="meta">Meta</button>
+        <button type="button" class="gs-tab-btn" data-tab="labels">Page Labels</button>
         <button type="button" class="gs-tab-btn" data-tab="hero">Hero</button>
         <button type="button" class="gs-tab-btn" data-tab="strip">Top Cards</button>
         <button type="button" class="gs-tab-btn" data-tab="about">About</button>
@@ -103,6 +106,46 @@
                 </div>
             </section>
 
+            <section class="gs-panel" data-panel="labels">
+                <div class="gs-section-title">Navigation and Section Copy</div>
+                <p class="gs-hint" style="margin-bottom:16px;">Every public heading and form label can be changed here.</p>
+                @php
+                    $labelFields = [
+                        'nav_home' => 'Navigation: Home',
+                        'nav_about' => 'Navigation: About',
+                        'nav_services' => 'Navigation: Services',
+                        'nav_portfolio' => 'Navigation: Work',
+                        'nav_tools' => 'Navigation: Tools',
+                        'nav_contact' => 'Navigation: Contact',
+                        'nav_cta' => 'Navigation CTA',
+                        'services_eyebrow' => 'Services Eyebrow',
+                        'services_title' => 'Services Heading',
+                        'services_subtitle' => 'Services Introduction',
+                        'portfolio_eyebrow' => 'Work Eyebrow',
+                        'portfolio_title' => 'Work Heading',
+                        'portfolio_subtitle' => 'Work Introduction',
+                        'tools_eyebrow' => 'Tools Eyebrow',
+                        'tools_title' => 'Tools Heading',
+                        'tools_subtitle' => 'Tools Introduction',
+                        'form_title' => 'Form Heading',
+                        'form_name_label' => 'Name Field Label',
+                        'form_email_label' => 'Email Field Label',
+                        'form_service_label' => 'Service Field Label',
+                        'form_message_label' => 'Message Field Label',
+                        'form_submit_label' => 'Submit Button Label',
+                    ];
+                @endphp
+                <div class="gs-grid-2">
+                    @foreach($labelFields as $key => $label)
+                        <div class="form-group">
+                            <label>{{ $label }}</label>
+                            <input type="text" name="labels[{{ $key }}]" value="{{ old('labels.'.$key, $labels[$key] ?? '') }}" required>
+                            @error('labels.'.$key)<div class="form-error">{{ $message }}</div>@enderror
+                        </div>
+                    @endforeach
+                </div>
+            </section>
+
             <section class="gs-panel" data-panel="hero">
                 <div class="gs-section-title">Hero</div>
                 <div class="form-group">
@@ -136,6 +179,24 @@
                 <div class="form-group">
                     <label>Hero Subtitle</label>
                     <textarea name="hero_subtitle" rows="2" required>{{ old('hero_subtitle', $hero['subtitle'] ?? '') }}</textarea>
+                </div>
+                <div class="gs-grid-2">
+                    <div class="form-group">
+                        <label>Primary Button Label</label>
+                        <input type="text" name="hero_primary_label" value="{{ old('hero_primary_label', $heroActions[0]['label'] ?? '') }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Primary Button Link</label>
+                        <input type="text" name="hero_primary_href" value="{{ old('hero_primary_href', $heroActions[0]['href'] ?? '#services') }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Secondary Button Label</label>
+                        <input type="text" name="hero_secondary_label" value="{{ old('hero_secondary_label', $heroActions[1]['label'] ?? '') }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Secondary Button Link</label>
+                        <input type="text" name="hero_secondary_href" value="{{ old('hero_secondary_href', $heroActions[1]['href'] ?? '#contact') }}" required>
+                    </div>
                 </div>
             </section>
 
@@ -397,6 +458,11 @@
                 <div class="form-group">
                     <label>LinkedIn URL</label>
                     <input type="url" name="contact_linkedin_url" value="{{ old('contact_linkedin_url', $contact['linkedin_url'] ?? '') }}" required>
+                </div>
+                <div class="form-group">
+                    <label>Contact Form Service Options</label>
+                    <textarea name="contact_service_options" rows="6" required>{{ old('contact_service_options', implode("\n", $contact['service_options'] ?? [])) }}</textarea>
+                    <div class="gs-hint">One option per line.</div>
                 </div>
             </section>
 

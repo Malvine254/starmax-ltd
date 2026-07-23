@@ -7,6 +7,7 @@ use App\Mail\ContactUserConfirmation;
 use App\Models\ContactMessage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use RuntimeException;
 use Tests\TestCase;
 
 class ContactFormTest extends TestCase
@@ -45,5 +46,24 @@ class ContactFormTest extends TestCase
             return $mail->contactMessage->is($contactMessage)
                 && $mail->hasTo('prospect@example.com');
         });
+    }
+
+    public function test_contact_message_is_not_lost_when_mail_delivery_fails(): void
+    {
+        Mail::shouldReceive('to')->once()->andThrow(new RuntimeException('Mailer unavailable'));
+
+        $response = $this->post('/contact', [
+            'name' => 'Saved Prospect',
+            'email' => 'saved@example.com',
+            'service' => 'web',
+            'message' => 'Please keep this message even if email is down.',
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('warning');
+        $this->assertDatabaseHas('contact_messages', [
+            'email' => 'saved@example.com',
+            'message' => 'Please keep this message even if email is down.',
+        ]);
     }
 }

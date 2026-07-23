@@ -489,8 +489,8 @@
                 <img src="{{ asset('images/landing-web-platform.png') }}" alt="Modern product dashboard built by Starmax">
             </div>
             <div class="nx-feature-copy reveal">
-                <span class="pill">Flagship Product</span>
-                <h3>TenantPro streamlines property operations end to end.</h3>
+                <span class="pill">Featured Portfolio Product</span>
+                <h3>TenantPro is one solution in the Starmax portfolio.</h3>
                 <p>From invoice generation and maintenance requests to tenant communication and analytics, TenantPro helps teams run portfolios with less manual overhead.</p>
                 <div class="stack">
                     <a href="/products" class="btn btn-primary">Explore TenantPro <i data-lucide="arrow-up-right"></i></a>

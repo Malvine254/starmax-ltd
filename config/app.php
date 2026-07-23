@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'tenant_demo_url' => env('TENANT_LIVE_DEMO_URL', 'http://localhost:3001/login?mode=demo'),
+    'tenant_demo_url' => env('TENANT_LIVE_DEMO_URL', 'https://app.starmaxltd.com'),
 
     'contact_admin_email' => env('CONTACT_ADMIN_EMAIL', env('MAIL_FROM_ADDRESS', 'hello@example.com')),
 

@@ -4,28 +4,29 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
-use App\Models\Invoice;
-use App\Models\MaintenanceRequest;
-use App\Models\Property;
-use App\Models\Tenant;
-use App\Models\Unit;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\EventRegistration;
+use App\Models\GraceSellahPage;
+use App\Models\SiteEvent;
 
 class DashboardController extends Controller
 {
     public function index()
     {
         $stats = [
-            'total_properties' => Property::count(),
-            'total_units' => Unit::count(),
-            'occupied_units' => Unit::where('status', 'OCCUPIED')->count(),
-            'total_tenants' => Tenant::where('is_active', true)->count(),
-            'pending_invoices' => Invoice::where('status', 'PENDING')->count(),
-            'open_maintenance' => MaintenanceRequest::whereIn('status', ['OPEN', 'IN_PROGRESS'])->count(),
             'unread_messages' => ContactMessage::whereNull('read_at')->count(),
-            'total_users' => User::count(),
+            'total_messages' => ContactMessage::count(),
+            'upcoming_events' => SiteEvent::where('status', 'upcoming')->count(),
+            'event_registrations' => EventRegistration::count(),
+            'unread_registrations' => EventRegistration::whereNull('read_at')->count(),
+            'portfolio_ready' => GraceSellahPage::where('slug', 'grace-sellah')->exists(),
         ];
-        return view('admin.dashboard', compact('stats'));
+
+        $recentMessages = ContactMessage::latest()->take(5)->get();
+        $upcomingEvents = SiteEvent::where('status', 'upcoming')
+            ->orderBy('starts_at')
+            ->take(4)
+            ->get();
+
+        return view('admin.dashboard', compact('stats', 'recentMessages', 'upcomingEvents'));
     }
 }

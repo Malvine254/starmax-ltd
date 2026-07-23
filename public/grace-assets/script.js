@@ -1,116 +1,84 @@
-/* ── Navbar scroll state ── */
 const navbar = document.getElementById('navbar');
 const backToTop = document.getElementById('backToTop');
-
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) {
-    navbar.classList.add('scrolled');
-    backToTop.classList.add('visible');
-  } else {
-    navbar.classList.remove('scrolled');
-    backToTop.classList.remove('visible');
-  }
-});
-
-/* ── Hamburger menu ── */
 const hamburger = document.getElementById('hamburger');
 const navLinks = document.querySelector('.nav-links');
 
-hamburger.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY > 60;
+  navbar?.classList.toggle('scrolled', scrolled);
+  backToTop?.classList.toggle('visible', scrolled);
+}, { passive: true });
+
+hamburger?.addEventListener('click', () => {
+  navLinks?.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', String(navLinks?.classList.contains('open')));
 });
 
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => navLinks.classList.remove('open'));
+document.querySelectorAll('.nav-links a').forEach((link) => {
+  link.addEventListener('click', () => {
+    navLinks?.classList.remove('open');
+    hamburger?.setAttribute('aria-expanded', 'false');
+  });
 });
 
-/* ── Active nav link on scroll ── */
 const sections = document.querySelectorAll('section[id]');
 const navItems = document.querySelectorAll('.nav-links a');
-
-const observerNav = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      navItems.forEach(a => {
-        a.style.fontWeight = a.getAttribute('href') === '#' + entry.target.id ? '700' : '';
-      });
-    }
+const navObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    navItems.forEach((item) => item.classList.toggle('active', item.getAttribute('href') === `#${entry.target.id}`));
   });
-}, { threshold: 0.4 });
+}, { rootMargin: '-30% 0px -60%', threshold: 0 });
+sections.forEach((section) => navObserver.observe(section));
 
-sections.forEach(s => observerNav.observe(s));
-
-/* ── Scroll-reveal ── */
-const revealEls = document.querySelectorAll(
-  '.strip-card, .service-card, .portfolio-item, .tool-pill, .contact-item, .about-highlights .highlight-item'
-);
-revealEls.forEach((el, i) => {
-  el.setAttribute('data-reveal', '');
-  el.style.transitionDelay = (i % 4) * 80 + 'ms';
+document.querySelectorAll('.service-card, .portfolio-item, .tool-pill, .about-highlights span').forEach((element, index) => {
+  element.dataset.reveal = '';
+  element.style.transitionDelay = `${(index % 4) * 70}ms`;
 });
-
-const revealObserver = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('revealed');
-      revealObserver.unobserve(entry.target);
-    }
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('revealed');
+    revealObserver.unobserve(entry.target);
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.08 });
+document.querySelectorAll('[data-reveal]').forEach((element) => revealObserver.observe(element));
 
-document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
-
-/* ── Contact form ── */
 const graceForm = document.getElementById('graceContactForm');
-if (graceForm) {
-  graceForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+graceForm?.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const button = graceForm.querySelector('button[type="submit"]');
+  const message = document.getElementById('form-msg');
+  const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+  const submitLabel = button.dataset.label || button.textContent;
 
-    const btn = graceForm.querySelector('button[type="submit"]');
-    const msg = document.getElementById('form-msg');
-    const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
+  button.disabled = true;
+  button.textContent = 'Sending…';
+  message.textContent = '';
 
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
-    msg.textContent = '';
-    msg.style.color = '';
-
-    const body = {
-      name:    graceForm.querySelector('#name').value.trim(),
-      email:   graceForm.querySelector('#email').value.trim(),
-      service: graceForm.querySelector('#service').value,
-      message: graceForm.querySelector('#message').value.trim(),
-    };
-
-    try {
-      const res = await fetch('/grace-sellah/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': csrf,
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-
-      const data = await res.json();
-
-      if (res.ok && data.success) {
-        msg.textContent = 'Message sent! Grace will get back to you shortly.';
-        msg.style.color = '#4a7c5f';
-        graceForm.reset();
-      } else {
-        const errors = data.errors ? Object.values(data.errors).flat().join(' ') : 'Something went wrong. Please try again.';
-        msg.textContent = errors;
-        msg.style.color = '#c0392b';
-      }
-    } catch {
-      msg.textContent = 'Network error. Please check your connection and try again.';
-      msg.style.color = '#c0392b';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Send Message';
-      setTimeout(() => { msg.textContent = ''; }, 7000);
+  try {
+    const response = await fetch('/grace-sellah/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': csrf, Accept: 'application/json' },
+      body: JSON.stringify({
+        name: graceForm.name.value.trim(),
+        email: graceForm.email.value.trim(),
+        service: graceForm.service.value,
+        message: graceForm.message.value.trim(),
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      throw new Error(data.errors ? Object.values(data.errors).flat().join(' ') : 'Please check the form and try again.');
     }
-  });
-}
+    message.textContent = data.message || 'Thank you — your enquiry has been sent.';
+    message.style.color = data.email_sent === false ? '#8a5a12' : '#28734b';
+    graceForm.reset();
+  } catch (error) {
+    message.textContent = error.message || 'Unable to send right now. Please try again.';
+    message.style.color = '#a83232';
+  } finally {
+    button.disabled = false;
+    button.textContent = submitLabel;
+  }
+});

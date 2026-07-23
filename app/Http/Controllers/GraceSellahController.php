@@ -6,6 +6,7 @@ use App\Mail\ContactAdminNotification;
 use App\Mail\ContactUserConfirmation;
 use App\Models\ContactMessage;
 use App\Models\GraceSellahPage;
+use App\Support\SafeMailDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -36,14 +37,27 @@ class GraceSellahController extends Controller
             'message' => 'required|string|max:5000',
         ]);
 
-        $contactMessage = ContactMessage::create($validated);
+        $contactMessage = ContactMessage::create([
+            ...$validated,
+            'source' => 'grace-portfolio',
+        ]);
 
-        Mail::to(config('app.contact_admin_email'))
-            ->send(new ContactAdminNotification($contactMessage));
+        $emailSent = SafeMailDelivery::attempt(function () use ($contactMessage): void {
+            Mail::to(config('app.contact_admin_email'))
+                ->send(new ContactAdminNotification($contactMessage));
+            Mail::to($contactMessage->email)
+                ->send(new ContactUserConfirmation($contactMessage));
+        }, [
+            'flow' => 'grace-portfolio-contact',
+            'contact_message_id' => $contactMessage->id,
+        ]);
 
-        Mail::to($contactMessage->email)
-            ->send(new ContactUserConfirmation($contactMessage));
-
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'email_sent' => $emailSent,
+            'message' => $emailSent
+                ? 'Your enquiry has been sent.'
+                : 'Your enquiry was saved. Email delivery is temporarily delayed.',
+        ]);
     }
 }

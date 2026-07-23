@@ -22,7 +22,24 @@ class EventRegistration extends Model
         'phone',
         'company',
         'message',
+        'status',
+        'admin_notes',
+        'read_at',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'read_at' => 'datetime',
+        ];
+    }
+
+    public function markAsRead(): void
+    {
+        if ($this->read_at === null) {
+            $this->forceFill(['read_at' => now()])->save();
+        }
+    }
 
     public function event(): BelongsTo
     {

@@ -8,6 +8,7 @@ use App\Mail\EventRegistrationConfirmation;
 use App\Models\ContactMessage;
 use App\Models\EventRegistration;
 use App\Models\SiteEvent;
+use App\Support\SafeMailDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -177,12 +178,12 @@ class SiteController extends Controller
                 'slug' => 'tenant-management',
                 'title' => 'Tenant & Property Management',
                 'tagline' => 'Complete operational platform for landlords, property managers, and tenants.',
-                'description' => 'Our flagship domain. We\'ve built a production-grade platform covering billing, maintenance, tenant communication, and portfolio analytics — with a web dashboard and native Android app.',
+                'description' => 'TenantPro is one of the products in our portfolio: a production-grade platform covering billing, maintenance, tenant communication, and operational analytics across web and Android.',
                 'icon' => 'building-2',
                 'color' => 'emerald',
                 'gradient' => 'linear-gradient(150deg,#064e3b 0%,#065f46 40%,#0f172a 100%)',
-                'category' => 'Flagship',
-                'badge' => 'Our Flagship Product',
+                'category' => 'Product',
+                'badge' => 'Starmax Product',
                 'features' => [
                     ['icon' => 'home', 'title' => 'Property & Unit Lifecycle', 'desc' => 'Manage properties, units, occupancy, and lease agreements from a single dashboard.'],
                     ['icon' => 'receipt', 'title' => 'Automated Invoicing', 'desc' => 'Recurring rent invoices, payment tracking, overdue alerts, and receipt generation.'],
@@ -285,12 +286,24 @@ class SiteController extends Controller
             ? $event->cta_url
             : route('events.index', ['event' => $event->slug]) . '#schedule';
 
-        Mail::to($registration->email)
-            ->send(new EventRegistrationConfirmation($registration, $eventUrl));
+        $emailSent = SafeMailDelivery::attempt(
+            fn () => Mail::to($registration->email)
+                ->send(new EventRegistrationConfirmation($registration, $eventUrl)),
+            [
+                'flow' => 'event-registration-confirmation',
+                'registration_id' => $registration->id,
+                'event_id' => $event->id,
+            ],
+        );
 
         return redirect()
             ->route('events.index', ['event' => $event->slug])
-            ->with('success', 'Registration received. We sent a confirmation email with your event URL.');
+            ->with(
+                $emailSent ? 'success' : 'warning',
+                $emailSent
+                    ? 'Registration received. We sent a confirmation email with your event URL.'
+                    : 'Registration received. Your place is saved, but the confirmation email is temporarily delayed.'
+            );
     }
 
     public function contact()
@@ -307,20 +320,27 @@ class SiteController extends Controller
             'message' => 'required|string|max:3000',
         ]);
 
-        $contactMessage = ContactMessage::create($request->only([
-            'name',
-            'email',
-            'service',
-            'message',
-        ]));
+        $contactMessage = ContactMessage::create([
+            ...$request->only(['name', 'email', 'service', 'message']),
+            'source' => 'starmax-website',
+        ]);
 
-        Mail::to(config('app.contact_admin_email'))
-            ->send(new ContactAdminNotification($contactMessage));
+        $emailSent = SafeMailDelivery::attempt(function () use ($contactMessage): void {
+            Mail::to(config('app.contact_admin_email'))
+                ->send(new ContactAdminNotification($contactMessage));
+            Mail::to($contactMessage->email)
+                ->send(new ContactUserConfirmation($contactMessage));
+        }, [
+            'flow' => 'site-contact',
+            'contact_message_id' => $contactMessage->id,
+        ]);
 
-        Mail::to($contactMessage->email)
-            ->send(new ContactUserConfirmation($contactMessage));
-
-        return back()->with('success', 'Thank you! Your message has been received.');
+        return back()->with(
+            $emailSent ? 'success' : 'warning',
+            $emailSent
+                ? 'Thank you! Your message has been received.'
+                : 'Thank you! Your message was saved. Email delivery is temporarily delayed.'
+        );
     }
 
     public function dashboard()

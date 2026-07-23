@@ -18,6 +18,7 @@ class ContactMessage extends Model
         'name',
         'email',
         'service',
+        'source',
         'message',
         'read_at',
     ];

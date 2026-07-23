@@ -6,7 +6,7 @@
     <title>@yield('title', 'Starmax Ltd — Innovative Digital Solutions')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.min.js"></script>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1243,6 +1243,7 @@
             .modern-slide-media, .modern-slide-image { min-height: 280px; }
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('css/starmax-unified.css') }}?v={{ filemtime(public_path('css/starmax-unified.css')) }}">
 </head>
 <body>
 @php($tenantDemoUrl = config('app.tenant_demo_url'))

@@ -10,6 +10,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Service</th>
+                <th>Source</th>
                 <th>Received</th>
                 <th></th>
             </tr>
@@ -27,12 +28,13 @@
                     <td>{{ $message->name }}</td>
                     <td><a href="mailto:{{ $message->email }}">{{ $message->email }}</a></td>
                     <td>{{ $message->service ? str($message->service)->headline() : 'General' }}</td>
+                    <td><span class="badge badge-gray">{{ $message->source === 'grace-portfolio' ? 'Grace Portfolio' : 'Starmax Website' }}</span></td>
                     <td>{{ $message->created_at->format('M d, Y H:i') }}</td>
                     <td><a href="{{ route('admin.contact-messages.show', $message) }}" class="btn btn-secondary">Open</a></td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" style="color:#64748b;">No contact messages yet.</td>
+                    <td colspan="7" style="color:#64748b;">No contact messages yet.</td>
                 </tr>
             @endforelse
         </tbody>

@@ -72,14 +72,10 @@
 
 <!-- Hero -->
 <section class="contact-pg-hero">
-    <div class="container" style="position:relative;z-index:1;text-align:center;">
-        <p class="eyebrow" style="color:#94a3b8;margin-bottom:14px;justify-content:center;">Contact Us</p>
-        <h2 style="color:#fff;max-width:640px;margin:0 auto 16px;font-size:clamp(32px,5vw,54px);">
-            Let's build something together.
-        </h2>
-        <p style="color:rgba(255,255,255,0.58);max-width:520px;margin:0 auto;font-size:17px;line-height:1.75;">
-            Whether you're starting a new project, need consulting, or want to discuss a partnership — we're ready to listen.
-        </p>
+    <div class="container contact-hero-inner">
+        <p class="contact-hero-kicker">Contact us</p>
+        <h1 class="contact-hero-title">Let’s build something together.</h1>
+        <p class="contact-hero-copy">Whether you’re starting a new project, need consulting, or want to discuss a partnership — we’re ready to listen.</p>
     </div>
 </section>
 
@@ -93,6 +89,13 @@
             <div style="display:flex;align-items:center;gap:10px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;padding:14px 18px;border-radius:12px;margin-bottom:20px;font-size:14px;font-weight:600;">
                 <i data-lucide="check-circle" style="width:18px;height:18px;flex-shrink:0;"></i>
                 {{ session('success') }}
+            </div>
+            @endif
+
+            @if(session('warning'))
+            <div style="display:flex;align-items:center;gap:10px;background:#fffbeb;border:1px solid #fcd34d;color:#92400e;padding:14px 18px;border-radius:12px;margin-bottom:20px;font-size:14px;font-weight:600;">
+                <i data-lucide="clock" style="width:18px;height:18px;flex-shrink:0;"></i>
+                {{ session('warning') }}
             </div>
             @endif
 

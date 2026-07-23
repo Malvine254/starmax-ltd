@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\View\View;
 
@@ -158,7 +159,10 @@ class DeploymentToolsController extends Controller
         return view('admin.deployment-tools', [
             'status' => $this->statusSnapshot(),
             'availableActions' => $this->availableActions(),
-            'toolTokenRequired' => !empty((string) env('DEPLOYMENT_TOOL_TOKEN')),
+            'toolTokenRequired' => app()->isProduction() || !empty((string) env('DEPLOYMENT_TOOL_TOKEN')),
+            'runRoute' => request()->routeIs('server-tools.public.*')
+                ? 'server-tools.public.run'
+                : 'admin.server-tools.run',
         ]);
     }
 
@@ -169,9 +173,14 @@ class DeploymentToolsController extends Controller
         $request->validate([
             'action' => 'required|string',
             'tool_token' => 'nullable|string',
+            'confirmation' => 'nullable|string',
         ]);
 
         $expectedToken = (string) env('DEPLOYMENT_TOOL_TOKEN', '');
+        if (app()->isProduction() && $expectedToken === '') {
+            return back()->with('error', 'Set DEPLOYMENT_TOOL_TOKEN in the production .env before using server tools.');
+        }
+
         if ($expectedToken !== '' && !hash_equals($expectedToken, (string) $request->input('tool_token', ''))) {
             return back()->with('error', 'Invalid deployment tool token. Set DEPLOYMENT_TOOL_TOKEN in .env and use the same value here.');
         }
@@ -182,7 +191,16 @@ class DeploymentToolsController extends Controller
             return back()->with('error', 'Unsupported action requested.');
         }
 
+        if ($action === 'migrate_force' && $request->input('confirmation') !== 'MIGRATE') {
+            return back()->with('error', 'Type MIGRATE in the confirmation field before running database migrations.');
+        }
+
         try {
+            Log::notice('Admin server tool executed.', [
+                'action' => $action,
+                'user_id' => $request->user()?->id,
+                'ip' => $request->ip(),
+            ]);
             $output = $this->executeAction($action);
             $message = $this->availableActions()[$action] . ' completed successfully.';
 
@@ -207,9 +225,6 @@ class DeploymentToolsController extends Controller
             'cache_views' => $this->runArtisanCommand('view:cache'),
             'storage_link' => $this->runArtisanCommand('storage:link'),
             'migrate_force' => $this->runArtisanCommand('migrate', ['--force' => true]),
-            'seed_force' => $this->runArtisanCommand('db:seed', ['--force' => true]),
-            'generate_key' => $this->runArtisanCommand('key:generate', ['--force' => true]),
-            'ensure_vendor' => $this->ensureVendorFolder(),
             default => throw new \RuntimeException('Unknown action.'),
         };
     }
@@ -249,9 +264,6 @@ class DeploymentToolsController extends Controller
             'cache_views' => 'Rebuild compiled views',
             'storage_link' => 'Create storage symlink',
             'migrate_force' => 'Run migrations (--force)',
-            'seed_force' => 'Run database seeders (--force)',
-            'generate_key' => 'Generate app key',
-            'ensure_vendor' => 'Ensure vendor folder exists',
         ];
     }
 
@@ -305,6 +317,10 @@ class DeploymentToolsController extends Controller
 
     private function ensureAdmin(): void
     {
+        if (request()->routeIs('server-tools.public.*')) {
+            return;
+        }
+
         $user = auth()->user();
         if (!$user) {
             throw new HttpException(403, 'Please login first.');

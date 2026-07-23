@@ -1,52 +1,88 @@
 @extends('admin.layout')
-@section('page-title', 'Deployment Tools')
+@section('page-title', 'Server tools')
 
 @section('content')
-<div class="page-title">Deployment Tools</div>
-
-<div class="card" style="margin-bottom:16px;">
-    <h3 style="margin-bottom:10px;">Server Status</h3>
-    <table>
-        <tbody>
-            <tr><th style="width:260px;">PHP Version</th><td>{{ $status['php_version'] }}</td></tr>
-            <tr><th>Laravel Version</th><td>{{ $status['laravel_version'] }}</td></tr>
-            <tr><th>Environment</th><td>{{ $status['environment'] }}</td></tr>
-            <tr><th>APP_URL</th><td>{{ $status['app_url'] }}</td></tr>
-            <tr><th>.env file</th><td>{!! $status['env_file_exists'] ? '<span class="badge badge-green">Present</span>' : '<span class="badge badge-red">Missing</span>' !!}</td></tr>
-            <tr><th>APP_KEY</th><td>{!! $status['app_key_set'] ? '<span class="badge badge-green">Set</span>' : '<span class="badge badge-red">Missing</span>' !!}</td></tr>
-            <tr><th>vendor/autoload.php</th><td>{!! $status['vendor_autoload'] ? '<span class="badge badge-green">Present</span>' : '<span class="badge badge-red">Missing</span>' !!}</td></tr>
-            <tr><th>storage writable</th><td>{!! $status['storage_writable'] ? '<span class="badge badge-green">Yes</span>' : '<span class="badge badge-red">No</span>' !!}</td></tr>
-            <tr><th>bootstrap/cache writable</th><td>{!! $status['bootstrap_cache_writable'] ? '<span class="badge badge-green">Yes</span>' : '<span class="badge badge-red">No</span>' !!}</td></tr>
-        </tbody>
-    </table>
+<div class="server-hero">
+    <div>
+        <span class="eyebrow">Production maintenance</span>
+        <h1>Laravel server tools</h1>
+        <p>Run a limited set of approved Artisan operations when terminal access is unavailable.</p>
+    </div>
+    <span class="environment-badge">{{ strtoupper($status['environment']) }}</span>
 </div>
 
-<div class="card" style="margin-bottom:16px;">
-    <h3 style="margin-bottom:10px;">Run Operation</h3>
-    <p style="font-size:13px;color:#64748b;margin-bottom:14px;">Use this when GoDaddy terminal access is unavailable.</p>
-
-    <form method="POST" action="{{ route('admin.deployment-tools.run') }}">
-        @csrf
-
-        @if($toolTokenRequired)
-            <div class="form-group" style="max-width:420px;">
-                <label>Deployment Tool Token</label>
-                <input type="password" name="tool_token" required placeholder="Value of DEPLOYMENT_TOOL_TOKEN">
-            </div>
-        @endif
-
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;">
-            @foreach($availableActions as $action => $label)
-                <button type="submit" name="action" value="{{ $action }}" class="btn btn-secondary" style="text-align:left;padding:10px 12px;">{{ $label }}</button>
+<div class="dashboard-grid">
+    <section class="card">
+        <div class="section-heading"><div><span class="eyebrow">Environment</span><h2>Server status</h2></div></div>
+        <div class="status-grid">
+            @foreach([
+                'PHP version' => $status['php_version'],
+                'Laravel version' => $status['laravel_version'],
+                'Application URL' => $status['app_url'],
+                '.env file' => $status['env_file_exists'],
+                'Application key' => $status['app_key_set'],
+                'Vendor autoload' => $status['vendor_autoload'],
+                'Storage writable' => $status['storage_writable'],
+                'Cache writable' => $status['bootstrap_cache_writable'],
+            ] as $label => $value)
+                <div>
+                    <span>{{ $label }}</span>
+                    @if(is_bool($value))
+                        <strong class="{{ $value ? 'is-ok' : 'is-bad' }}">{{ $value ? 'Ready' : 'Needs attention' }}</strong>
+                    @else
+                        <strong>{{ $value }}</strong>
+                    @endif
+                </div>
             @endforeach
         </div>
-    </form>
+    </section>
+
+    <section class="card">
+        <div class="section-heading"><div><span class="eyebrow">Allowlisted commands</span><h2>Run maintenance</h2></div></div>
+        <p class="tool-note">Only the operations shown below can run. Arbitrary shell or Artisan input is not accepted.</p>
+        <form method="POST" action="{{ route($runRoute) }}">
+            @csrf
+            @if($toolTokenRequired)
+                <div class="form-group">
+                    <label for="tool_token">Deployment token</label>
+                    <input id="tool_token" type="password" name="tool_token" required autocomplete="off" placeholder="DEPLOYMENT_TOOL_TOKEN">
+                </div>
+            @endif
+            <div class="form-group">
+                <label for="confirmation">Migration confirmation</label>
+                <input id="confirmation" type="text" name="confirmation" autocomplete="off" placeholder="Type MIGRATE only when running migrations">
+            </div>
+            <div class="command-grid">
+                @foreach($availableActions as $action => $label)
+                    <button type="submit" name="action" value="{{ $action }}" class="command-button {{ $action === 'migrate_force' ? 'command-warning' : '' }}">
+                        <span>{{ $label }}</span>
+                        <small>{{ match($action) {
+                            'clear_cache' => 'php artisan optimize:clear',
+                            'clear_config' => 'php artisan config:clear',
+                            'cache_config' => 'php artisan config:cache',
+                            'clear_routes' => 'php artisan route:clear',
+                            'cache_routes' => 'php artisan route:cache',
+                            'clear_views' => 'php artisan view:clear',
+                            'cache_views' => 'php artisan view:cache',
+                            'storage_link' => 'php artisan storage:link',
+                            'migrate_force' => 'php artisan migrate --force',
+                            default => '',
+                        } }}</small>
+                    </button>
+                @endforeach
+            </div>
+        </form>
+    </section>
 </div>
 
 @if(session('command_output'))
-    <div class="card">
-        <h3 style="margin-bottom:10px;">Last Command Output</h3>
-        <pre style="background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto;font-size:12px;line-height:1.5;">{{ session('command_output') }}</pre>
-    </div>
+    <section class="card output-card">
+        <div class="section-heading"><div><span class="eyebrow">Command result</span><h2>Last output</h2></div></div>
+        <pre>{{ session('command_output') }}</pre>
+    </section>
 @endif
+
+<style>
+.server-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:20px;padding:28px;border-radius:15px;color:#fff;background:#101318}.server-hero h1{margin:6px 0 7px;font-size:28px}.server-hero p{max-width:610px;color:#aeb6c2;font-size:12px}.environment-badge{padding:7px 11px;border:1px solid #39404b;border-radius:99px;color:#f0b95d;font-size:9px;font-weight:800;letter-spacing:.12em}.status-grid{display:grid}.status-grid>div{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid #f1f5f9}.status-grid span{color:#64748b;font-size:10px}.status-grid strong{font-size:11px}.is-ok{color:#16834f}.is-bad{color:#b42318}.tool-note{margin:16px 0;color:#64748b;font-size:11px;line-height:1.6}.command-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.command-button{display:flex;align-items:flex-start;flex-direction:column;gap:4px;padding:12px;border:1px solid #dedbd4;border-radius:9px;color:#111827;background:#faf9f6;text-align:left;cursor:pointer}.command-button:hover{border-color:#c18a32;background:#fff8eb}.command-button span{font-size:11px;font-weight:800}.command-button small{color:#7b8492;font:9px ui-monospace,monospace}.command-warning{border-color:#e7c989;background:#fff9e9}.output-card{margin-top:18px}.output-card pre{margin-top:15px;padding:16px;overflow:auto;border-radius:9px;color:#d7dde7;background:#0d1118;font:11px/1.65 ui-monospace,monospace;white-space:pre-wrap}@media(max-width:700px){.server-hero{align-items:flex-start;flex-direction:column}.command-grid{grid-template-columns:1fr}}
+</style>
 @endsection

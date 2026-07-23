@@ -132,10 +132,10 @@
     </div>
 </section>
 
-<!-- TenantPro Flagship -->
+<!-- TenantPro product -->
 <div class="section" style="padding-bottom:0;">
     <div class="section-header left" style="text-align:left;margin:0 0 12px;">
-        <p class="eyebrow">Flagship Product</p>
+        <p class="eyebrow">Starmax Portfolio Product</p>
         <h2 style="margin-bottom:8px;">TenantPro — Property Management Platform</h2>
         <p style="max-width:620px;">A complete ecosystem for property operations: a powerful web dashboard for landlords and an intuitive Android app for tenants — all backed by one robust API.</p>
     </div>

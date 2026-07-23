@@ -17,6 +17,11 @@
     </div>
 
     <div style="margin-bottom:18px;">
+        <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:6px;">Form Source</div>
+        <div><span class="badge badge-gray">{{ $contactMessage->source === 'grace-portfolio' ? 'Grace Portfolio' : 'Starmax Website' }}</span></div>
+    </div>
+
+    <div style="margin-bottom:18px;">
         <div style="font-size:12px;font-weight:700;color:#64748b;text-transform:uppercase;margin-bottom:6px;">Service Interest</div>
         <div>{{ $contactMessage->service ? str($contactMessage->service)->headline() : 'General' }}</div>
     </div>

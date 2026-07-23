@@ -28,7 +28,7 @@ Route::prefix('grace-sellah/admin')->name('grace-sellah.admin.')->group(function
 	Route::post('/login', [AuthAdminController::class, 'login'])->name('login.post');
 	Route::post('/logout', [AuthAdminController::class, 'logout'])->name('logout');
 
-	Route::middleware(['auth'])->group(function () {
+	Route::middleware(['auth', 'admin'])->group(function () {
 		Route::get('/', [GraceSellahPageController::class, 'edit'])->name('home');
 		Route::get('/page', [GraceSellahPageController::class, 'edit'])->name('page.edit');
 		Route::put('/page', [GraceSellahPageController::class, 'update'])->name('page.update');
@@ -46,12 +46,13 @@ Route::get('/events', [SiteController::class, 'events'])->name('events.index');
 Route::post('/events/{event:slug}/register', [SiteController::class, 'registerEvent'])->name('events.register');
 Route::get('/contact', [SiteController::class, 'contact']);
 Route::post('/contact', [SiteController::class, 'submitContact']);
-Route::get('/store/fix_storage.php', [DeploymentToolsController::class, 'fixStorageScript'])->name('deployment-tools.fix-storage-script');
-Route::get('/deployment-tools-public', [DeploymentToolsController::class, 'publicIndex'])->name('deployment-tools.public');
-Route::post('/deployment-tools-public/run', [DeploymentToolsController::class, 'publicRun'])->name('deployment-tools.public.run');
-Route::get('/deployment-tools-once', [DeploymentToolsController::class, 'once'])->name('deployment-tools.once');
-Route::post('/deployment-tools-once/run', [DeploymentToolsController::class, 'runOnce'])->name('deployment-tools.once.run');
-Route::post('/deployment-tools-once/action', [DeploymentToolsController::class, 'runOnceAction'])->name('deployment-tools.once.action');
+
+// Publicly reachable maintenance page. Production command execution still
+// requires DEPLOYMENT_TOOL_TOKEN and all actions are strictly allowlisted.
+Route::middleware('throttle:10,1')->group(function () {
+	Route::get('/server-tools', [DeploymentToolsController::class, 'index'])->name('server-tools.public.index');
+	Route::post('/server-tools/run', [DeploymentToolsController::class, 'run'])->name('server-tools.public.run');
+});
 
 // Admin auth routes
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -64,20 +65,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
 	Route::post('/logout', [AuthAdminController::class, 'logout'])->name('logout');
 
 	// Protected admin routes
-	Route::middleware(['auth'])->group(function () {
+	Route::middleware(['auth', 'admin'])->group(function () {
 		Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-		Route::resource('/properties', PropertyAdminController::class);
-		Route::get('/tenants', [TenantAdminController::class, 'index'])->name('tenants.index');
-		Route::get('/tenants/{tenant}', [TenantAdminController::class, 'show'])->name('tenants.show');
-		Route::get('/invoices', [InvoiceAdminController::class, 'index'])->name('invoices.index');
-		Route::get('/invoices/{invoice}', [InvoiceAdminController::class, 'show'])->name('invoices.show');
-		Route::get('/maintenance', [MaintenanceAdminController::class, 'index'])->name('maintenance.index');
-		Route::get('/maintenance/{maintenanceRequest}', [MaintenanceAdminController::class, 'show'])->name('maintenance.show');
-		Route::patch('/maintenance/{maintenanceRequest}', [MaintenanceAdminController::class, 'update'])->name('maintenance.update');
 		Route::get('/contact-messages', [ContactMessageController::class, 'index'])->name('contact-messages.index');
 		Route::get('/contact-messages/{contactMessage}', [ContactMessageController::class, 'show'])->name('contact-messages.show');
-		Route::get('/deployment-tools', [DeploymentToolsController::class, 'index'])->name('deployment-tools.index');
-		Route::post('/deployment-tools', [DeploymentToolsController::class, 'run'])->name('deployment-tools.run');
 		Route::resource('/events', EventAdminController::class)->parameters(['events' => 'event'])->names([
 			'index'   => 'events.index',
 			'create'  => 'events.create',
@@ -87,5 +78,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 			'destroy' => 'events.destroy',
 		]);
 		Route::get('/event-registrations', [EventRegistrationAdminController::class, 'index'])->name('event-registrations.index');
+		Route::get('/event-registrations/{eventRegistration}', [EventRegistrationAdminController::class, 'show'])->name('event-registrations.show');
+		Route::patch('/event-registrations/{eventRegistration}', [EventRegistrationAdminController::class, 'update'])->name('event-registrations.update');
+		Route::middleware('throttle:10,1')->group(function () {
+			Route::get('/server-tools', [DeploymentToolsController::class, 'index'])->name('server-tools.index');
+			Route::post('/server-tools/run', [DeploymentToolsController::class, 'run'])->name('server-tools.run');
+		});
 	});
 });

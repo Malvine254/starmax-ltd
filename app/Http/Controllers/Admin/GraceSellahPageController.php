@@ -35,6 +35,8 @@ class GraceSellahPageController extends Controller
             'meta_description' => ['required', 'string', 'max:500'],
             'brand_label' => ['required', 'string', 'max:120'],
             'brand_footer_label' => ['required', 'string', 'max:120'],
+            'labels' => ['required', 'array'],
+            'labels.*' => ['required', 'string', 'max:255'],
             'hero_eyebrow' => ['required', 'string', 'max:255'],
             'hero_title_line_1' => ['required', 'string', 'max:255'],
             'hero_title_line_2' => ['required', 'string', 'max:255'],
@@ -42,6 +44,10 @@ class GraceSellahPageController extends Controller
             'hero_highlight' => ['required', 'string', 'max:255'],
             'hero_subtitle' => ['required', 'string', 'max:255'],
             'hero_background_image' => ['required', 'url', 'max:2048'],
+            'hero_primary_label' => ['required', 'string', 'max:120'],
+            'hero_primary_href' => ['required', 'string', 'max:255'],
+            'hero_secondary_label' => ['required', 'string', 'max:120'],
+            'hero_secondary_href' => ['required', 'string', 'max:255'],
             'about_eyebrow' => ['required', 'string', 'max:255'],
             'about_title' => ['required', 'string', 'max:255'],
             'about_description_1' => ['required', 'string', 'max:2000'],
@@ -63,6 +69,7 @@ class GraceSellahPageController extends Controller
             'contact_phone_tel' => ['required', 'string', 'max:40'],
             'contact_linkedin_label' => ['required', 'string', 'max:255'],
             'contact_linkedin_url' => ['required', 'url', 'max:2048'],
+            'contact_service_options' => ['required', 'string', 'max:3000'],
             'footer_copy' => ['required', 'string', 'max:255'],
             'strip_cards' => ['required', 'array', 'min:1'],
             'strip_cards.*.title' => ['required', 'string', 'max:120'],
@@ -90,6 +97,7 @@ class GraceSellahPageController extends Controller
                 'label' => $validated['brand_label'],
                 'footer_label' => $validated['brand_footer_label'],
             ],
+            'labels' => $validated['labels'],
             'hero' => [
                 'eyebrow' => $validated['hero_eyebrow'],
                 'title_lines' => [
@@ -100,7 +108,18 @@ class GraceSellahPageController extends Controller
                 'highlight' => $validated['hero_highlight'],
                 'subtitle' => $validated['hero_subtitle'],
                 'background_image' => $validated['hero_background_image'],
-                'actions' => GraceSellahPage::defaultContent()['hero']['actions'],
+                'actions' => [
+                    [
+                        'label' => $validated['hero_primary_label'],
+                        'href' => $validated['hero_primary_href'],
+                        'variant' => 'btn-primary',
+                    ],
+                    [
+                        'label' => $validated['hero_secondary_label'],
+                        'href' => $validated['hero_secondary_href'],
+                        'variant' => 'btn-outline',
+                    ],
+                ],
             ],
             'strip_cards' => $this->normalizeCards($validated['strip_cards'], ['title', 'description']),
             'about' => [
@@ -131,7 +150,7 @@ class GraceSellahPageController extends Controller
                 'phone_tel' => $validated['contact_phone_tel'],
                 'linkedin_label' => $validated['contact_linkedin_label'],
                 'linkedin_url' => $validated['contact_linkedin_url'],
-                'service_options' => GraceSellahPage::defaultContent()['contact']['service_options'],
+                'service_options' => $this->linesToArray($validated['contact_service_options']),
             ],
             'footer' => [
                 'copy' => $validated['footer_copy'],

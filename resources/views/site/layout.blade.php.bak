@@ -432,7 +432,7 @@
     </style>
 </head>
 <body>
-@php($tenantDemoUrl = config('app.tenant_demo_url'))
+@php($tenantDemoUrl = config('app.tenant_demo_url', 'https://app.starmaxltd.com'))
 <div class="site-shell">
     <header class="site-header">
         <a href="/" class="brand">

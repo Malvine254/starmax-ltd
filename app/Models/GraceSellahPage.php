@@ -37,6 +37,30 @@ class GraceSellahPage extends Model
                 'label' => 'Grace',
                 'footer_label' => 'Grace',
             ],
+            'labels' => [
+                'nav_home' => 'Home',
+                'nav_about' => 'About',
+                'nav_services' => 'Services',
+                'nav_portfolio' => 'Work',
+                'nav_tools' => 'Tools',
+                'nav_contact' => 'Contact',
+                'nav_cta' => 'Work with me',
+                'services_eyebrow' => 'What I offer',
+                'services_title' => 'Support designed around your day',
+                'services_subtitle' => 'Practical, dependable support that gives you more time for the work that matters.',
+                'portfolio_eyebrow' => 'Selected work',
+                'portfolio_title' => 'A closer look at what I deliver',
+                'portfolio_subtitle' => 'Clear systems, polished documents, and organized operations.',
+                'tools_eyebrow' => 'My toolkit',
+                'tools_title' => 'Tools I work with',
+                'tools_subtitle' => 'A flexible, remote-ready stack for communication, organization, and reporting.',
+                'form_title' => 'Tell me what you need',
+                'form_name_label' => 'Your name',
+                'form_email_label' => 'Email address',
+                'form_service_label' => 'How can I help?',
+                'form_message_label' => 'A little about your needs',
+                'form_submit_label' => 'Send enquiry',
+            ],
             'hero' => [
                 'eyebrow' => 'Professional Virtual Assistant',
                 'title_lines' => [
@@ -171,7 +195,7 @@ class GraceSellahPage extends Model
                 ],
             ],
             'footer' => [
-                'copy' => '&copy; 2025 Grace Sellah Atemo. All rights reserved.',
+                'copy' => '© 2026 Grace Sellah Atemo. All rights reserved.',
             ],
         ];
     }

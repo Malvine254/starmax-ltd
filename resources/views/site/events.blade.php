@@ -3,376 +3,124 @@
 @section('title', 'Events — Starmax Ltd')
 
 @section('content')
-<style>
-.events-shell {
-    background:
-        radial-gradient(circle at top right, rgba(17,24,39,0.07), transparent 30%),
-        radial-gradient(circle at bottom left, rgba(17,24,39,0.05), transparent 28%),
-        linear-gradient(180deg, #f8fafc 0%, #ffffff 42%, #ffffff 100%);
-}
-.ev2-hero { padding: 74px 0 46px; }
-.ev2-title {
-    font-size: clamp(34px, 5vw, 58px);
-    line-height: 1.05;
-    margin-bottom: 14px;
-    max-width: 760px;
-}
-.ev2-sub {
-    max-width: 640px;
-    color: #475569;
-    line-height: 1.72;
-    font-size: 17px;
-    margin-bottom: 28px;
-}
-.ev2-stats {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-}
-.ev2-stat {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 14px 16px;
-    box-shadow: 0 12px 30px rgba(15,23,42,0.05);
-}
-.ev2-stat strong {
-    display: block;
-    font-size: 25px;
-    line-height: 1;
-    color: #0f172a;
-}
-.ev2-stat span {
-    display: block;
-    margin-top: 5px;
-    font-size: 12px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #64748b;
-    font-weight: 700;
-}
-.ev2-grid {
-    display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 18px;
-    align-items: start;
-}
-.ev2-list {
-    display: grid;
-    gap: 14px;
-}
-.ev2-card {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 18px;
-    box-shadow: 0 14px 36px rgba(15,23,42,0.06);
-}
-.ev2-card:hover {
-    border-color: #cbd5e1;
-    box-shadow: 0 20px 50px rgba(15,23,42,0.11);
-}
-.ev2-card-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 10px;
-}
-.ev2-pill {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 9px;
-    font-size: 10px;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    font-weight: 750;
-    border-radius: 999px;
-    background: #f3f4f6;
-    color: #374151;
-}
-.ev2-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 10px 0;
-    color: #64748b;
-    font-size: 12px;
-    font-weight: 600;
-}
-.ev2-meta span {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-.ev2-meta svg {
-    width: 14px;
-    height: 14px;
-}
-.ev2-card h3 {
-    margin: 8px 0 6px;
-    font-size: 20px;
-    line-height: 1.25;
-}
-.ev2-card p {
-    margin: 0;
-    color: #475569;
-    line-height: 1.65;
-    font-size: 14px;
-}
-.ev2-actions {
-    margin-top: 12px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-.ev2-register {
-    background: #fff;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 14px 36px rgba(15,23,42,0.08);
-    position: sticky;
-    top: 94px;
-}
-.ev2-register-head {
-    margin-bottom: 12px;
-}
-.ev2-register-head h3 {
-    margin: 5px 0 4px;
-    font-size: 22px;
-}
-.ev2-selected {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 12px;
-    margin-bottom: 12px;
-}
-.ev2-selected p {
-    margin: 0;
-    font-size: 12px;
-    color: #64748b;
-}
-.ev2-selected strong {
-    display: block;
-    margin: 4px 0;
-    color: #0f172a;
-    font-size: 15px;
-}
-.ev2-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #111827;
-    text-decoration: none;
-    margin-top: 8px;
-}
-.ev2-link svg { width: 14px; height: 14px; }
-.ev2-form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-.ev2-empty {
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    border-radius: 14px;
-    padding: 30px 20px;
-    text-align: center;
-    color: #64748b;
-}
-@media (max-width: 980px) {
-    .ev2-grid { grid-template-columns: 1fr; }
-    .ev2-register { position: static; }
-}
-@media (max-width: 640px) {
-    .ev2-stats { grid-template-columns: 1fr; }
-    .ev2-form-grid { grid-template-columns: 1fr; }
-}
-</style>
-
 @php
-    $activeEvent = old('event_slug')
+    $formEvent = old('event_slug')
         ? $events->firstWhere('slug', old('event_slug'))
         : ($selectedEvent ?? $events->first());
-    $formEvent = $activeEvent ?? $events->first();
-    $selectedEventUrl = $formEvent
-        ? (filled($formEvent->cta_url) ? $formEvent->cta_url : route('events.index', ['event' => $formEvent->slug]) . '#schedule')
-        : null;
 @endphp
 
-<div class="events-shell">
-<section class="ev2-hero">
-    <div class="container">
-        @if(session('success'))
-        <div style="display:flex;align-items:center;gap:10px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;font-weight:600;">
-            <i data-lucide="check-circle" style="width:18px;height:18px;flex-shrink:0;"></i>
-            {{ session('success') }}
-        </div>
-        @endif
+<style>
+    .events-page{--ev-ink:#101318;--ev-soft:#f4f1ea;--ev-gold:#d99a31;background:#fbfaf7;color:var(--ev-ink)}
+    .events-hero{position:relative;overflow:hidden;padding:clamp(48px,6vw,76px) 0 clamp(44px,5vw,62px);color:#fff;background:#0d1118}
+    .events-hero:after{content:"";position:absolute;width:680px;height:680px;right:-280px;top:-360px;border:1px solid rgba(255,255,255,.09);border-radius:50%;box-shadow:0 0 0 100px rgba(255,255,255,.018),0 0 0 200px rgba(255,255,255,.012)}
+    .events-hero .container{position:relative;z-index:1}.events-kicker{margin:0 0 18px;color:#f0b95d;font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+    .events-title{max-width:820px;margin:0;font-size:clamp(42px,5.8vw,72px);line-height:1;letter-spacing:-.06em}.events-intro{max-width:600px;margin:20px 0 0;color:#abb4c2;font-size:15px;line-height:1.7}
+    .events-summary{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}.summary-chip{padding:8px 12px;border:1px solid rgba(255,255,255,.15);border-radius:999px;color:#c8ced7;font-size:10px}.summary-chip b{margin-right:5px;color:#fff}
+    .flash{display:flex;align-items:flex-start;gap:10px;padding:13px 15px;margin-bottom:18px;border-radius:10px;font-size:13px;font-weight:600}.flash-success{color:#166534;background:#dcfce7}.flash-warning{color:#92400e;background:#fef3c7}.flash-error{color:#991b1b;background:#fee2e2}
+    .events-main{padding:76px 0 110px}.events-layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,.75fr);gap:clamp(36px,6vw,82px);align-items:start}
+    .section-kicker{margin:0 0 10px;color:#a5680b;font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}.section-title-clean{margin:0 0 14px;font-size:clamp(30px,4vw,48px);letter-spacing:-.045em}.section-copy{max-width:560px;margin:0 0 35px;color:#667085;font-size:14px;line-height:1.7}
+    .event-list{display:grid;gap:18px}.event-card{display:grid;grid-template-columns:82px minmax(0,1fr);gap:24px;padding:26px;border:1px solid #dedbd4;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(15,23,42,.045);transition:transform .2s,border-color .2s,box-shadow .2s}.event-card:hover{transform:translateY(-2px);border-color:#c7c1b6;box-shadow:0 16px 34px rgba(15,23,42,.075)}.event-date{width:72px;height:80px;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:12px 8px;border-radius:12px;color:#fff;background:#111827}.event-date b{font-size:24px;line-height:1}.event-date span{margin-top:7px;color:#f0b95d;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+    .event-topline{display:flex;align-items:center;justify-content:space-between;gap:16px}.event-category{color:#a5680b;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.event-featured{padding:3px 8px;border-radius:99px;color:#7c4a03;background:#fef3c7;font-size:9px;font-weight:800}
+    .event-card h3{margin:7px 0 9px;font-size:21px;letter-spacing:-.03em}.event-card p{margin:0;color:#667085;font-size:13px;line-height:1.65}.event-meta{display:flex;flex-wrap:wrap;gap:7px 16px;margin:13px 0;color:#475467;font-size:10px;font-weight:700}.event-action{display:inline-flex;min-height:42px;align-items:center;justify-content:center;gap:9px;margin-top:20px;padding:0 18px;border-radius:8px;color:#fff;background:#111827;font-size:11px;font-weight:800;text-decoration:none;transition:background .18s,transform .18s}.event-action span{transition:.18s}.event-action:hover{background:#000;transform:translateY(-1px)}.event-action:hover span{transform:translateX(3px)}
+    .registration-card{position:sticky;top:92px;padding:27px;border:1px solid #dedbd4;border-radius:16px;background:#fff;box-shadow:0 24px 60px rgba(15,23,42,.08)}.registration-card h2{margin:5px 0 8px;font-size:26px;letter-spacing:-.04em}.registration-card>p{margin:0 0 22px;color:#667085;font-size:12px;line-height:1.6}
+    .selected-event{padding:13px;margin-bottom:19px;border-radius:10px;background:#f5f2eb}.selected-event span{display:block;color:#8b6a34;font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.selected-event strong{display:block;margin:4px 0 3px;font-size:12px}.selected-event small{color:#667085;font-size:10px}
+    .event-form{display:grid;gap:13px}.field label{display:block;margin-bottom:6px;color:#475467;font-size:10px;font-weight:800}.field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1px solid #d0d5dd;border-radius:8px;background:#fff;color:#101828;font:12px Inter,sans-serif;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#b7791f;box-shadow:0 0 0 3px rgba(217,154,49,.12)}.field-error{margin-top:5px;color:#b42318;font-size:10px}.form-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .register-button{width:100%;min-height:50px;margin-top:6px;padding:0 20px;border:0;border-radius:9px;color:#fff;background:#111827;font:800 12px Inter,sans-serif;cursor:pointer}.register-button:hover{background:#000}
+    .empty-events{padding:35px;border:1px dashed #c9c5bc;border-radius:12px;color:#667085;text-align:center}
+    @media(max-width:900px){.events-layout{grid-template-columns:1fr}.registration-card{position:static}.events-title{max-width:700px}}
+    @media(max-width:600px){.events-hero{padding:42px 0 46px}.events-title{font-size:clamp(38px,11vw,52px)}.events-intro{margin-top:16px}.events-summary{margin-top:22px}.events-main{padding:58px 0 80px}.event-list{gap:14px}.event-card{grid-template-columns:62px minmax(0,1fr);gap:15px;padding:18px 16px}.event-date{width:58px;height:68px;padding:9px 6px}.event-date b{font-size:20px}.event-action{width:100%;margin-top:18px}.form-two{grid-template-columns:1fr}.registration-card{padding:22px 18px}.event-topline{align-items:flex-start;flex-direction:column;gap:5px}}
+</style>
 
-        @if(session('error'))
-        <div style="display:flex;align-items:center;gap:10px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;font-weight:600;">
-            <i data-lucide="alert-circle" style="width:18px;height:18px;flex-shrink:0;"></i>
-            {{ session('error') }}
+<div class="events-page">
+    <section class="events-hero">
+        <div class="container">
+            @if(session('success'))<div class="flash flash-success">{{ session('success') }}</div>@endif
+            @if(session('warning'))<div class="flash flash-warning">{{ session('warning') }}</div>@endif
+            @if(session('error'))<div class="flash flash-error">{{ session('error') }}</div>@endif
+            <p class="events-kicker">Starmax events</p>
+            <h1 class="events-title">Learn, connect, and build what comes next.</h1>
+            <p class="events-intro">Focused workshops and conversations for teams turning good ideas into useful digital products.</p>
+            <div class="events-summary">
+                <span class="summary-chip"><b>{{ $eventStats['upcoming'] }}</b> upcoming</span>
+                <span class="summary-chip"><b>{{ $eventStats['formats'] }}</b> formats</span>
+                <span class="summary-chip">Next: <b>{{ $eventStats['next_month'] }}</b></span>
+            </div>
         </div>
-        @endif
+    </section>
 
-        <p class="eyebrow">Events</p>
-        <h1 class="ev2-title">Modern events with direct registration.</h1>
-        <p class="ev2-sub">
-            Browse upcoming sessions powered from the database, pick the event that matches your goal, and get your confirmation email with the event URL right away.
-        </p>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;">
-            <a href="#register" class="btn btn-primary"><i data-lucide="ticket"></i> Register now</a>
-            <a href="/contact" class="btn btn-secondary">Request private session</a>
-        </div>
-        <div class="ev2-stats">
-            <div class="ev2-stat">
-                <strong>{{ $eventStats['upcoming'] }}</strong>
-                <span>Upcoming Events</span>
-            </div>
-            <div class="ev2-stat">
-                <strong>{{ $eventStats['formats'] }}</strong>
-                <span>Formats</span>
-            </div>
-            <div class="ev2-stat">
-                <strong>{{ $eventStats['next_month'] }}</strong>
-                <span>Next Session Window</span>
-            </div>
-        </div>
-    </div>
-</section>
-<section class="section" id="schedule" style="padding-top:8px; padding-bottom:66px;">
-    <div class="ev2-grid">
-        <div>
-            <div class="section-header left" style="text-align:left;margin:0 0 20px;">
-                <p class="eyebrow">Schedule</p>
-                <h2 style="margin-bottom:8px;">Upcoming sessions.</h2>
-                <p style="max-width:620px;">All events are loaded from the database and stay in sync with your admin updates.</p>
-            </div>
+    <section class="events-main" id="schedule">
+        <div class="container events-layout">
+            <div>
+                <p class="section-kicker">Upcoming schedule</p>
+                <h2 class="section-title-clean">Choose your session.</h2>
+                <p class="section-copy">Practical events with clear outcomes, limited noise, and room for useful questions.</p>
 
-            @if($events->isEmpty())
-                <div class="ev2-empty">
-                    <h3 style="margin:0 0 8px;">No upcoming events</h3>
-                    <p style="margin:0;">New sessions will appear here once published.</p>
-                </div>
-            @else
-                <div class="ev2-list">
-                    @foreach($events as $event)
-                        <article class="ev2-card reveal">
-                            <div class="ev2-card-top">
+                @if($events->isEmpty())
+                    <div class="empty-events">There are no published events right now. Please check back soon.</div>
+                @else
+                    <div class="event-list">
+                        @foreach($events as $event)
+                            <article class="event-card">
+                                <time class="event-date" datetime="{{ $event->starts_at->toIso8601String() }}">
+                                    <b>{{ $event->starts_at->format('d') }}</b><span>{{ $event->starts_at->format('M') }}</span>
+                                </time>
                                 <div>
-                                    <span class="ev2-pill">{{ $event->category }}</span>
+                                    <div class="event-topline">
+                                        <span class="event-category">{{ $event->category }} · {{ $event->format ?: 'Session' }}</span>
+                                        @if($event->is_featured)<span class="event-featured">Featured</span>@endif
+                                    </div>
                                     <h3>{{ $event->title }}</h3>
+                                    <p>{{ $event->excerpt }}</p>
+                                    <div class="event-meta">
+                                        <span>{{ $event->starts_at->format('D, d M Y · g:i A') }}</span>
+                                        <span>{{ $event->location }}</span>
+                                    </div>
+                                    <a class="event-action" href="{{ route('events.index', ['event' => $event->slug]) }}#register">Reserve a place <span>→</span></a>
                                 </div>
-                                @if($event->is_featured)
-                                    <span class="ev2-pill" style="background:#fef3c7;color:#92400e;">Featured</span>
-                                @endif
-                            </div>
-
-                            <div class="ev2-meta">
-                                <span><i data-lucide="calendar-days"></i>{{ $event->starts_at->format('d M Y') }}</span>
-                                <span><i data-lucide="clock-3"></i>{{ $event->starts_at->format('g:i A') }} EAT</span>
-                                <span><i data-lucide="map-pin"></i>{{ $event->location }}</span>
-                                @if($event->format)
-                                    <span><i data-lucide="monitor"></i>{{ $event->format }}</span>
-                                @endif
-                            </div>
-
-                            <p>{{ $event->excerpt }}</p>
-
-                            <div class="ev2-actions">
-                                <a href="{{ route('events.index', ['event' => $event->slug]) }}#register" class="btn btn-sm btn-primary">Register</a>
-                                @if(filled($event->cta_url))
-                                    <a href="{{ $event->cta_url }}" class="btn btn-sm btn-secondary" target="_blank" rel="noopener">{{ $event->cta_label ?: 'Event URL' }}</a>
-                                @endif
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
-            @endif
-        </div>
-
-        <aside class="ev2-register" id="register">
-            <div class="ev2-register-head">
-                <p class="eyebrow" style="margin-bottom:4px;">Register</p>
-                <h3>Reserve your spot</h3>
-                <p style="margin:0;color:#64748b;font-size:14px;line-height:1.6;">After submitting, you will receive an email with the event URL.</p>
+                            </article>
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
-            @if($events->isEmpty())
-                <div class="ev2-empty" style="padding:20px 14px;">
-                    <p style="margin:0;">Registration is currently closed.</p>
-                </div>
-            @else
-                <div class="ev2-selected">
-                    <p>Selected event</p>
-                    <strong>{{ $formEvent?->title }}</strong>
-                    <p>{{ $formEvent?->starts_at?->format('d M Y, g:i A') }} @if($formEvent?->location) • {{ $formEvent->location }} @endif</p>
-                    @if($selectedEventUrl)
-                        <a href="{{ $selectedEventUrl }}" target="_blank" rel="noopener" class="ev2-link">
-                            <i data-lucide="link-2"></i>
-                            Event URL
-                        </a>
-                    @endif
-                </div>
+            <aside class="registration-card" id="register">
+                <p class="section-kicker">Registration</p>
+                <h2>Reserve your place.</h2>
+                <p>Select an event and leave your details. Your registration is saved immediately.</p>
 
-                <form method="POST" action="{{ route('events.register', ['event' => $formEvent]) }}">
-                    @csrf
-
-                    <div class="form-group">
-                        <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Event *</label>
-                        <select name="event_slug" id="event_slug" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" onchange="if(this.value){ window.location='{{ route('events.index') }}?event=' + encodeURIComponent(this.value) + '#register'; }" required>
-                            @foreach($events as $event)
-                                <option value="{{ $event->slug }}" @selected(($formEvent?->slug ?? null) === $event->slug)>
-                                    {{ $event->title }} - {{ $event->starts_at->format('d M Y, g:i A') }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('event_slug')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                @if($formEvent)
+                    <div class="selected-event">
+                        <span>Selected session</span>
+                        <strong>{{ $formEvent->title }}</strong>
+                        <small>{{ $formEvent->starts_at->format('d M Y · g:i A') }} · {{ $formEvent->location }}</small>
                     </div>
 
-                    <div class="ev2-form-grid">
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Full Name *</label>
-                            <input type="text" name="name" value="{{ old('name') }}" required style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Your full name">
-                            @error('name')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                    <form class="event-form" method="POST" action="{{ route('events.register', $formEvent) }}">
+                        @csrf
+                        <div class="field">
+                            <label for="event_slug">Event</label>
+                            <select name="event_slug" id="event_slug" onchange="if(this.value){location='{{ route('events.index') }}?event='+encodeURIComponent(this.value)+'#register'}">
+                                @foreach($events as $event)
+                                    <option value="{{ $event->slug }}" @selected($event->is($formEvent))>{{ $event->title }}</option>
+                                @endforeach
+                            </select>
                         </div>
-
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Email *</label>
-                            <input type="email" name="email" value="{{ old('email') }}" required style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="you@company.com">
-                            @error('email')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                        <div class="form-two">
+                            <div class="field"><label for="reg-name">Full name *</label><input id="reg-name" name="name" value="{{ old('name') }}" autocomplete="name" required>@error('name')<div class="field-error">{{ $message }}</div>@enderror</div>
+                            <div class="field"><label for="reg-email">Email *</label><input id="reg-email" type="email" name="email" value="{{ old('email') }}" autocomplete="email" required>@error('email')<div class="field-error">{{ $message }}</div>@enderror</div>
                         </div>
-
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Phone</label>
-                            <input type="text" name="phone" value="{{ old('phone') }}" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Optional">
-                            @error('phone')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                        <div class="form-two">
+                            <div class="field"><label for="reg-phone">Phone</label><input id="reg-phone" name="phone" value="{{ old('phone') }}" autocomplete="tel"></div>
+                            <div class="field"><label for="reg-company">Company</label><input id="reg-company" name="company" value="{{ old('company') }}" autocomplete="organization"></div>
                         </div>
-
-                        <div class="form-group" style="margin-bottom:0;">
-                            <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Company</label>
-                            <input type="text" name="company" value="{{ old('company') }}" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Optional">
-                            @error('company')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
-                        </div>
-                    </div>
-
-                    <div class="form-group" style="margin-top:10px;">
-                        <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Message</label>
-                        <textarea name="message" rows="4" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;resize:vertical;" placeholder="Share anything we should know before the session...">{{ old('message') }}</textarea>
-                        @error('message')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="margin-top:8px;width:100%;justify-content:center;">Submit registration</button>
-                </form>
-            @endif
-        </aside>
-    </div>
-</section>
+                        <div class="field"><label for="reg-message">Anything we should know?</label><textarea id="reg-message" name="message" rows="3">{{ old('message') }}</textarea>@error('message')<div class="field-error">{{ $message }}</div>@enderror</div>
+                        <button class="register-button" type="submit">Complete registration</button>
+                    </form>
+                @else
+                    <div class="empty-events">Registration will open with the next published event.</div>
+                @endif
+            </aside>
+        </div>
+    </section>
 </div>
-
 @endsection

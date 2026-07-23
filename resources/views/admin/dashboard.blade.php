@@ -1,66 +1,84 @@
 @extends('admin.layout')
-@section('page-title', 'Dashboard')
+@section('page-title', 'Portfolio overview')
 
 @section('content')
-<div class="stat-grid">
-    <div class="stat">
-        <div class="stat-label">Properties</div>
-        <div class="stat-value">{{ $stats['total_properties'] }}</div>
+<div class="welcome-panel">
+    <div>
+        <span class="eyebrow">Starmax content workspace</span>
+        <h1>Keep the portfolio current.</h1>
+        <p>Manage Grace Sellah’s public portfolio, website enquiries, events, and registrations from one focused workspace.</p>
     </div>
-    <div class="stat">
-        <div class="stat-label">Total Units</div>
-        <div class="stat-value">{{ $stats['total_units'] }}</div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Occupied Units</div>
-        <div class="stat-value" style="color:#16a34a;">{{ $stats['occupied_units'] }}</div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Active Tenants</div>
-        <div class="stat-value">{{ $stats['total_tenants'] }}</div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Pending Invoices</div>
-        <div class="stat-value" style="color:#ca8a04;">{{ $stats['pending_invoices'] }}</div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Open Maintenance</div>
-        <div class="stat-value" style="color:#dc2626;">{{ $stats['open_maintenance'] }}</div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Unread Messages</div>
-        <div class="stat-value" style="color:#1d4ed8;">{{ $stats['unread_messages'] }}</div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Total Users</div>
-        <div class="stat-value">{{ $stats['total_users'] }}</div>
-    </div>
+    <a href="{{ route('grace-sellah.admin.page.edit') }}" class="btn btn-primary">Edit Grace’s portfolio</a>
 </div>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;">
-    <a href="{{ route('admin.properties.index') }}" class="card" style="text-decoration:none;color:inherit;display:block;">
-        <div style="font-weight:600;margin-bottom:4px;">Manage Properties</div>
-        <div style="font-size:13px;color:#94a3b8;">View, add and manage properties</div>
+<div class="stat-grid">
+    <a class="stat" href="{{ route('admin.contact-messages.index') }}">
+        <div class="stat-label">Unread enquiries</div>
+        <div class="stat-value">{{ $stats['unread_messages'] }}</div>
+        <div class="stat-meta">{{ $stats['total_messages'] }} total messages</div>
     </a>
-    <a href="{{ route('admin.tenants.index') }}" class="card" style="text-decoration:none;color:inherit;display:block;">
-        <div style="font-weight:600;margin-bottom:4px;">Manage Tenants</div>
-        <div style="font-size:13px;color:#94a3b8;">View tenant profiles and details</div>
+    <a class="stat" href="{{ route('admin.events.index') }}">
+        <div class="stat-label">Upcoming events</div>
+        <div class="stat-value">{{ $stats['upcoming_events'] }}</div>
+        <div class="stat-meta">Published opportunities</div>
     </a>
-    <a href="{{ route('admin.invoices.index') }}" class="card" style="text-decoration:none;color:inherit;display:block;">
-        <div style="font-weight:600;margin-bottom:4px;">Invoices</div>
-        <div style="font-size:13px;color:#94a3b8;">Track payments and outstanding invoices</div>
+    <a class="stat" href="{{ route('admin.event-registrations.index') }}">
+        <div class="stat-label">Event registrations</div>
+        <div class="stat-value">{{ $stats['event_registrations'] }}</div>
+        <div class="stat-meta">{{ $stats['unread_registrations'] }} awaiting review</div>
     </a>
-    <a href="{{ route('admin.maintenance.index') }}" class="card" style="text-decoration:none;color:inherit;display:block;">
-        <div style="font-weight:600;margin-bottom:4px;">Maintenance</div>
-        <div style="font-size:13px;color:#94a3b8;">Review and assign maintenance requests</div>
+    <a class="stat" href="{{ route('grace-sellah.admin.page.edit') }}">
+        <div class="stat-label">Grace portfolio</div>
+        <div class="stat-value status-value">{{ $stats['portfolio_ready'] ? 'Live' : 'Draft' }}</div>
+        <div class="stat-meta">Public page status</div>
     </a>
-    <a href="{{ route('admin.contact-messages.index') }}" class="card" style="text-decoration:none;color:inherit;display:block;">
-        <div style="font-weight:600;margin-bottom:4px;">Contact Messages</div>
-        <div style="font-size:13px;color:#94a3b8;">Review website enquiries</div>
-    </a>
-    <a href="{{ route('grace-sellah.admin.home') }}" class="card" style="text-decoration:none;color:inherit;display:block;">
-        <div style="font-weight:600;margin-bottom:4px;">Grace Sellah Page</div>
-        <div style="font-size:13px;color:#94a3b8;">Update the public portfolio content</div>
-    </a>
+</div>
+
+<div class="dashboard-grid">
+    <section class="card">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">Inbox</span>
+                <h2>Recent enquiries</h2>
+            </div>
+            <a href="{{ route('admin.contact-messages.index') }}">View all</a>
+        </div>
+        @forelse($recentMessages as $message)
+            <a class="activity-row" href="{{ route('admin.contact-messages.show', $message) }}">
+                <span class="activity-avatar">{{ strtoupper(substr($message->name, 0, 1)) }}</span>
+                <span class="activity-copy">
+                    <strong>{{ $message->name }}</strong>
+                    <small>{{ \Illuminate\Support\Str::limit($message->message, 72) }}</small>
+                </span>
+                <time>{{ $message->created_at->diffForHumans() }}</time>
+            </a>
+        @empty
+            <div class="empty-state">No website enquiries yet.</div>
+        @endforelse
+    </section>
+
+    <section class="card">
+        <div class="section-heading">
+            <div>
+                <span class="eyebrow">Schedule</span>
+                <h2>Upcoming events</h2>
+            </div>
+            <a href="{{ route('admin.events.create') }}">Add event</a>
+        </div>
+        @forelse($upcomingEvents as $event)
+            <a class="activity-row" href="{{ route('admin.events.edit', $event) }}">
+                <span class="event-date">
+                    <b>{{ optional($event->starts_at)->format('d') }}</b>
+                    <small>{{ optional($event->starts_at)->format('M') }}</small>
+                </span>
+                <span class="activity-copy">
+                    <strong>{{ $event->title }}</strong>
+                    <small>{{ $event->format ?: 'Portfolio event' }}</small>
+                </span>
+            </a>
+        @empty
+            <div class="empty-state">No upcoming events. Add one when you are ready.</div>
+        @endforelse
+    </section>
 </div>
 @endsection
