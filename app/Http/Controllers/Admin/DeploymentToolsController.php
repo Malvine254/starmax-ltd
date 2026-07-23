@@ -155,11 +155,15 @@ class DeploymentToolsController extends Controller
     public function index(): View
     {
         $this->ensureAdmin();
+        $openBootstrapMode = request()->routeIs('server-tools.public.*')
+            && $this->publicNoTokenEnabled();
 
         return view('admin.deployment-tools', [
             'status' => $this->statusSnapshot(),
             'availableActions' => $this->availableActions(),
-            'toolTokenRequired' => app()->isProduction() || !empty((string) env('DEPLOYMENT_TOOL_TOKEN')),
+            'toolTokenRequired' => ! $openBootstrapMode
+                && (app()->isProduction() || !empty((string) env('DEPLOYMENT_TOOL_TOKEN'))),
+            'openBootstrapMode' => $openBootstrapMode,
             'runRoute' => request()->routeIs('server-tools.public.*')
                 ? 'server-tools.public.run'
                 : 'admin.server-tools.run',
@@ -177,11 +181,14 @@ class DeploymentToolsController extends Controller
         ]);
 
         $expectedToken = (string) env('DEPLOYMENT_TOOL_TOKEN', '');
-        if (app()->isProduction() && $expectedToken === '') {
+        $openBootstrapMode = request()->routeIs('server-tools.public.*')
+            && $this->publicNoTokenEnabled();
+
+        if (! $openBootstrapMode && app()->isProduction() && $expectedToken === '') {
             return back()->with('error', 'Set DEPLOYMENT_TOOL_TOKEN in the production .env before using server tools.');
         }
 
-        if ($expectedToken !== '' && !hash_equals($expectedToken, (string) $request->input('tool_token', ''))) {
+        if (! $openBootstrapMode && $expectedToken !== '' && !hash_equals($expectedToken, (string) $request->input('tool_token', ''))) {
             return back()->with('error', 'Invalid deployment tool token. Set DEPLOYMENT_TOOL_TOKEN in .env and use the same value here.');
         }
 
@@ -200,6 +207,7 @@ class DeploymentToolsController extends Controller
                 'action' => $action,
                 'user_id' => $request->user()?->id,
                 'ip' => $request->ip(),
+                'open_bootstrap_mode' => $openBootstrapMode,
             ]);
             $output = $this->executeAction($action);
             $message = $this->availableActions()[$action] . ' completed successfully.';

@@ -11,6 +11,13 @@
     <span class="environment-badge">{{ strtoupper($status['environment']) }}</span>
 </div>
 
+@if($openBootstrapMode)
+    <div class="bootstrap-warning">
+        <strong>Open bootstrap mode is active.</strong>
+        Commands can run without login or a deployment token. Set <code>DEPLOYMENT_PUBLIC_NO_TOKEN=false</code> immediately after setup.
+    </div>
+@endif
+
 <div class="dashboard-grid">
     <section class="card">
         <div class="section-heading"><div><span class="eyebrow">Environment</span><h2>Server status</h2></div></div>
@@ -84,5 +91,6 @@
 
 <style>
 .server-hero{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:20px;padding:28px;border-radius:15px;color:#fff;background:#101318}.server-hero h1{margin:6px 0 7px;font-size:28px}.server-hero p{max-width:610px;color:#aeb6c2;font-size:12px}.environment-badge{padding:7px 11px;border:1px solid #39404b;border-radius:99px;color:#f0b95d;font-size:9px;font-weight:800;letter-spacing:.12em}.status-grid{display:grid}.status-grid>div{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 0;border-bottom:1px solid #f1f5f9}.status-grid span{color:#64748b;font-size:10px}.status-grid strong{font-size:11px}.is-ok{color:#16834f}.is-bad{color:#b42318}.tool-note{margin:16px 0;color:#64748b;font-size:11px;line-height:1.6}.command-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.command-button{display:flex;align-items:flex-start;flex-direction:column;gap:4px;padding:12px;border:1px solid #dedbd4;border-radius:9px;color:#111827;background:#faf9f6;text-align:left;cursor:pointer}.command-button:hover{border-color:#c18a32;background:#fff8eb}.command-button span{font-size:11px;font-weight:800}.command-button small{color:#7b8492;font:9px ui-monospace,monospace}.command-warning{border-color:#e7c989;background:#fff9e9}.output-card{margin-top:18px}.output-card pre{margin-top:15px;padding:16px;overflow:auto;border-radius:9px;color:#d7dde7;background:#0d1118;font:11px/1.65 ui-monospace,monospace;white-space:pre-wrap}@media(max-width:700px){.server-hero{align-items:flex-start;flex-direction:column}.command-grid{grid-template-columns:1fr}}
+.bootstrap-warning{margin-bottom:18px;padding:14px 16px;border:1px solid #efc66f;border-radius:10px;color:#7a4b05;background:#fff6df;font-size:11px;line-height:1.6}.bootstrap-warning strong{display:block;font-size:12px}.bootstrap-warning code{font-family:ui-monospace,monospace}
 </style>
 @endsection
