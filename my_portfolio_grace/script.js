@@ -20,6 +20,12 @@ hamburger.addEventListener('click', () => {
   navLinks.classList.toggle('open');
 });
 
+document.addEventListener('click', (event) => {
+  if (!navLinks.contains(event.target) && !hamburger.contains(event.target)) {
+    navLinks.classList.remove('open');
+  }
+});
+
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => navLinks.classList.remove('open'));
 });
@@ -32,7 +38,7 @@ const observerNav = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       navItems.forEach(a => {
-        a.style.fontWeight = a.getAttribute('href') === '#' + entry.target.id ? '700' : '';
+        a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
       });
     }
   });
