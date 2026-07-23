@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\SiteEvent;
 use App\Models\User;
 use App\Mail\EventRegistrationConfirmation;
+use App\Mail\EventReminder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -123,5 +124,49 @@ class EventRegistrationTest extends TestCase
             return $mail->eventUrl === 'https://meet.example.com/private-session'
                 && $mail->hasTo('recipient@example.com');
         });
+    }
+
+    public function test_admin_can_send_individual_bulk_reminders_and_print_attendance(): void
+    {
+        Mail::fake();
+        $role = Role::create(['name' => 'ADMIN']);
+        $admin = User::factory()->create(['role_id' => $role->id, 'is_active' => true]);
+        $event = SiteEvent::create([
+            'title' => 'Reminder Workshop',
+            'slug' => 'reminder-workshop',
+            'category' => 'Workshop',
+            'location' => 'Nairobi',
+            'starts_at' => now()->addWeek(),
+            'excerpt' => 'Reminder test.',
+            'description' => 'Reminder test event.',
+            'event_url' => 'https://meet.example.com/reminder',
+            'status' => 'upcoming',
+        ]);
+        foreach (['first@example.com', 'second@example.com'] as $index => $email) {
+            EventRegistration::create([
+                'site_event_id' => $event->id,
+                'name' => 'Attendee '.($index + 1),
+                'email' => $email,
+            ]);
+        }
+
+        $this->actingAs($admin)->post(route('admin.event-registrations.reminders.send'), [
+            'site_event_id' => $event->id,
+            'subject' => 'Event reminder',
+            'message' => 'Please remember to attend.',
+        ])->assertSessionHas('success', 'Reminder completed: 2 sent, 0 failed.');
+
+        Mail::assertSent(EventReminder::class, 2);
+        Mail::assertSent(EventReminder::class, fn (EventReminder $mail) =>
+            $mail->eventUrl === 'https://meet.example.com/reminder'
+            && $mail->hasTo('first@example.com')
+        );
+
+        $this->actingAs($admin)
+            ->get(route('admin.events.attendance', $event))
+            ->assertOk()
+            ->assertSee('Attendee 1')
+            ->assertSee('Attendee 2')
+            ->assertSee('Print attendance register');
     }
 }

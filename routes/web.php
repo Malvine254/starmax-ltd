@@ -80,6 +80,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 		Route::get('/event-registrations', [EventRegistrationAdminController::class, 'index'])->name('event-registrations.index');
 		Route::get('/event-registrations/{eventRegistration}', [EventRegistrationAdminController::class, 'show'])->name('event-registrations.show');
 		Route::patch('/event-registrations/{eventRegistration}', [EventRegistrationAdminController::class, 'update'])->name('event-registrations.update');
+		Route::post('/event-registrations/reminders/send', [EventRegistrationAdminController::class, 'sendReminder'])->name('event-registrations.reminders.send');
+		Route::get('/events/{event}/attendance', [EventRegistrationAdminController::class, 'attendance'])->name('events.attendance');
 		Route::middleware('throttle:10,1')->group(function () {
 			Route::get('/server-tools', [DeploymentToolsController::class, 'index'])->name('server-tools.index');
 			Route::post('/server-tools/run', [DeploymentToolsController::class, 'run'])->name('server-tools.run');
