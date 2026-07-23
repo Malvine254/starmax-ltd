@@ -4,154 +4,208 @@
 
 @section('content')
 <style>
-/* ── EVENTS PAGE ── */
-.ev-hero {
-    background: linear-gradient(150deg,#0f172a 0%,#1e293b 55%,#111827 100%);
-    padding: 68px 0 52px; position: relative; overflow: hidden;
+.events-shell {
+    background:
+        radial-gradient(circle at top right, rgba(17,24,39,0.07), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(17,24,39,0.05), transparent 28%),
+        linear-gradient(180deg, #f8fafc 0%, #ffffff 42%, #ffffff 100%);
 }
-.ev-hero::after {
-    content:''; position:absolute; inset:0;
-    background-image: radial-gradient(rgba(255,255,255,0.035) 1px,transparent 1px);
-    background-size: 30px 30px; pointer-events:none;
+.ev2-hero { padding: 74px 0 46px; }
+.ev2-title {
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.05;
+    margin-bottom: 14px;
+    max-width: 760px;
 }
-.ev-hero-stats {
-    display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 40px;
+.ev2-sub {
+    max-width: 640px;
+    color: #475569;
+    line-height: 1.72;
+    font-size: 17px;
+    margin-bottom: 28px;
 }
-.ev-stat {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 14px; padding: 20px 22px;
+.ev2-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
 }
-.ev-stat-num { font-size: 34px; font-weight: 850; color: #fff; line-height: 1; }
-.ev-stat-label { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 5px; line-height: 1.4; }
-
-/* Format badge */
-.ev-format {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px;
+.ev2-stat {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: 0 12px 30px rgba(15,23,42,0.05);
 }
-.ev-format-online   { background:#dbeafe; color:#1d4ed8; }
-.ev-format-inperson { background:#d1fae5; color:#065f46; }
-.ev-format-hybrid   { background:#f3e8ff; color:#7e22ce; }
-.ev-format-default  { background:#f1f5f9; color:#475569; }
-
-/* Category badge */
-.ev-cat {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-    padding: 3px 10px; border-radius: 999px; background:#f3f4f6; color:#374151;
+.ev2-stat strong {
+    display: block;
+    font-size: 25px;
+    line-height: 1;
+    color: #0f172a;
 }
-
-/* Featured event card */
-.ev-featured-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
-.ev-featured-card {
-    background: #fff; border: 1px solid #e2e8f0; border-radius: 20px;
-    overflow: hidden; box-shadow: 0 4px 24px rgba(15,23,42,0.08);
-    display: flex; flex-direction: column; transition: all 0.3s ease;
+.ev2-stat span {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #64748b;
+    font-weight: 700;
 }
-.ev-featured-card:hover { box-shadow: 0 16px 52px rgba(15,23,42,0.13); transform: translateY(-4px); }
-.ev-featured-card-header {
-    background: linear-gradient(135deg,#0f172a 0%,#1e293b 100%);
-    padding: 28px 28px 24px; position: relative; overflow: hidden;
-    display: flex; gap: 20px; align-items: flex-start;
+.ev2-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 18px;
+    align-items: start;
 }
-.ev-featured-card-header::after {
-    content:''; position:absolute; inset:0;
-    background-image: radial-gradient(rgba(255,255,255,0.04) 1px,transparent 1px);
-    background-size: 20px 20px; pointer-events:none;
+.ev2-list {
+    display: grid;
+    gap: 14px;
 }
-.ev-date-box {
-    flex-shrink: 0; width: 64px; height: 64px; border-radius: 12px;
-    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    position: relative; z-index: 1;
+.ev2-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 14px 36px rgba(15,23,42,0.06);
 }
-.ev-date-box .day  { font-size: 26px; font-weight: 850; color: #fff; line-height: 1; }
-.ev-date-box .mon  { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-top: 2px; }
-.ev-featured-header-meta { position: relative; z-index: 1; flex: 1; }
-.ev-featured-header-meta h3 { font-size: 20px; font-weight: 850; color: #fff; margin: 10px 0 8px; line-height: 1.25; }
-.ev-featured-header-meta p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.65; margin: 0; }
-.ev-featured-card-body { padding: 22px 28px 28px; flex: 1; display: flex; flex-direction: column; gap: 16px; }
-.ev-detail-row { display: flex; flex-wrap: wrap; gap: 14px; }
-.ev-detail-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #64748b; font-weight: 500; }
-.ev-detail-item svg { width: 14px; height: 14px; color: #94a3b8; flex-shrink: 0; }
-
-/* Schedule card grid */
-.ev-schedule-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-.ev-schedule-card {
-    background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
-    overflow: hidden; box-shadow: 0 1px 4px rgba(15,23,42,0.05);
-    display: flex; flex-direction: column; transition: all 0.28s ease;
+.ev2-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 20px 50px rgba(15,23,42,0.11);
 }
-.ev-schedule-card:hover { border-color: #cbd5e1; box-shadow: 0 10px 36px rgba(15,23,42,0.1); transform: translateY(-3px); }
-.ev-schedule-card-top {
-    display: flex; gap: 16px; align-items: flex-start; padding: 20px 20px 16px;
+.ev2-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
 }
-.ev-small-date {
-    flex-shrink: 0; width: 52px; height: 52px; border-radius: 10px;
-    background: #0f172a; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
+.ev2-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    font-size: 10px;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-weight: 750;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #374151;
 }
-.ev-small-date .day  { font-size: 20px; font-weight: 850; color: #fff; line-height: 1; }
-.ev-small-date .mon  { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(255,255,255,0.55); }
-.ev-schedule-card-info { flex: 1; min-width: 0; }
-.ev-schedule-card-info h4 { font-size: 15px; font-weight: 750; color: #0f172a; margin-bottom: 6px; line-height: 1.3; }
-.ev-schedule-card-info p { font-size: 13px; color: #64748b; line-height: 1.6; margin: 0; }
-.ev-schedule-card-bottom {
-    padding: 12px 20px 18px; border-top: 1px solid #f1f5f9;
-    background: #fafbff; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+.ev2-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
 }
-.ev-schedule-detail { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #94a3b8; font-weight: 500; }
-.ev-schedule-detail svg { width: 12px; height: 12px; }
-.ev-cta-pill {
-    display: inline-flex; align-items: center; gap: 5px;
-    font-size: 12px; font-weight: 700; color: #111827; text-decoration: none;
-    background: #f1f5f9; border: 1px solid #e2e8f0; padding: 6px 12px; border-radius: 999px;
-    transition: all 0.2s ease; white-space: nowrap;
+.ev2-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
-.ev-cta-pill:hover { background: #111827; color: #fff; border-color: #111827; }
-.ev-cta-pill svg { width: 12px; height: 12px; }
-
-/* Format cards */
-.ev-formats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
-.ev-format-card {
-    background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 28px;
-    box-shadow: 0 1px 4px rgba(15,23,42,0.05); transition: all 0.28s ease;
-    display: flex; align-items: flex-start; gap: 16px;
+.ev2-meta svg {
+    width: 14px;
+    height: 14px;
 }
-.ev-format-card:hover { border-color: #cbd5e1; box-shadow: 0 8px 28px rgba(15,23,42,0.08); transform: translateY(-3px); }
-.ev-format-icon { width: 44px; height: 44px; border-radius: 10px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.ev-format-icon svg { width: 20px; height: 20px; color: #111827; }
-.ev-format-card h4 { font-size: 15px; font-weight: 750; color: #0f172a; margin-bottom: 6px; }
-.ev-format-card p { font-size: 13px; color: #64748b; line-height: 1.65; margin: 0; }
-
-/* Empty state */
-.ev-empty {
-    text-align: center; padding: 60px 24px;
-    background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 16px;
+.ev2-card h3 {
+    margin: 8px 0 6px;
+    font-size: 20px;
+    line-height: 1.25;
 }
-.ev-empty svg { width: 48px; height: 48px; color: #cbd5e1; margin: 0 auto 16px; display: block; }
-.ev-empty h3 { font-size: 18px; color: #374151; margin-bottom: 8px; }
-.ev-empty p { font-size: 14px; color: #94a3b8; }
-
-@media (max-width: 1024px) { .ev-schedule-grid { grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 900px)  { .ev-featured-grid { grid-template-columns: 1fr; } .ev-formats-grid { grid-template-columns: 1fr; } }
-@media (max-width: 640px)  { .ev-schedule-grid { grid-template-columns: 1fr; } .ev-hero-stats { grid-template-columns: 1fr; } }
+.ev2-card p {
+    margin: 0;
+    color: #475569;
+    line-height: 1.65;
+    font-size: 14px;
+}
+.ev2-actions {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.ev2-register {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 14px 36px rgba(15,23,42,0.08);
+    position: sticky;
+    top: 94px;
+}
+.ev2-register-head {
+    margin-bottom: 12px;
+}
+.ev2-register-head h3 {
+    margin: 5px 0 4px;
+    font-size: 22px;
+}
+.ev2-selected {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+.ev2-selected p {
+    margin: 0;
+    font-size: 12px;
+    color: #64748b;
+}
+.ev2-selected strong {
+    display: block;
+    margin: 4px 0;
+    color: #0f172a;
+    font-size: 15px;
+}
+.ev2-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #111827;
+    text-decoration: none;
+    margin-top: 8px;
+}
+.ev2-link svg { width: 14px; height: 14px; }
+.ev2-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.ev2-empty {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+    padding: 30px 20px;
+    text-align: center;
+    color: #64748b;
+}
+@media (max-width: 980px) {
+    .ev2-grid { grid-template-columns: 1fr; }
+    .ev2-register { position: static; }
+}
+@media (max-width: 640px) {
+    .ev2-stats { grid-template-columns: 1fr; }
+    .ev2-form-grid { grid-template-columns: 1fr; }
+}
 </style>
 
 @php
-function evFormatClass(string $fmt): string {
-    return match(strtolower($fmt)) {
-        'online'             => 'ev-format-online',
-        'in-person','in person' => 'ev-format-inperson',
-        'hybrid'             => 'ev-format-hybrid',
-        default              => 'ev-format-default',
-    };
-}
+    $activeEvent = old('event_slug')
+        ? $events->firstWhere('slug', old('event_slug'))
+        : ($selectedEvent ?? $events->first());
+    $formEvent = $activeEvent ?? $events->first();
+    $selectedEventUrl = $formEvent
+        ? (filled($formEvent->cta_url) ? $formEvent->cta_url : route('events.index', ['event' => $formEvent->slug]) . '#schedule')
+        : null;
 @endphp
 
-<!-- Hero -->
-<section class="ev-hero">
-    <div class="container" style="position:relative;z-index:1;">
+<div class="events-shell">
+<section class="ev2-hero">
+    <div class="container">
         @if(session('success'))
         <div style="display:flex;align-items:center;gap:10px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;font-weight:600;">
             <i data-lucide="check-circle" style="width:18px;height:18px;flex-shrink:0;"></i>
@@ -166,254 +220,159 @@ function evFormatClass(string $fmt): string {
         </div>
         @endif
 
-        <p class="eyebrow" style="color:#94a3b8;margin-bottom:14px;">Events</p>
-        <h2 style="color:#fff;max-width:680px;margin-bottom:16px;font-size:clamp(34px,5vw,56px);">
-            Workshops, launches, and technology sessions.
-        </h2>
-        <p style="color:rgba(255,255,255,0.58);max-width:560px;font-size:17px;margin-bottom:36px;line-height:1.75;">
-            Meet the Starmax team at product demos, developer workshops, and business technology sessions focused on practical digital transformation.
+        <p class="eyebrow">Events</p>
+        <h1 class="ev2-title">Modern events with direct registration.</h1>
+        <p class="ev2-sub">
+            Browse upcoming sessions powered from the database, pick the event that matches your goal, and get your confirmation email with the event URL right away.
         </p>
-        <div style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:44px;">
-            <a href="#schedule" class="btn btn-white"><i data-lucide="calendar"></i> View Schedule</a>
-            <a href="/contact" class="btn btn-ghost">Request Private Demo</a>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px;">
+            <a href="#register" class="btn btn-primary"><i data-lucide="ticket"></i> Register now</a>
+            <a href="/contact" class="btn btn-secondary">Request private session</a>
         </div>
-        <div class="ev-hero-stats">
-            <div class="ev-stat">
-                <div class="ev-stat-num">{{ $eventStats['upcoming'] }}</div>
-                <div class="ev-stat-label">Upcoming events</div>
+        <div class="ev2-stats">
+            <div class="ev2-stat">
+                <strong>{{ $eventStats['upcoming'] }}</strong>
+                <span>Upcoming Events</span>
             </div>
-            <div class="ev-stat">
-                <div class="ev-stat-num">{{ $eventStats['formats'] }}</div>
-                <div class="ev-stat-label">Event formats</div>
+            <div class="ev2-stat">
+                <strong>{{ $eventStats['formats'] }}</strong>
+                <span>Formats</span>
             </div>
-            <div class="ev-stat">
-                <div class="ev-stat-num">{{ $eventStats['next_month'] }}</div>
-                <div class="ev-stat-label">Next available session</div>
+            <div class="ev2-stat">
+                <strong>{{ $eventStats['next_month'] }}</strong>
+                <span>Next Session Window</span>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Featured Events -->
-@if($featuredEvents->isNotEmpty())
-<div class="section" style="padding-bottom:0;">
-    <div class="section-header left" style="text-align:left;margin:0 0 28px;">
-        <p class="eyebrow">Featured</p>
-        <h2 style="margin-bottom:8px;">Start with these sessions.</h2>
-        <p style="max-width:540px;">High-value events for teams planning property platforms, AI workflows, and modern operational systems.</p>
-    </div>
-    <div class="ev-featured-grid">
-        @foreach($featuredEvents as $event)
-        <article class="ev-featured-card reveal">
-            <div class="ev-featured-card-header">
-                <div class="ev-date-box">
-                    <span class="day">{{ $event->starts_at->format('d') }}</span>
-                    <span class="mon">{{ $event->starts_at->format('M') }}</span>
-                </div>
-                <div class="ev-featured-header-meta">
-                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:2px;">
-                        <span class="ev-cat">{{ $event->category }}</span>
-                        @if($event->format)
-                            <span class="ev-format {{ evFormatClass($event->format) }}">{{ $event->format }}</span>
-                        @endif
-                    </div>
-                    <h3>{{ $event->title }}</h3>
-                    <p>{{ $event->excerpt }}</p>
-                </div>
+<section class="section" id="schedule" style="padding-top:8px; padding-bottom:66px;">
+    <div class="ev2-grid">
+        <div>
+            <div class="section-header left" style="text-align:left;margin:0 0 20px;">
+                <p class="eyebrow">Schedule</p>
+                <h2 style="margin-bottom:8px;">Upcoming sessions.</h2>
+                <p style="max-width:620px;">All events are loaded from the database and stay in sync with your admin updates.</p>
             </div>
-            <div class="ev-featured-card-body">
-                <div class="ev-detail-row">
-                    <span class="ev-detail-item"><i data-lucide="map-pin"></i>{{ $event->location }}</span>
-                    <span class="ev-detail-item"><i data-lucide="clock"></i>{{ $event->starts_at->format('g:i A') }} EAT</span>
-                    @if($event->ends_at)
-                    <span class="ev-detail-item"><i data-lucide="timer"></i>{{ $event->starts_at->diffInMinutes($event->ends_at) }} min</span>
+
+            @if($events->isEmpty())
+                <div class="ev2-empty">
+                    <h3 style="margin:0 0 8px;">No upcoming events</h3>
+                    <p style="margin:0;">New sessions will appear here once published.</p>
+                </div>
+            @else
+                <div class="ev2-list">
+                    @foreach($events as $event)
+                        <article class="ev2-card reveal">
+                            <div class="ev2-card-top">
+                                <div>
+                                    <span class="ev2-pill">{{ $event->category }}</span>
+                                    <h3>{{ $event->title }}</h3>
+                                </div>
+                                @if($event->is_featured)
+                                    <span class="ev2-pill" style="background:#fef3c7;color:#92400e;">Featured</span>
+                                @endif
+                            </div>
+
+                            <div class="ev2-meta">
+                                <span><i data-lucide="calendar-days"></i>{{ $event->starts_at->format('d M Y') }}</span>
+                                <span><i data-lucide="clock-3"></i>{{ $event->starts_at->format('g:i A') }} EAT</span>
+                                <span><i data-lucide="map-pin"></i>{{ $event->location }}</span>
+                                @if($event->format)
+                                    <span><i data-lucide="monitor"></i>{{ $event->format }}</span>
+                                @endif
+                            </div>
+
+                            <p>{{ $event->excerpt }}</p>
+
+                            <div class="ev2-actions">
+                                <a href="{{ route('events.index', ['event' => $event->slug]) }}#register" class="btn btn-sm btn-primary">Register</a>
+                                @if(filled($event->cta_url))
+                                    <a href="{{ $event->cta_url }}" class="btn btn-sm btn-secondary" target="_blank" rel="noopener">{{ $event->cta_label ?: 'Event URL' }}</a>
+                                @endif
+                            </div>
+                        </article>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <aside class="ev2-register" id="register">
+            <div class="ev2-register-head">
+                <p class="eyebrow" style="margin-bottom:4px;">Register</p>
+                <h3>Reserve your spot</h3>
+                <p style="margin:0;color:#64748b;font-size:14px;line-height:1.6;">After submitting, you will receive an email with the event URL.</p>
+            </div>
+
+            @if($events->isEmpty())
+                <div class="ev2-empty" style="padding:20px 14px;">
+                    <p style="margin:0;">Registration is currently closed.</p>
+                </div>
+            @else
+                <div class="ev2-selected">
+                    <p>Selected event</p>
+                    <strong>{{ $formEvent?->title }}</strong>
+                    <p>{{ $formEvent?->starts_at?->format('d M Y, g:i A') }} @if($formEvent?->location) • {{ $formEvent->location }} @endif</p>
+                    @if($selectedEventUrl)
+                        <a href="{{ $selectedEventUrl }}" target="_blank" rel="noopener" class="ev2-link">
+                            <i data-lucide="link-2"></i>
+                            Event URL
+                        </a>
                     @endif
                 </div>
-                <p style="font-size:14px;color:#374151;line-height:1.7;margin:0;">{{ $event->description }}</p>
-                <div>
-                    <a href="{{ route('events.index', ['event' => $event->slug]) }}#register" class="btn btn-primary">Register Now <i data-lucide="arrow-right"></i></a>
-                    <a href="{{ $event->cta_url }}" class="btn btn-secondary" style="margin-left:8px;">{{ $event->cta_label }}</a>
-                </div>
-            </div>
-        </article>
-        @endforeach
-    </div>
-</div>
-@endif
 
-<!-- Full Schedule -->
-<div class="section" id="schedule">
-    <div class="section-header left" style="text-align:left;margin:0 0 28px;">
-        <p class="eyebrow">Schedule</p>
-        <h2 style="margin-bottom:8px;">All upcoming events.</h2>
-        <p style="max-width:540px;">A database-backed calendar of demos, workshops, clinics, and strategy sessions — updated regularly.</p>
-    </div>
+                <form method="POST" action="{{ route('events.register', ['event' => $formEvent]) }}">
+                    @csrf
 
-    @if($events->isEmpty())
-    <div class="ev-empty">
-        <i data-lucide="calendar-off"></i>
-        <h3>No upcoming events</h3>
-        <p>New sessions will appear here as soon as they are published.</p>
-    </div>
-    @else
-    <div class="ev-schedule-grid">
-        @foreach($events as $event)
-        <article class="ev-schedule-card reveal">
-            <div class="ev-schedule-card-top">
-                <div class="ev-small-date">
-                    <span class="day">{{ $event->starts_at->format('d') }}</span>
-                    <span class="mon">{{ $event->starts_at->format('M') }}</span>
-                </div>
-                <div class="ev-schedule-card-info">
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                        <span class="ev-cat" style="font-size:10px;">{{ $event->category }}</span>
-                        @if($event->format)
-                            <span class="ev-format {{ evFormatClass($event->format) }}">{{ $event->format }}</span>
-                        @endif
+                    <div class="form-group">
+                        <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Event *</label>
+                        <select name="event_slug" id="event_slug" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" onchange="if(this.value){ window.location='{{ route('events.index') }}?event=' + encodeURIComponent(this.value) + '#register'; }" required>
+                            @foreach($events as $event)
+                                <option value="{{ $event->slug }}" @selected(($formEvent?->slug ?? null) === $event->slug)>
+                                    {{ $event->title }} - {{ $event->starts_at->format('d M Y, g:i A') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('event_slug')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
                     </div>
-                    <h4>{{ $event->title }}</h4>
-                    <p>{{ $event->excerpt }}</p>
-                </div>
-            </div>
-            <div class="ev-schedule-card-bottom">
-                <div style="display:flex;gap:12px;flex-wrap:wrap;">
-                    <span class="ev-schedule-detail"><i data-lucide="clock"></i>{{ $event->starts_at->format('g:i A') }}</span>
-                    <span class="ev-schedule-detail"><i data-lucide="map-pin"></i>{{ Str::limit($event->location, 28) }}</span>
-                </div>
-                <a href="{{ route('events.index', ['event' => $event->slug]) }}#register" class="ev-cta-pill">
-                    Register <i data-lucide="arrow-right"></i>
-                </a>
-            </div>
-        </article>
-        @endforeach
+
+                    <div class="ev2-form-grid">
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Full Name *</label>
+                            <input type="text" name="name" value="{{ old('name') }}" required style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Your full name">
+                            @error('name')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Email *</label>
+                            <input type="email" name="email" value="{{ old('email') }}" required style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="you@company.com">
+                            @error('email')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Phone</label>
+                            <input type="text" name="phone" value="{{ old('phone') }}" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Optional">
+                            @error('phone')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                        </div>
+
+                        <div class="form-group" style="margin-bottom:0;">
+                            <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Company</label>
+                            <input type="text" name="company" value="{{ old('company') }}" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Optional">
+                            @error('company')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:10px;">
+                        <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Message</label>
+                        <textarea name="message" rows="4" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;resize:vertical;" placeholder="Share anything we should know before the session...">{{ old('message') }}</textarea>
+                        @error('message')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="margin-top:8px;width:100%;justify-content:center;">Submit registration</button>
+                </form>
+            @endif
+        </aside>
     </div>
-    @endif
-</div>
-
-<!-- Dark strip: format types -->
-<div style="background:#0f172a;padding:52px 0;">
-    <div class="container">
-        <div class="section-header" style="text-align:left;margin:0 0 32px;">
-            <p class="eyebrow" style="color:#475569;">Event Formats</p>
-            <h2 style="color:#fff;margin-bottom:8px;">What we host.</h2>
-            <p style="color:#64748b;max-width:500px;">
-                @if($categories->isNotEmpty())
-                    Currently hosting: {{ $categories->join(', ', ' and ') }}.
-                @else
-                    Sessions for every stage — from idea to production.
-                @endif
-            </p>
-        </div>
-        <div class="ev-formats-grid">
-            <div class="ev-format-card">
-                <div class="ev-format-icon"><i data-lucide="monitor-play"></i></div>
-                <div>
-                    <h4>Product Demos</h4>
-                    <p>Live walkthroughs of Starmax products with time for implementation planning and operational questions.</p>
-                </div>
-            </div>
-            <div class="ev-format-card">
-                <div class="ev-format-icon"><i data-lucide="graduation-cap"></i></div>
-                <div>
-                    <h4>Workshops</h4>
-                    <p>Hands-on sessions covering web platforms, Android development, AI automation, and deployment practices.</p>
-                </div>
-            </div>
-            <div class="ev-format-card">
-                <div class="ev-format-icon"><i data-lucide="users"></i></div>
-                <div>
-                    <h4>Strategy Sessions</h4>
-                    <p>Small-group sessions for teams planning new systems, migrations, technology evaluations, or product launches.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Event Registration -->
-<div class="section" id="register">
-    <div class="section-header left" style="text-align:left;margin:0 0 28px;">
-        <p class="eyebrow">Register</p>
-        <h2 style="margin-bottom:8px;">Reserve your spot.</h2>
-        <p style="max-width:620px;">Choose an upcoming event and submit your details. We will send confirmation and attendance details by email.</p>
-    </div>
-
-    @if($events->isEmpty())
-    <div class="ev-empty">
-        <i data-lucide="calendar-off"></i>
-        <h3>No events open for registration</h3>
-        <p>Please check back soon for new sessions.</p>
-    </div>
-    @else
-    @php
-        $activeEvent = old('event_slug')
-            ? $events->firstWhere('slug', old('event_slug'))
-            : ($selectedEvent ?? $events->first());
-        $formEvent = $activeEvent ?? $events->first();
-    @endphp
-
-    <div class="card" style="max-width:760px;padding:26px 24px;border-radius:16px;">
-        <form method="POST" action="{{ route('events.register', ['event' => $formEvent]) }}">
-            @csrf
-
-            <div class="form-group">
-                <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Event *</label>
-                <select name="event_slug" id="event_slug" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" onchange="if(this.value){ window.location='{{ route('events.index') }}?event=' + encodeURIComponent(this.value) + '#register'; }" required>
-                    @foreach($events as $event)
-                    <option value="{{ $event->slug }}" @selected(($formEvent?->slug ?? null) === $event->slug)>
-                        {{ $event->title }} — {{ $event->starts_at->format('d M Y, g:i A') }}
-                    </option>
-                    @endforeach
-                </select>
-                @error('event_slug')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
-            </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-                <div class="form-group" style="margin-bottom:0;">
-                    <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Full Name *</label>
-                    <input type="text" name="name" value="{{ old('name') }}" required style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Your full name">
-                    @error('name')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
-                </div>
-
-                <div class="form-group" style="margin-bottom:0;">
-                    <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Email *</label>
-                    <input type="email" name="email" value="{{ old('email') }}" required style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="you@company.com">
-                    @error('email')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
-                </div>
-
-                <div class="form-group" style="margin-bottom:0;">
-                    <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Phone</label>
-                    <input type="text" name="phone" value="{{ old('phone') }}" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Optional">
-                    @error('phone')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
-                </div>
-
-                <div class="form-group" style="margin-bottom:0;">
-                    <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Company</label>
-                    <input type="text" name="company" value="{{ old('company') }}" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Optional">
-                    @error('company')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
-                </div>
-            </div>
-
-            <div class="form-group" style="margin-top:14px;">
-                <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Message</label>
-                <textarea name="message" rows="4" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;resize:vertical;" placeholder="Share anything we should know before the session...">{{ old('message') }}</textarea>
-                @error('message')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="margin-top:8px;">Submit Registration <i data-lucide="send"></i></button>
-        </form>
-    </div>
-    @endif
-</div>
-
-<!-- CTA -->
-<div class="cta-banner reveal">
-    <h2>Want an invite or a private demo?</h2>
-    <p>Tell us what you want to explore and we'll share the right event or schedule a focused one-on-one session.</p>
-    <div class="cta-actions">
-        <a href="/contact" class="btn btn-primary">Request an Invite →</a>
-        <a href="/services" class="btn btn-secondary">Explore our services</a>
-    </div>
+</section>
 </div>
 
 @endsection

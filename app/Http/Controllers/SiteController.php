@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\ContactAdminNotification;
 use App\Mail\ContactUserConfirmation;
+use App\Mail\EventRegistrationConfirmation;
 use App\Models\ContactMessage;
 use App\Models\EventRegistration;
 use App\Models\SiteEvent;
@@ -278,11 +279,18 @@ class SiteController extends Controller
 
         $data['site_event_id'] = $event->id;
 
-        EventRegistration::create($data);
+        $registration = EventRegistration::create($data);
+
+        $eventUrl = filled($event->cta_url)
+            ? $event->cta_url
+            : route('events.index', ['event' => $event->slug]) . '#schedule';
+
+        Mail::to($registration->email)
+            ->send(new EventRegistrationConfirmation($registration, $eventUrl));
 
         return redirect()
             ->route('events.index', ['event' => $event->slug])
-            ->with('success', 'Registration received. We will contact you with event details shortly.');
+            ->with('success', 'Registration received. We sent a confirmation email with your event URL.');
     }
 
     public function contact()
