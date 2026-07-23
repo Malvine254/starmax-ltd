@@ -1312,7 +1312,7 @@
                         <div class="dropdown-text"><strong>TenantPro Mobile</strong><span>Android tenant app</span></div>
                     </a>
                     <div class="dropdown-divider"></div>
-                    <a href="{{ $tenantDemoUrl }}" class="dropdown-item" target="_blank" rel="noopener">
+                    <a href="{{ $tenantDemoUrl }}" class="dropdown-item" target="_blank" rel="noopener noreferrer">
                         <div class="dropdown-icon indigo"><i data-lucide="external-link"></i></div>
                         <div class="dropdown-text"><strong>Live Demo</strong><span>Try it now →</span></div>
                     </a>
@@ -1325,7 +1325,7 @@
         </nav>
 
         <div class="header-cta">
-            <a href="{{ $tenantDemoUrl }}" class="btn-cta btn-cta-ghost" target="_blank" rel="noopener">Live Demo</a>
+            <a href="{{ $tenantDemoUrl }}" class="btn-cta btn-cta-ghost" target="_blank" rel="noopener noreferrer">Live Demo ↗</a>
             <a href="/contact" class="btn-cta btn-cta-primary">
                 <i data-lucide="rocket"></i> Get Started
             </a>
