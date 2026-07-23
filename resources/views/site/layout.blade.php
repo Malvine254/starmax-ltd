@@ -54,7 +54,12 @@
         .site-header.scrolled { background: rgba(255,255,255,0.98); box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
         .header-inner { width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w)); margin: 0 auto; height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
         .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-        .brand-img { height: 40px; width: auto; object-fit: contain; }
+        .brand-wordmark {
+            display: inline-flex; align-items: baseline; color: #111827;
+            font-family: 'Manrope', sans-serif; font-size: 21px; font-weight: 800;
+            letter-spacing: -0.055em; line-height: 1; text-transform: uppercase;
+        }
+        .brand-wordmark span { color: #d99a31; }
         /* nav */
         .main-nav { display: flex; align-items: center; gap: 2px; }
         .nav-item { position: relative; }
@@ -1251,7 +1256,7 @@
 <header class="site-header" id="site-header">
     <div class="header-inner">
         <a href="/" class="brand" aria-label="Starmax home">
-            <img src="{{ asset('images/logo.png') }}" alt="Starmax" class="brand-img" onerror="this.style.display='none'">
+            <span class="brand-wordmark">Starmax<span>.</span></span>
         </a>
 
         <nav class="main-nav">
