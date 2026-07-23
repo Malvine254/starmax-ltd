@@ -31,6 +31,9 @@
             <h2 style="margin:7px 0 8px;font-size:18px;">{{ $eventRegistration->event?->title ?? 'Event removed' }}</h2>
             @if($eventRegistration->event)
                 <p style="color:#64748b;font-size:12px;line-height:1.65;">{{ $eventRegistration->event->starts_at?->format('D, d M Y · g:i A') }}<br>{{ $eventRegistration->event->location }}</p>
+                @if($eventRegistration->event->event_url)
+                    <a href="{{ $eventRegistration->event->event_url }}" target="_blank" rel="noopener" style="display:block;margin-top:10px;color:#8a5a12;font-size:11px;font-weight:700;word-break:break-all;">Open event link ↗</a>
+                @endif
                 <a href="{{ route('admin.events.edit', $eventRegistration->event) }}" class="btn btn-secondary" style="margin-top:14px;">Edit event</a>
             @endif
         </section>

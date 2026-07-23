@@ -78,9 +78,17 @@
             </div>
 
             <div class="form-group">
-                <label>CTA URL *</label>
+                <label>Public CTA URL *</label>
                 <input type="text" name="cta_url" value="{{ old('cta_url', $event->cta_url) }}" required>
+                <div style="margin-top:5px;color:#64748b;font-size:11px;">Public marketing link. This is not the private meeting/access link.</div>
                 @error('cta_url')<p class="form-error">{{ $message }}</p>@enderror
+            </div>
+
+            <div class="form-group" style="grid-column:1/-1;">
+                <label>Event / Meeting Link</label>
+                <input type="url" name="event_url" value="{{ old('event_url', $event->event_url) }}" placeholder="https://zoom.us/j/... or https://meet.google.com/...">
+                <div style="margin-top:5px;color:#64748b;font-size:11px;">Optional. This exact link is included in the attendee confirmation email after registration.</div>
+                @error('event_url')<p class="form-error">{{ $message }}</p>@enderror
             </div>
 
             <div class="form-group">

@@ -6,6 +6,7 @@ use App\Models\EventRegistration;
 use App\Models\Role;
 use App\Models\SiteEvent;
 use App\Models\User;
+use App\Mail\EventRegistrationConfirmation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -95,5 +96,32 @@ class EventRegistrationTest extends TestCase
             'status' => 'confirmed',
             'admin_notes' => 'Confirmation completed by phone.',
         ]);
+    }
+
+    public function test_confirmation_email_uses_the_dedicated_event_link(): void
+    {
+        Mail::fake();
+        $event = SiteEvent::create([
+            'title' => 'Online Portfolio Session',
+            'slug' => 'online-portfolio-session',
+            'category' => 'Webinar',
+            'location' => 'Online',
+            'starts_at' => now()->addWeek(),
+            'excerpt' => 'An online portfolio session.',
+            'description' => 'A practical online portfolio session.',
+            'cta_url' => '/contact',
+            'event_url' => 'https://meet.example.com/private-session',
+            'status' => 'upcoming',
+        ]);
+
+        $this->post(route('events.register', $event), [
+            'name' => 'Email Recipient',
+            'email' => 'recipient@example.com',
+        ])->assertSessionHas('success');
+
+        Mail::assertSent(EventRegistrationConfirmation::class, function (EventRegistrationConfirmation $mail) {
+            return $mail->eventUrl === 'https://meet.example.com/private-session'
+                && $mail->hasTo('recipient@example.com');
+        });
     }
 }

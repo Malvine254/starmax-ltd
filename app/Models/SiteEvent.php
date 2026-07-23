@@ -27,6 +27,7 @@ class SiteEvent extends Model
         'description',
         'cta_label',
         'cta_url',
+        'event_url',
         'is_featured',
         'status',
         'sort_order',

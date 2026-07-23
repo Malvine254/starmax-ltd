@@ -282,8 +282,8 @@ class SiteController extends Controller
 
         $registration = EventRegistration::create($data);
 
-        $eventUrl = filled($event->cta_url)
-            ? $event->cta_url
+        $eventUrl = filled($event->event_url)
+            ? $event->event_url
             : route('events.index', ['event' => $event->slug]) . '#schedule';
 
         $emailSent = SafeMailDelivery::attempt(
