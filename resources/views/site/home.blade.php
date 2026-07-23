@@ -1,295 +1,511 @@
 @extends('site.layout')
 
+@section('title', 'Starmax Ltd - Digital Product Studio')
+
 @section('content')
-<!-- Hero -->
-<div class="hero-section landing-hero">
-    <div class="hero-content hero-slider landing-hero-slider js-hero-slider" data-autoplay="true" data-interval="6200">
-        <div class="hero-slider-track">
-            <div class="hero-slide landing-slide">
-                <img src="{{ asset('images/landing-hero-team.png') }}" alt="Starmax software team planning a digital platform" class="landing-slide-image">
-                <div class="landing-slide-shade"></div>
-                <div class="landing-slide-copy">
-                    <p class="eyebrow">Digital Product Partner</p>
-                    <h2>Build the software your business has been waiting for.</h2>
-                    <p>Starmax designs and ships modern web platforms, Android apps, AI workflows, and property operations tools for teams that need reliable software in production.</p>
-                    <div class="stack">
-                        <a href="/contact" class="btn btn-primary">Start a Project</a>
-                        <a href="/portfolio" class="btn btn-secondary">View Work</a>
+<style>
+/* Landing page redesign scoped to this file */
+.nx-landing {
+    --nx-ink: #0b1220;
+    --nx-muted: #4b5563;
+    --nx-soft: #f3f7fb;
+    --nx-line: #dbe5f0;
+    --nx-card: #ffffff;
+    --nx-brand: #0f2a44;
+    --nx-brand-2: #12476f;
+    --nx-gold: #ca9358;
+    --nx-teal: #0e8a7f;
+}
+
+.nx-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: min(86vh, 860px);
+    background: linear-gradient(125deg, #061525 0%, #0d2c45 52%, #124f69 100%);
+}
+.nx-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 18% 18%, rgba(255,255,255,0.14), transparent 34%), radial-gradient(circle at 84% 22%, rgba(202,147,88,0.23), transparent 32%);
+}
+.nx-hero-grid {
+    position: relative;
+    z-index: 2;
+    width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w));
+    margin: 0 auto;
+    padding: 84px 0 76px;
+    display: grid;
+    grid-template-columns: 1.04fr 0.96fr;
+    gap: 36px;
+    align-items: center;
+}
+.nx-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #ecf4ff;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    margin-bottom: 16px;
+}
+.nx-hero h1 {
+    font-size: clamp(38px, 6.2vw, 70px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    color: #f8fbff;
+    margin-bottom: 16px;
+}
+.nx-hero p {
+    color: rgba(235,245,255,0.82);
+    font-size: 18px;
+    max-width: 620px;
+}
+.nx-hero-actions {
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.nx-hero-actions .btn-primary {
+    background: #f8fbff;
+    color: #0f2a44;
+    border: 1px solid #f8fbff;
+}
+.nx-hero-actions .btn-secondary {
+    background: transparent;
+    border: 1px solid rgba(248,251,255,0.55);
+    color: #f8fbff;
+}
+
+.nx-hero-media {
+    position: relative;
+    border-radius: 28px;
+    overflow: hidden;
+    min-height: 420px;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 24px 60px rgba(4,12,20,0.35);
+}
+.nx-hero-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.nx-hero-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(6,16,25,0.62) 0%, rgba(6,16,25,0.04) 58%);
+}
+.nx-metric-cards {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+.nx-metric {
+    background: rgba(6,19,30,0.78);
+    border: 1px solid rgba(248,251,255,0.2);
+    border-radius: 12px;
+    padding: 10px;
+}
+.nx-metric strong {
+    display: block;
+    color: #fff;
+    font-size: 19px;
+    line-height: 1;
+}
+.nx-metric span {
+    display: block;
+    margin-top: 4px;
+    color: rgba(236,245,255,0.82);
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.nx-proof {
+    background: #fff;
+    border-bottom: 1px solid var(--nx-line);
+}
+.nx-proof-inner {
+    width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w));
+    margin: 0 auto;
+    padding: 18px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.nx-proof b {
+    color: var(--nx-ink);
+}
+.nx-proof span {
+    color: var(--nx-muted);
+    font-size: 14px;
+}
+
+.nx-section {
+    width: min(calc(100% - (var(--page-gutter) * 2)), var(--max-w));
+    margin: 0 auto;
+    padding: 72px 0;
+}
+.nx-head {
+    margin-bottom: 30px;
+}
+.nx-kicker {
+    color: var(--nx-teal);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.nx-title {
+    font-size: clamp(28px, 4vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--nx-ink);
+    margin-bottom: 10px;
+}
+.nx-desc {
+    color: var(--nx-muted);
+    max-width: 700px;
+}
+
+.nx-solutions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+.nx-card {
+    background: var(--nx-card);
+    border: 1px solid var(--nx-line);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 6px 20px rgba(11, 18, 32, 0.05);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+.nx-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(11, 18, 32, 0.1);
+}
+.nx-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #edf4fb;
+    color: var(--nx-brand-2);
+    margin-bottom: 14px;
+}
+.nx-icon svg { width: 20px; height: 20px; }
+.nx-card h3 {
+    color: var(--nx-ink);
+    font-size: 19px;
+    margin-bottom: 8px;
+}
+.nx-card p {
+    color: var(--nx-muted);
+    font-size: 14px;
+}
+.nx-card ul {
+    margin-top: 12px;
+    display: grid;
+    gap: 7px;
+}
+.nx-card li {
+    color: var(--nx-muted);
+    font-size: 13px;
+    padding-left: 14px;
+    position: relative;
+}
+.nx-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--nx-gold);
+}
+
+.nx-process {
+    background: linear-gradient(180deg, #f4f9ff 0%, #ffffff 100%);
+    border-top: 1px solid var(--nx-line);
+    border-bottom: 1px solid var(--nx-line);
+}
+.nx-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+.nx-step {
+    background: #fff;
+    border: 1px solid var(--nx-line);
+    border-radius: 14px;
+    padding: 16px;
+}
+.nx-step .num {
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    background: var(--nx-brand);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+.nx-step h4 { margin-bottom: 5px; color: var(--nx-ink); font-size: 15px; }
+.nx-step p { color: var(--nx-muted); font-size: 13px; }
+
+.nx-feature {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: center;
+}
+.nx-feature-media {
+    border-radius: 22px;
+    overflow: hidden;
+    border: 1px solid var(--nx-line);
+    min-height: 360px;
+    box-shadow: 0 14px 36px rgba(15, 42, 68, 0.12);
+}
+.nx-feature-media img { width: 100%; height: 100%; object-fit: cover; }
+.nx-feature-copy .pill {
+    display: inline-flex;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--nx-brand-2);
+    background: #e8f1fb;
+    padding: 5px 10px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+}
+.nx-feature-copy h3 {
+    font-size: clamp(24px, 3vw, 34px);
+    color: var(--nx-ink);
+    line-height: 1.13;
+    margin-bottom: 12px;
+}
+.nx-feature-copy p { color: var(--nx-muted); margin-bottom: 14px; }
+
+.nx-cta {
+    border-radius: 24px;
+    padding: 44px;
+    background: linear-gradient(130deg, #0d2b42 0%, #0f4f63 56%, #12756f 100%);
+    color: #eef7ff;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 20px 54px rgba(6, 18, 30, 0.28);
+}
+.nx-cta h3 {
+    font-size: clamp(28px, 4vw, 46px);
+    line-height: 1.06;
+    margin-bottom: 10px;
+    color: #fff;
+}
+.nx-cta p { color: rgba(235,245,255,0.86); max-width: 680px; margin: 0 auto 20px; }
+.nx-cta .btn {
+    background: #fff;
+    color: #0f2a44;
+    border: 1px solid #fff;
+}
+
+@media (max-width: 980px) {
+    .nx-hero-grid,
+    .nx-feature {
+        grid-template-columns: 1fr;
+    }
+    .nx-solutions {
+        grid-template-columns: 1fr 1fr;
+    }
+    .nx-steps {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .nx-solutions,
+    .nx-steps {
+        grid-template-columns: 1fr;
+    }
+    .nx-hero-grid {
+        padding: 66px 0 54px;
+    }
+    .nx-hero p {
+        font-size: 16px;
+    }
+    .nx-hero-media {
+        min-height: 330px;
+    }
+    .nx-metric-cards {
+        grid-template-columns: 1fr;
+        left: 14px;
+        right: 14px;
+    }
+    .nx-cta {
+        padding: 30px 20px;
+    }
+}
+</style>
+
+<div class="nx-landing">
+    <section class="nx-hero">
+        <div class="nx-hero-grid">
+            <div>
+                <span class="nx-chip"><i data-lucide="sparkles"></i> Digital Product Studio</span>
+                <h1>From concept to launch-ready software without the chaos.</h1>
+                <p>Starmax helps ambitious teams build web platforms, Android apps, and AI-assisted workflows with clear scope, rapid delivery, and production-grade engineering.</p>
+                <div class="nx-hero-actions">
+                    <a href="/contact" class="btn btn-primary">Start Your Project <i data-lucide="arrow-right"></i></a>
+                    <a href="/portfolio" class="btn btn-secondary">See Recent Work</a>
+                </div>
+            </div>
+            <div class="nx-hero-media">
+                <img src="{{ asset('images/landing-hero-team.png') }}" alt="Starmax team collaborating on product strategy">
+                <div class="nx-metric-cards">
+                    <div class="nx-metric">
+                        <strong>50+</strong>
+                        <span>Projects shipped</span>
+                    </div>
+                    <div class="nx-metric">
+                        <strong>6</strong>
+                        <span>Core service tracks</span>
+                    </div>
+                    <div class="nx-metric">
+                        <strong>24/7</strong>
+                        <span>Post-launch support</span>
                     </div>
                 </div>
             </div>
-
-            <div class="hero-slide landing-slide">
-                <img src="{{ asset('images/landing-web-platform.png') }}" alt="Modern dashboard and web platform product mockup" class="landing-slide-image">
-                <div class="landing-slide-shade"></div>
-                <div class="landing-slide-copy">
-                    <p class="eyebrow">Web Platforms</p>
-                    <h2>Dashboards, portals, and APIs built to scale cleanly.</h2>
-                    <p>From admin consoles to customer-facing SaaS, we create secure platforms with polished UX, clear data flows, and maintainable architecture.</p>
-                    <div class="stack">
-                        <a href="/services#web" class="btn btn-primary">Explore Web Services</a>
-                        <a href="/products" class="btn btn-secondary">See Products</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="hero-slide landing-slide">
-                <img src="{{ asset('images/landing-mobile-ai.png') }}" alt="Mobile app and AI automation product scene" class="landing-slide-image">
-                <div class="landing-slide-shade"></div>
-                <div class="landing-slide-copy">
-                    <p class="eyebrow">Mobile + AI</p>
-                    <h2>Mobile-first systems with automation where it matters.</h2>
-                    <p>We combine native Android experiences with practical AI agents that reduce repetitive work, speed up support, and keep operations moving.</p>
-                    <div class="stack">
-                        <a href="/services#android" class="btn btn-primary">Plan Mobile App</a>
-                        <a href="/services#ai" class="btn btn-secondary">Explore AI</a>
-                    </div>
-                </div>
-            </div>
         </div>
+    </section>
 
-        <div class="hero-slider-controls">
-            <div class="hero-slider-nav">
-                <button type="button" class="hero-slider-btn js-hero-prev" aria-label="Previous hero slide"><i data-lucide="arrow-left"></i></button>
-                <button type="button" class="hero-slider-btn js-hero-next" aria-label="Next hero slide"><i data-lucide="arrow-right"></i></button>
-            </div>
-            <div class="hero-slider-dots">
-                <button type="button" class="hero-slider-dot active" aria-label="Go to hero slide 1"></button>
-                <button type="button" class="hero-slider-dot" aria-label="Go to hero slide 2"></button>
-                <button type="button" class="hero-slider-dot" aria-label="Go to hero slide 3"></button>
-            </div>
+    <section class="nx-proof">
+        <div class="nx-proof-inner">
+            <span><b>Trusted by:</b> founders, property teams, and operations leaders</span>
+            <span>Web platforms</span>
+            <span>Android delivery</span>
+            <span>AI automation</span>
+            <span>Long-term support</span>
         </div>
-    </div>
+    </section>
 
-    <div class="hero-stats landing-stats">
-        <div class="hero-stat reveal">
-            <p class="kpi">50+</p>
-            <p class="kpi-label">Projects delivered across web, mobile, and AI</p>
+    <section class="nx-section">
+        <div class="nx-head">
+            <p class="nx-kicker">What We Build</p>
+            <h2 class="nx-title">High-impact digital systems that teams can actually use every day.</h2>
+            <p class="nx-desc">We focus on practical outcomes: faster operations, cleaner user journeys, and software that scales as your business grows.</p>
         </div>
-        <div class="hero-stat reveal">
-            <p class="kpi">6</p>
-            <p class="kpi-label">Core service verticals for product and operations teams</p>
-        </div>
-        <div class="hero-stat reveal">
-            <p class="kpi">24/7</p>
-            <p class="kpi-label">Launch support, monitoring, and improvement cycles</p>
-        </div>
-    </div>
-</div>
-
-<!-- Featured Solutions -->
-<div class="section landing-section">
-    <div class="section-header">
-        <p class="eyebrow">Featured Solutions</p>
-        <h2>One team for strategy, build, launch, and support.</h2>
-        <p>We pair sharp product thinking with practical engineering so every build has a clear path from idea to daily use.</p>
-    </div>
-
-    <div class="modern-slider landing-solution-slider js-modern-slider reveal" data-autoplay="true" data-interval="5200">
-        <div class="modern-slider-track">
-            <article class="modern-slide">
-                <div class="modern-slide-content">
-                    <span class="tag">Web Platforms</span>
-                    <h3>Operational dashboards that make work easier to run.</h3>
-                    <p>Custom Laravel, Next.js, and NestJS platforms for internal teams, customers, and business workflows.</p>
-                    <ul class="list">
-                        <li>Admin portals, CRMs, and SaaS products</li>
-                        <li>Secure API-first architecture</li>
-                        <li>Analytics, roles, notifications, and audit trails</li>
-                    </ul>
-                    <div class="stack"><a href="/services#web" class="btn btn-primary">See Web Services</a></div>
-                </div>
-                <div class="modern-slide-media">
-                    <img src="{{ asset('images/landing-web-platform.png') }}" alt="Dashboard product mockup" class="modern-slide-image">
-                    <div class="modern-slide-overlay">
-                        <p class="media-kpi">99.9%</p>
-                        <p class="media-label">Uptime-minded platform architecture</p>
-                    </div>
-                </div>
+        <div class="nx-solutions">
+            <article class="nx-card reveal">
+                <div class="nx-icon"><i data-lucide="layout-dashboard"></i></div>
+                <h3>Web Platforms</h3>
+                <p>Custom systems for operations, dashboards, and customer workflows.</p>
+                <ul>
+                    <li>Admin portals and internal tools</li>
+                    <li>Secure API architecture</li>
+                    <li>Analytics and workflow automation</li>
+                </ul>
             </article>
-
-            <article class="modern-slide">
-                <div class="modern-slide-content">
-                    <span class="tag">Android Apps</span>
-                    <h3>Native mobile apps people can rely on every day.</h3>
-                    <p>We build Kotlin apps with clean architecture, smooth UX, and backend integrations that hold up in real use.</p>
-                    <ul class="list">
-                        <li>Tenant self-service and field operations apps</li>
-                        <li>Offline-first flows and push notifications</li>
-                        <li>Material 3 interfaces with analytics built in</li>
-                    </ul>
-                    <div class="stack"><a href="/services#android" class="btn btn-primary">See Mobile Services</a></div>
-                </div>
-                <div class="modern-slide-media">
-                    <img src="{{ asset('images/landing-mobile-ai.png') }}" alt="Mobile app product mockup" class="modern-slide-image">
-                    <div class="modern-slide-overlay">
-                        <p class="media-kpi">4.8</p>
-                        <p class="media-label">Target quality for app experience and usability</p>
-                    </div>
-                </div>
-            </article>
-
-            <article class="modern-slide">
-                <div class="modern-slide-content">
-                    <span class="tag">AI Automation</span>
-                    <h3>Useful AI workflows, not gimmicks.</h3>
-                    <p>We design assistants and automations that handle repetitive tasks, route work, and support teams with traceable outputs.</p>
-                    <ul class="list">
-                        <li>Support assistants and knowledge chat</li>
-                        <li>Document extraction and workflow routing</li>
-                        <li>RAG pipelines, agent tools, and review loops</li>
-                    </ul>
-                    <div class="stack"><a href="/services#ai" class="btn btn-primary">See AI Services</a></div>
-                </div>
-                <div class="modern-slide-media">
-                    <img src="{{ asset('images/landing-hero-team.png') }}" alt="Team planning AI automation workflow" class="modern-slide-image">
-                    <div class="modern-slide-overlay">
-                        <p class="media-kpi">60%</p>
-                        <p class="media-label">Potential reduction in repetitive operations work</p>
-                    </div>
-                </div>
-            </article>
-        </div>
-
-        <div class="modern-slider-controls">
-            <div class="modern-slider-nav">
-                <button type="button" class="modern-slider-btn js-slider-prev" aria-label="Previous slide"><i data-lucide="arrow-left"></i></button>
-                <button type="button" class="modern-slider-btn js-slider-next" aria-label="Next slide"><i data-lucide="arrow-right"></i></button>
-            </div>
-            <div class="modern-slider-dots">
-                <button type="button" class="modern-slider-dot active" aria-label="Go to slide 1"></button>
-                <button type="button" class="modern-slider-dot" aria-label="Go to slide 2"></button>
-                <button type="button" class="modern-slider-dot" aria-label="Go to slide 3"></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Services Preview -->
-<div class="section">
-    <div class="section-header">
-        <p class="eyebrow">Capabilities</p>
-        <h2>Everything needed to ship modern digital products.</h2>
-        <p>Choose a single service or bring us in for the full lifecycle from discovery to long-term support.</p>
-    </div>
-    <div class="grid grid-3">
-        <a href="/services#web" class="service-preview-card reveal">
-            <div class="service-preview-top">
-                <div class="card-icon purple"><i data-lucide="globe"></i></div>
-                <h3>Web Development</h3>
-                <p>Responsive platforms, dashboards, APIs, and business systems built with modern frameworks.</p>
-            </div>
-            <div class="service-preview-bottom"><span>Learn more</span><i data-lucide="arrow-right"></i></div>
-        </a>
-        <a href="/services#android" class="service-preview-card reveal">
-            <div class="service-preview-top">
-                <div class="card-icon blue"><i data-lucide="smartphone"></i></div>
+            <article class="nx-card reveal">
+                <div class="nx-icon"><i data-lucide="smartphone"></i></div>
                 <h3>Android Apps</h3>
-                <p>Native Kotlin experiences with clean architecture, offline support, and reliable integrations.</p>
-            </div>
-            <div class="service-preview-bottom"><span>Learn more</span><i data-lucide="arrow-right"></i></div>
-        </a>
-        <a href="/services#ai" class="service-preview-card reveal">
-            <div class="service-preview-top">
-                <div class="card-icon teal"><i data-lucide="bot"></i></div>
-                <h3>AI Agents</h3>
-                <p>Practical assistants, document workflows, and knowledge-aware automation for busy teams.</p>
-            </div>
-            <div class="service-preview-bottom"><span>Learn more</span><i data-lucide="arrow-right"></i></div>
-        </a>
-        <a href="/services#consulting" class="service-preview-card reveal">
-            <div class="service-preview-top">
-                <div class="card-icon orange"><i data-lucide="briefcase"></i></div>
-                <h3>IT Consulting</h3>
-                <p>Architecture reviews, product planning, migration strategy, and technology roadmaps.</p>
-            </div>
-            <div class="service-preview-bottom"><span>Learn more</span><i data-lucide="arrow-right"></i></div>
-        </a>
-        <a href="/services#tenant" class="service-preview-card reveal">
-            <div class="service-preview-top">
-                <div class="card-icon emerald"><i data-lucide="building-2"></i></div>
-                <h3>Tenant Management</h3>
-                <p>Property operations software with invoicing, maintenance, tenant portals, and analytics.</p>
-            </div>
-            <div class="service-preview-bottom"><span>Learn more</span><i data-lucide="arrow-right"></i></div>
-        </a>
-        <a href="/services#custom" class="service-preview-card reveal">
-            <div class="service-preview-top">
-                <div class="card-icon rose"><i data-lucide="zap"></i></div>
-                <h3>Custom Software</h3>
-                <p>Business systems for inventory, CRM, booking, reporting, integrations, and operations.</p>
-            </div>
-            <div class="service-preview-bottom"><span>Learn more</span><i data-lucide="arrow-right"></i></div>
-        </a>
-    </div>
-</div>
+                <p>Native Kotlin apps designed for reliability and smooth performance.</p>
+                <ul>
+                    <li>Offline-first behavior</li>
+                    <li>Push notifications and real-time sync</li>
+                    <li>Production-ready release pipeline</li>
+                </ul>
+            </article>
+            <article class="nx-card reveal">
+                <div class="nx-icon"><i data-lucide="bot"></i></div>
+                <h3>AI Workflow Automation</h3>
+                <p>AI assistants that reduce repetitive work and speed up decisions.</p>
+                <ul>
+                    <li>Knowledge-aware assistants</li>
+                    <li>Document extraction and routing</li>
+                    <li>Human-in-the-loop controls</li>
+                </ul>
+            </article>
+        </div>
+    </section>
 
-<div class="divider"></div>
+    <section class="nx-process">
+        <div class="nx-section" style="padding-top:58px;padding-bottom:58px;">
+            <div class="nx-head" style="margin-bottom:22px;">
+                <p class="nx-kicker">How We Work</p>
+                <h2 class="nx-title">A clear process from first call to stable launch.</h2>
+            </div>
+            <div class="nx-steps">
+                <article class="nx-step reveal">
+                    <span class="num">1</span>
+                    <h4>Discovery</h4>
+                    <p>We align on goals, users, scope, timeline, and measurable outcomes.</p>
+                </article>
+                <article class="nx-step reveal">
+                    <span class="num">2</span>
+                    <h4>Blueprint</h4>
+                    <p>Architecture, UX direction, milestones, and implementation plan.</p>
+                </article>
+                <article class="nx-step reveal">
+                    <span class="num">3</span>
+                    <h4>Build</h4>
+                    <p>Agile delivery with frequent demos, testing, and quality checkpoints.</p>
+                </article>
+                <article class="nx-step reveal">
+                    <span class="num">4</span>
+                    <h4>Launch + Support</h4>
+                    <p>Deployment, monitoring, iteration, and post-launch improvements.</p>
+                </article>
+            </div>
+        </div>
+    </section>
 
-<!-- Product Highlight -->
-<div class="section product-highlight">
-    <div class="section-header">
-        <p class="eyebrow">Flagship Product</p>
-        <h2>TenantPro keeps property operations moving.</h2>
-        <p>A complete tenant management ecosystem with a web dashboard for landlords and a native Android app for tenants.</p>
-    </div>
-    <div class="grid grid-2">
-        <article class="card reveal">
-            <span class="tag">Web Dashboard</span>
-            <h3 style="margin-top:14px;">TenantPro Admin</h3>
-            <p>Manage properties, units, tenants, invoices, maintenance, and analytics from a single modern interface.</p>
-            <ul class="list">
-                <li>Occupancy and revenue dashboards</li>
-                <li>Automated invoices and reminders</li>
-                <li>Maintenance request tracking</li>
-            </ul>
-            <div class="stack"><a href="/products" class="btn btn-secondary">Learn More</a></div>
-        </article>
-        <article class="card reveal">
-            <span class="tag">Android App</span>
-            <h3 style="margin-top:14px;">TenantPro Mobile</h3>
-            <p>Tenants view invoices, make payments, submit maintenance requests, and message management from their phone.</p>
-            <ul class="list">
-                <li>Native Kotlin app</li>
-                <li>Offline-capable flows</li>
-                <li>Push notifications for updates</li>
-            </ul>
-            <div class="stack"><a href="/products" class="btn btn-secondary">Explore Product</a></div>
-        </article>
-    </div>
-</div>
+    <section class="nx-section">
+        <div class="nx-feature">
+            <div class="nx-feature-media reveal">
+                <img src="{{ asset('images/landing-web-platform.png') }}" alt="Modern product dashboard built by Starmax">
+            </div>
+            <div class="nx-feature-copy reveal">
+                <span class="pill">Flagship Product</span>
+                <h3>TenantPro streamlines property operations end to end.</h3>
+                <p>From invoice generation and maintenance requests to tenant communication and analytics, TenantPro helps teams run portfolios with less manual overhead.</p>
+                <div class="stack">
+                    <a href="/products" class="btn btn-primary">Explore TenantPro <i data-lucide="arrow-up-right"></i></a>
+                    <a href="/events" class="btn btn-secondary">Book a Live Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="divider"></div>
-
-<!-- Why Starmax -->
-<div class="section">
-    <div class="section-header">
-        <p class="eyebrow">Why Starmax</p>
-        <h2>Clear thinking, clean builds, dependable delivery.</h2>
-    </div>
-    <div class="grid grid-3">
-        <article class="card reveal">
-            <div class="card-icon emerald"><i data-lucide="map-pin"></i></div>
-            <h3>East Africa Focus</h3>
-            <p>We understand local operations, payment realities, infrastructure constraints, and fast-moving business needs.</p>
-        </article>
-        <article class="card reveal">
-            <div class="card-icon blue"><i data-lucide="workflow"></i></div>
-            <h3>Full Lifecycle</h3>
-            <p>Strategy, design, build, deploy, and support from one accountable team that stays close to outcomes.</p>
-        </article>
-        <article class="card reveal">
-            <div class="card-icon purple"><i data-lucide="shield-check"></i></div>
-            <h3>Production Mindset</h3>
-            <p>Security, performance, maintainability, and supportability are considered from the first planning session.</p>
-        </article>
-    </div>
-</div>
-
-<!-- CTA -->
-<div class="cta-banner reveal">
-    <h2>Ready to turn the idea into a working product?</h2>
-    <p>Tell us what you want to build and we will help shape the path from concept to launch.</p>
-    <a href="/contact" class="btn">Start the Conversation</a>
+    <section class="nx-section" style="padding-top:8px;">
+        <div class="nx-cta reveal">
+            <h3>Need to launch quickly without cutting quality?</h3>
+            <p>Share your goal and constraints. We will map the fastest realistic path to production and help your team execute with confidence.</p>
+            <a href="/contact" class="btn">Talk to Starmax</a>
+        </div>
+    </section>
 </div>
 @endsection
