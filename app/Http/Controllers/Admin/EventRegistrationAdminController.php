@@ -25,8 +25,19 @@ class EventRegistrationAdminController extends Controller
         $selectedEvent = $request->filled('event')
             ? $events->firstWhere('id', $request->string('event')->toString())
             : null;
+        $personalizationFields = [
+            '{{name}}', '{{email}}', '{{phone}}', '{{company}}',
+            '{{event}}', '{{date}}', '{{location}}', '{{event_url}}',
+        ];
+        $defaultReminder = 'This is a friendly reminder about {{event}} on {{date}} at {{location}}. We look forward to seeing you there.';
 
-        return view('admin.event-registrations.index', compact('registrations', 'events', 'selectedEvent'));
+        return view('admin.event-registrations.index', compact(
+            'registrations',
+            'events',
+            'selectedEvent',
+            'personalizationFields',
+            'defaultReminder',
+        ));
     }
 
     public function show(EventRegistration $eventRegistration): View

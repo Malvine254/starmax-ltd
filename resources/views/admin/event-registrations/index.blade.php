@@ -39,14 +39,14 @@
             </div>
             <div class="form-group">
                 <label for="message">Reminder message</label>
-                <textarea id="message" name="message" rows="7" required placeholder="Add arrival instructions, what to bring, or any schedule updates…">{{ old('message', "Dear {{name}},\n\nThis is a friendly reminder about {{event}} on {{date}} at {{location}}. We look forward to seeing you there.") }}</textarea>
+                <textarea id="message" name="message" rows="7" required placeholder="Add arrival instructions, what to bring, or any schedule updates…">{{ old('message', $defaultReminder) }}</textarea>
                 @error('message')<div class="form-error">{{ $message }}</div>@enderror
             </div>
             <div class="merge-fields" aria-label="Available personalization fields">
                 <strong>Personalization fields</strong>
                 <span>Use these in the subject or message. They are replaced separately for every attendee.</span>
                 <div>
-                    @foreach(['{{name}}', '{{email}}', '{{phone}}', '{{company}}', '{{event}}', '{{date}}', '{{location}}', '{{event_url}}'] as $field)
+                    @foreach($personalizationFields as $field)
                         <code>{{ $field }}</code>
                     @endforeach
                 </div>

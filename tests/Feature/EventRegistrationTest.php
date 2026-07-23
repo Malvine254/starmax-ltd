@@ -150,6 +150,12 @@ class EventRegistrationTest extends TestCase
             ]);
         }
 
+        $this->actingAs($admin)
+            ->get(route('admin.event-registrations.index', ['event' => $event->id]))
+            ->assertOk()
+            ->assertSee('Personalization fields')
+            ->assertSee('{{name}}');
+
         $this->actingAs($admin)->post(route('admin.event-registrations.reminders.send'), [
             'site_event_id' => $event->id,
             'subject' => 'Event reminder',
