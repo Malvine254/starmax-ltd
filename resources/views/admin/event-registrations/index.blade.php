@@ -39,8 +39,17 @@
             </div>
             <div class="form-group">
                 <label for="message">Reminder message</label>
-                <textarea id="message" name="message" rows="5" required placeholder="Add arrival instructions, what to bring, or any schedule updates…">{{ old('message', "This is a friendly reminder about your upcoming Starmax event. We look forward to seeing you there.") }}</textarea>
+                <textarea id="message" name="message" rows="7" required placeholder="Add arrival instructions, what to bring, or any schedule updates…">{{ old('message', "Dear {{name}},\n\nThis is a friendly reminder about {{event}} on {{date}} at {{location}}. We look forward to seeing you there.") }}</textarea>
                 @error('message')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+            <div class="merge-fields" aria-label="Available personalization fields">
+                <strong>Personalization fields</strong>
+                <span>Use these in the subject or message. They are replaced separately for every attendee.</span>
+                <div>
+                    @foreach(['{{name}}', '{{email}}', '{{phone}}', '{{company}}', '{{event}}', '{{date}}', '{{location}}', '{{event_url}}'] as $field)
+                        <code>{{ $field }}</code>
+                    @endforeach
+                </div>
             </div>
             <button class="btn btn-primary" type="submit">Send reminder to all</button>
         </form>
@@ -81,6 +90,6 @@
 </div>
 @if($registrations->hasPages())<div class="pagination">{{ $registrations->links() }}</div>@endif
 <style>
-.reminder-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:-.05em}.roster-count span{color:#64748b;font-size:10px}@media(max-width:800px){.reminder-grid{grid-template-columns:1fr}}
+.reminder-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:-.05em}.roster-count span{color:#64748b;font-size:10px}.merge-fields{margin:-4px 0 18px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.5}.merge-fields strong,.merge-fields span{display:block}.merge-fields strong{color:#334155}.merge-fields div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.merge-fields code{padding:3px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#7c3aed;font-size:10px}@media(max-width:800px){.reminder-grid{grid-template-columns:1fr}}
 </style>
 @endsection

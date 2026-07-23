@@ -159,6 +159,21 @@ class EventRegistrationTest extends TestCase
         Mail::assertSent(EventReminder::class, 2);
         Mail::assertSent(EventReminder::class, fn (EventReminder $mail) =>
             $mail->eventUrl === 'https://meet.example.com/reminder'
+            && $mail->registration->name === 'Attendee 1'
+            && $mail->hasTo('first@example.com')
+        );
+
+        $this->actingAs($admin)->post(route('admin.event-registrations.reminders.send'), [
+            'site_event_id' => $event->id,
+            'subject' => 'Reminder for {{name}}',
+            'message' => 'Hello {{name}}. Your event is {{event}} at {{location}}. {{event_url}}',
+        ])->assertSessionHas('success');
+
+        Mail::assertSent(EventReminder::class, fn (EventReminder $mail) =>
+            $mail->reminderSubject === 'Reminder for Attendee 1'
+            && str_contains($mail->reminderMessage, 'Hello Attendee 1.')
+            && str_contains($mail->reminderMessage, 'Reminder Workshop at Nairobi')
+            && str_contains($mail->reminderMessage, 'https://meet.example.com/reminder')
             && $mail->hasTo('first@example.com')
         );
 

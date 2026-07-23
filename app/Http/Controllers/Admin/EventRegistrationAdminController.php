@@ -69,9 +69,22 @@ class EventRegistrationAdminController extends Controller
         $failed = 0;
 
         foreach ($event->registrations as $registration) {
+            $replacements = [
+                '{{name}}' => $registration->name,
+                '{{email}}' => $registration->email,
+                '{{phone}}' => $registration->phone ?: 'Not provided',
+                '{{company}}' => $registration->company ?: 'Not provided',
+                '{{event}}' => $event->title,
+                '{{date}}' => $event->starts_at?->format('D, d M Y · g:i A') ?? 'To be confirmed',
+                '{{location}}' => $event->location ?: 'To be confirmed',
+                '{{event_url}}' => $eventUrl,
+            ];
+            $personalizedSubject = strtr($validated['subject'], $replacements);
+            $personalizedMessage = strtr($validated['message'], $replacements);
+
             $delivered = SafeMailDelivery::attempt(
                 fn () => Mail::to($registration->email)->send(
-                    new EventReminder($registration, $validated['subject'], $validated['message'], $eventUrl)
+                    new EventReminder($registration, $personalizedSubject, $personalizedMessage, $eventUrl)
                 ),
                 [
                     'flow' => 'event-bulk-reminder',
