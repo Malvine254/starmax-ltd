@@ -152,6 +152,20 @@ function evFormatClass(string $fmt): string {
 <!-- Hero -->
 <section class="ev-hero">
     <div class="container" style="position:relative;z-index:1;">
+        @if(session('success'))
+        <div style="display:flex;align-items:center;gap:10px;background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;font-weight:600;">
+            <i data-lucide="check-circle" style="width:18px;height:18px;flex-shrink:0;"></i>
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div style="display:flex;align-items:center;gap:10px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;padding:12px 16px;border-radius:10px;margin-bottom:20px;font-size:14px;font-weight:600;">
+            <i data-lucide="alert-circle" style="width:18px;height:18px;flex-shrink:0;"></i>
+            {{ session('error') }}
+        </div>
+        @endif
+
         <p class="eyebrow" style="color:#94a3b8;margin-bottom:14px;">Events</p>
         <h2 style="color:#fff;max-width:680px;margin-bottom:16px;font-size:clamp(34px,5vw,56px);">
             Workshops, launches, and technology sessions.
@@ -217,7 +231,8 @@ function evFormatClass(string $fmt): string {
                 </div>
                 <p style="font-size:14px;color:#374151;line-height:1.7;margin:0;">{{ $event->description }}</p>
                 <div>
-                    <a href="{{ $event->cta_url }}" class="btn btn-primary">{{ $event->cta_label }} <i data-lucide="arrow-right"></i></a>
+                    <a href="{{ route('events.index', ['event' => $event->slug]) }}#register" class="btn btn-primary">Register Now <i data-lucide="arrow-right"></i></a>
+                    <a href="{{ $event->cta_url }}" class="btn btn-secondary" style="margin-left:8px;">{{ $event->cta_label }}</a>
                 </div>
             </div>
         </article>
@@ -265,8 +280,8 @@ function evFormatClass(string $fmt): string {
                     <span class="ev-schedule-detail"><i data-lucide="clock"></i>{{ $event->starts_at->format('g:i A') }}</span>
                     <span class="ev-schedule-detail"><i data-lucide="map-pin"></i>{{ Str::limit($event->location, 28) }}</span>
                 </div>
-                <a href="{{ $event->cta_url }}" class="ev-cta-pill">
-                    {{ $event->cta_label }} <i data-lucide="arrow-right"></i>
+                <a href="{{ route('events.index', ['event' => $event->slug]) }}#register" class="ev-cta-pill">
+                    Register <i data-lucide="arrow-right"></i>
                 </a>
             </div>
         </article>
@@ -313,6 +328,82 @@ function evFormatClass(string $fmt): string {
             </div>
         </div>
     </div>
+</div>
+
+<!-- Event Registration -->
+<div class="section" id="register">
+    <div class="section-header left" style="text-align:left;margin:0 0 28px;">
+        <p class="eyebrow">Register</p>
+        <h2 style="margin-bottom:8px;">Reserve your spot.</h2>
+        <p style="max-width:620px;">Choose an upcoming event and submit your details. We will send confirmation and attendance details by email.</p>
+    </div>
+
+    @if($events->isEmpty())
+    <div class="ev-empty">
+        <i data-lucide="calendar-off"></i>
+        <h3>No events open for registration</h3>
+        <p>Please check back soon for new sessions.</p>
+    </div>
+    @else
+    @php
+        $activeEvent = old('event_slug')
+            ? $events->firstWhere('slug', old('event_slug'))
+            : ($selectedEvent ?? $events->first());
+        $formEvent = $activeEvent ?? $events->first();
+    @endphp
+
+    <div class="card" style="max-width:760px;padding:26px 24px;border-radius:16px;">
+        <form method="POST" action="{{ route('events.register', ['event' => $formEvent]) }}">
+            @csrf
+
+            <div class="form-group">
+                <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Event *</label>
+                <select name="event_slug" id="event_slug" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" onchange="if(this.value){ window.location='{{ route('events.index') }}?event=' + encodeURIComponent(this.value) + '#register'; }" required>
+                    @foreach($events as $event)
+                    <option value="{{ $event->slug }}" @selected(($formEvent?->slug ?? null) === $event->slug)>
+                        {{ $event->title }} — {{ $event->starts_at->format('d M Y, g:i A') }}
+                    </option>
+                    @endforeach
+                </select>
+                @error('event_slug')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Full Name *</label>
+                    <input type="text" name="name" value="{{ old('name') }}" required style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Your full name">
+                    @error('name')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Email *</label>
+                    <input type="email" name="email" value="{{ old('email') }}" required style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="you@company.com">
+                    @error('email')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Phone</label>
+                    <input type="text" name="phone" value="{{ old('phone') }}" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Optional">
+                    @error('phone')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                </div>
+
+                <div class="form-group" style="margin-bottom:0;">
+                    <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Company</label>
+                    <input type="text" name="company" value="{{ old('company') }}" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;" placeholder="Optional">
+                    @error('company')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top:14px;">
+                <label style="display:block;font-size:13px;font-weight:700;color:#334155;margin-bottom:6px;">Message</label>
+                <textarea name="message" rows="4" style="width:100%;padding:10px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:14px;resize:vertical;" placeholder="Share anything we should know before the session...">{{ old('message') }}</textarea>
+                @error('message')<p style="margin-top:6px;font-size:12px;color:#dc2626;">{{ $message }}</p>@enderror
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top:8px;">Submit Registration <i data-lucide="send"></i></button>
+        </form>
+    </div>
+    @endif
 </div>
 
 <!-- CTA -->

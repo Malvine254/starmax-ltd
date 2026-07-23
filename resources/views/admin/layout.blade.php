@@ -58,6 +58,7 @@
         <a href="{{ route('grace-sellah.admin.home') }}" class="{{ request()->routeIs('grace-sellah.admin*') ? 'active' : '' }}">Grace Sellah Page</a>
         <a href="{{ route('admin.contact-messages.index') }}" class="{{ request()->routeIs('admin.contact-messages*') ? 'active' : '' }}">Contact Messages</a>
         <a href="{{ route('admin.events.index') }}" class="{{ request()->routeIs('admin.events*') ? 'active' : '' }}">Events</a>
+        <a href="{{ route('admin.event-registrations.index') }}" class="{{ request()->routeIs('admin.event-registrations*') ? 'active' : '' }}">Event Registrations</a>
         <a href="{{ route('admin.deployment-tools.index') }}" class="{{ request()->routeIs('admin.deployment-tools*') ? 'active' : '' }}">Deployment Tools</a>
     </nav>
     <div class="sidebar-bottom">

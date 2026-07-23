@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\MaintenanceAdminController;
 use App\Http\Controllers\Admin\DeploymentToolsController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\EventAdminController;
+use App\Http\Controllers\Admin\EventRegistrationAdminController;
 use App\Http\Controllers\GraceSellahController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +42,8 @@ Route::get('/services', [SiteController::class, 'services']);
 Route::get('/services/{service}', [SiteController::class, 'serviceDetail'])->name('services.show');
 Route::get('/products', [SiteController::class, 'products']);
 Route::get('/portfolio', [SiteController::class, 'portfolio']);
-Route::get('/events', [SiteController::class, 'events']);
+Route::get('/events', [SiteController::class, 'events'])->name('events.index');
+Route::post('/events/{event:slug}/register', [SiteController::class, 'registerEvent'])->name('events.register');
 Route::get('/contact', [SiteController::class, 'contact']);
 Route::post('/contact', [SiteController::class, 'submitContact']);
 Route::get('/store/fix_storage.php', [DeploymentToolsController::class, 'fixStorageScript'])->name('deployment-tools.fix-storage-script');
@@ -84,5 +86,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 			'update'  => 'events.update',
 			'destroy' => 'events.destroy',
 		]);
+		Route::get('/event-registrations', [EventRegistrationAdminController::class, 'index'])->name('event-registrations.index');
 	});
 });

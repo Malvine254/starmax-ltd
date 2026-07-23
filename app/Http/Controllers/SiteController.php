@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\ContactAdminNotification;
 use App\Mail\ContactUserConfirmation;
 use App\Models\ContactMessage;
+use App\Models\EventRegistration;
 use App\Models\SiteEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -223,6 +224,8 @@ class SiteController extends Controller
             ->orderBy('sort_order')
             ->get();
 
+        $selectedEvent = $events->firstWhere('slug', request('event'));
+
         $featuredEvents = $events->where('is_featured', true)->take(2);
 
         $categories = $events->pluck('category')->filter()->unique()->values();
@@ -233,7 +236,30 @@ class SiteController extends Controller
             'next_month' => optional($events->first()?->starts_at)->format('M Y') ?? 'Soon',
         ];
 
-        return view('site.events', compact('events', 'featuredEvents', 'eventStats', 'categories'));
+        return view('site.events', compact('events', 'featuredEvents', 'eventStats', 'categories', 'selectedEvent'));
+    }
+
+    public function registerEvent(Request $request, SiteEvent $event)
+    {
+        if ($event->status !== 'upcoming') {
+            return redirect()->route('events.index')->with('error', 'This event is not open for registration.');
+        }
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'nullable|string|max:40',
+            'company' => 'nullable|string|max:255',
+            'message' => 'nullable|string|max:2000',
+        ]);
+
+        $data['site_event_id'] = $event->id;
+
+        EventRegistration::create($data);
+
+        return redirect()
+            ->route('events.index', ['event' => $event->slug])
+            ->with('success', 'Registration received. We will contact you with event details shortly.');
     }
 
     public function contact()
