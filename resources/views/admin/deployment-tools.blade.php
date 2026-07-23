@@ -14,7 +14,7 @@
 @if($openBootstrapMode)
     <div class="bootstrap-warning">
         <strong>Open bootstrap mode is active.</strong>
-        Commands can run without login or a deployment token. Set <code>DEPLOYMENT_PUBLIC_NO_TOKEN=false</code> immediately after setup.
+        Commands on this public page can run without login, a deployment token, or migration confirmation.
     </div>
 @endif
 
@@ -55,10 +55,12 @@
                     <input id="tool_token" type="password" name="tool_token" required autocomplete="off" placeholder="DEPLOYMENT_TOOL_TOKEN">
                 </div>
             @endif
-            <div class="form-group">
-                <label for="confirmation">Migration confirmation</label>
-                <input id="confirmation" type="text" name="confirmation" autocomplete="off" placeholder="Type MIGRATE only when running migrations">
-            </div>
+            @unless($openBootstrapMode)
+                <div class="form-group">
+                    <label for="confirmation">Migration confirmation</label>
+                    <input id="confirmation" type="text" name="confirmation" autocomplete="off" placeholder="Type MIGRATE only when running migrations">
+                </div>
+            @endunless
             <div class="command-grid">
                 @foreach($availableActions as $action => $label)
                     <button type="submit" name="action" value="{{ $action }}" class="command-button {{ $action === 'migrate_force' ? 'command-warning' : '' }}">

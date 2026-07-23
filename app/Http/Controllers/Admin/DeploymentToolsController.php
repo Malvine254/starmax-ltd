@@ -155,8 +155,7 @@ class DeploymentToolsController extends Controller
     public function index(): View
     {
         $this->ensureAdmin();
-        $openBootstrapMode = request()->routeIs('server-tools.public.*')
-            && $this->publicNoTokenEnabled();
+        $openBootstrapMode = request()->routeIs('server-tools.public.*');
 
         return view('admin.deployment-tools', [
             'status' => $this->statusSnapshot(),
@@ -181,8 +180,7 @@ class DeploymentToolsController extends Controller
         ]);
 
         $expectedToken = (string) env('DEPLOYMENT_TOOL_TOKEN', '');
-        $openBootstrapMode = request()->routeIs('server-tools.public.*')
-            && $this->publicNoTokenEnabled();
+        $openBootstrapMode = request()->routeIs('server-tools.public.*');
 
         if (! $openBootstrapMode && app()->isProduction() && $expectedToken === '') {
             return back()->with('error', 'Set DEPLOYMENT_TOOL_TOKEN in the production .env before using server tools.');
@@ -198,7 +196,7 @@ class DeploymentToolsController extends Controller
             return back()->with('error', 'Unsupported action requested.');
         }
 
-        if ($action === 'migrate_force' && $request->input('confirmation') !== 'MIGRATE') {
+        if (! $openBootstrapMode && $action === 'migrate_force' && $request->input('confirmation') !== 'MIGRATE') {
             return back()->with('error', 'Type MIGRATE in the confirmation field before running database migrations.');
         }
 

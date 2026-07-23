@@ -13,7 +13,8 @@ class ServerToolsAccessTest extends TestCase
             ->assertSee('Laravel server tools')
             ->assertSee('Allowlisted commands')
             ->assertSee('Open bootstrap mode is active')
-            ->assertDontSee('Deployment token');
+            ->assertDontSee('Deployment token')
+            ->assertDontSee('Migration confirmation');
     }
 
     public function test_arbitrary_commands_are_rejected(): void
