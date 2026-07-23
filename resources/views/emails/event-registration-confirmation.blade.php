@@ -17,6 +17,11 @@
             <a href="{{ $eventUrl }}" style="display:inline-block;background:#111827;color:#fff;text-decoration:none;padding:12px 18px;border-radius:8px;font-weight:700;">Open Event Link</a>
             <p style="margin:14px 0 0;font-size:13px;color:#64748b;word-break:break-all;">{{ $eventUrl }}</p>
 
+            <div style="margin-top:20px;padding:14px 16px;border:1px solid #f3d28c;border-radius:8px;background:#fff8e8;color:#76500f;font-size:13px;line-height:1.6;">
+                <strong style="display:block;margin-bottom:3px;">Don’t miss event updates</strong>
+                Please check your Spam or Junk folder if future event reminders are not in your inbox, and mark emails from <strong>{{ config('mail.from.address') }}</strong> as safe.
+            </div>
+
             <p style="margin:22px 0 0;color:#64748b;font-size:13px;line-height:1.6;">If you need to update your details, reply to this email and our team will help.</p>
         </div>
     </div>

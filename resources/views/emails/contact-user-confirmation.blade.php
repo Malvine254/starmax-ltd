@@ -10,6 +10,11 @@
             <p style="margin:0 0 12px;"><strong>Service:</strong> {{ $contactMessage->service ? str($contactMessage->service)->headline() : 'General' }}</p>
             <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:18px;line-height:1.6;white-space:pre-line;">{{ $contactMessage->message }}</div>
 
+            <div style="margin-top:20px;padding:14px 16px;border:1px solid #f3d28c;border-radius:8px;background:#fff8e8;color:#76500f;font-size:13px;line-height:1.6;">
+                <strong style="display:block;margin-bottom:3px;">Keep an eye on your inbox</strong>
+                If you don’t see our follow-up, please check your Spam or Junk folder and mark emails from <strong>{{ config('mail.from.address') }}</strong> as safe.
+            </div>
+
             <p style="margin:22px 0 0;color:#64748b;font-size:13px;">If you need to add more details, reply to this email or send us another note through the website.</p>
         </div>
     </div>
