@@ -41,7 +41,7 @@
                 @error('format')<p class="form-error">{{ $message }}</p>@enderror
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="grid-column:1/-1;">
                 <label>Location *</label>
                 <input type="text" name="location" value="{{ old('location', $event->location) }}" required>
                 @error('location')<p class="form-error">{{ $message }}</p>@enderror
@@ -143,5 +143,5 @@
         <button type="submit" class="btn btn-danger">Delete Event</button>
     </form>
 </div>
-<style>.event-form-card{width:100%;max-width:none}.event-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.event-form-grid>.form-group{min-width:0}@media(max-width:1100px){.event-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.event-form-grid{grid-template-columns:1fr}.event-form-grid>.form-group{grid-column:1!important}}</style>
+<style>.event-form-card{width:100%;max-width:none;padding:26px}.event-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:22px;row-gap:4px}.event-form-grid>.form-group{min-width:0}.event-form-grid input,.event-form-grid select{min-height:44px}@media(max-width:700px){.event-form-card{padding:18px}.event-form-grid{grid-template-columns:1fr}.event-form-grid>.form-group{grid-column:1!important}}</style>
 @endsection
