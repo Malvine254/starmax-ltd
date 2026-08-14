@@ -91,6 +91,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 		Route::post('/events/{event}/certificates', [EventRegistrationAdminController::class, 'issueCertificates'])->name('events.certificates.issue');
 		Route::post('/event-registrations/reminders/send', [EventRegistrationAdminController::class, 'sendReminder'])->name('event-registrations.reminders.send');
 		Route::get('/events/{event}/attendance', [EventRegistrationAdminController::class, 'attendance'])->name('events.attendance');
+		Route::post('/events/{event}/attendance/confirm', [EventRegistrationAdminController::class, 'confirmAttendance'])->name('events.attendance.confirm');
 		Route::middleware('throttle:10,1')->group(function () {
 			Route::get('/server-tools', [DeploymentToolsController::class, 'index'])->name('server-tools.index');
 			Route::post('/server-tools/run', [DeploymentToolsController::class, 'run'])->name('server-tools.run');

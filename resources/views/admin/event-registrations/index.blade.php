@@ -76,8 +76,31 @@
         @csrf <button class="btn btn-primary" @disabled($selectedEvent->attended_count === 0)>Send certificates to all attended</button>
     </form>
 </section>
+<section class="card" style="display:flex;align-items:center;gap:24px;margin-bottom:18px;flex-wrap:wrap">
+    <div style="flex:1;min-width:260px"><span class="eyebrow">Bulk attendance</span><h2 style="margin:6px 0;font-size:19px">Confirm event attendance</h2><p style="color:#64748b;font-size:11px;line-height:1.6">Mark every new or confirmed registration as attended. Cancelled registrations are excluded.</p></div>
+    <form method="POST" action="{{ route('admin.events.attendance.confirm',$selectedEvent) }}" onsubmit="return confirm('Mark all non-cancelled registrations for this event as attended?')">@csrf<button class="btn btn-primary">Confirm attendance for all</button></form>
+</section>
 @endif
 
+@if(!$selectedEvent)
+<div style="display:grid;gap:12px">
+@forelse($events->filter(fn($event) => $event->registrations_count > 0) as $event)
+    <details class="card" style="padding:0;overflow:hidden">
+        <summary style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;cursor:pointer">
+            <span><strong style="display:block">{{ $event->title }}</strong><small style="display:block;margin-top:4px;color:#94a3b8">{{ $event->starts_at?->format('d M Y, g:i A') ?? 'Date unavailable' }}</small></span>
+            <span class="badge badge-yellow">{{ $event->registrations_count }} attendee{{ $event->registrations_count === 1 ? '' : 's' }}</span>
+        </summary>
+        <div style="overflow-x:auto;border-top:1px solid #e2e8f0"><table><thead><tr><th>Attendee</th><th>Status</th><th>Contact</th><th>Company</th><th>Registered</th><th></th></tr></thead><tbody>
+        @foreach($event->registrations as $registration)
+            <tr><td><strong>{{ $registration->name }}</strong></td><td><span class="badge {{ in_array($registration->status,['confirmed','attended']) ? 'badge-green' : ($registration->status === 'cancelled' ? 'badge-red' : 'badge-blue') }}">{{ str($registration->status)->headline() }}</span></td><td><a href="mailto:{{ $registration->email }}">{{ $registration->email }}</a><small style="display:block;color:#94a3b8">{{ $registration->phone ?: 'No phone' }}</small></td><td>{{ $registration->company ?: '—' }}</td><td>{{ $registration->created_at->format('d M Y, g:i A') }}</td><td><a href="{{ route('admin.event-registrations.show',$registration) }}" class="btn btn-secondary">View details</a></td></tr>
+        @endforeach
+        </tbody></table></div>
+    </details>
+@empty
+    <div class="card" style="padding:32px;color:#94a3b8;text-align:center">No registrations yet.</div>
+@endforelse
+</div>
+@else
 <div class="card" style="overflow-x:auto;">
     <table>
         <thead><tr><th>Attendee</th><th>Status</th><th>Event</th><th>Contact</th><th>Company</th><th>Registered</th><th></th></tr></thead>
@@ -102,6 +125,7 @@
         </tbody>
     </table>
 </div>
+@endif
 @if($registrations->hasPages())<div class="pagination">{{ $registrations->links() }}</div>@endif
 <style>
 .reminder-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:-.05em}.roster-count span{color:#64748b;font-size:10px}.merge-fields{margin:-4px 0 18px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.5}.merge-fields strong,.merge-fields span{display:block}.merge-fields strong{color:#334155}.merge-fields div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.merge-fields code{padding:3px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#7c3aed;font-size:10px}@media(max-width:800px){.reminder-grid{grid-template-columns:1fr}}

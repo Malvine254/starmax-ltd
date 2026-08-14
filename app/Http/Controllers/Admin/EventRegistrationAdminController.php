@@ -23,7 +23,7 @@ class EventRegistrationAdminController extends Controller
             ->latest()
             ->paginate(25);
 
-        $events = SiteEvent::withCount([
+        $events = SiteEvent::with(['registrations' => fn ($query) => $query->latest()])->withCount([
             'registrations',
             'registrations as attended_count' => fn ($query) => $query->where('status', 'attended'),
             'registrations as certificate_count' => fn ($query) => $query->whereNotNull('certificate_issued_at'),
@@ -123,6 +123,16 @@ class EventRegistrationAdminController extends Controller
         $event->load(['registrations' => fn ($query) => $query->orderBy('name')]);
 
         return view('admin.event-registrations.attendance', compact('event'));
+    }
+
+    public function confirmAttendance(SiteEvent $event): RedirectResponse
+    {
+        $updated = $event->registrations()->whereIn('status', ['new', 'confirmed'])
+            ->update(['status' => 'attended', 'updated_at' => now()]);
+
+        return back()->with('success', $updated
+            ? "Attendance confirmed for {$updated} participants. They are now eligible for certificates."
+            : 'No pending or confirmed attendees needed updating.');
     }
 
     public function issueCertificate(EventRegistration $eventRegistration): RedirectResponse
