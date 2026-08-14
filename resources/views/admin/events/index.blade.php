@@ -35,8 +35,12 @@
                     {{ $event->format ?? '—' }}
                 </td>
                 <td>
-                    <strong style="display:block;">{{ $event->starts_at->format('d M Y') }}</strong>
-                    <span style="font-size:12px;color:#94a3b8;">{{ $event->starts_at->format('g:i A') }} EAT</span>
+                    @if($event->starts_at)
+                        <strong style="display:block;">{{ $event->starts_at->format('d M Y') }}</strong>
+                        <span style="font-size:12px;color:#94a3b8;">{{ $event->starts_at->format('g:i A') }} EAT</span>
+                    @else
+                        <span class="badge badge-red">Date missing</span>
+                    @endif
                 </td>
                 <td>
                     @if($event->status === 'upcoming')
