@@ -8,11 +8,11 @@
     <a href="{{ route('admin.events.index') }}" class="btn btn-secondary">← Back to Events</a>
 </div>
 
-<div class="card" style="max-width:800px;">
+<div class="card event-form-card">
     <form method="POST" action="{{ route('admin.events.store') }}">
         @csrf
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="event-form-grid">
             <div class="form-group" style="grid-column:1/-1;">
                 <label>Title *</label>
                 <input type="text" name="title" value="{{ old('title') }}" placeholder="e.g. TenantPro Live Walkthrough" required>
@@ -41,7 +41,7 @@
                 @error('format')<p class="form-error">{{ $message }}</p>@enderror
             </div>
 
-            <div class="form-group" style="grid-column:1/-1;">
+            <div class="form-group">
                 <label>Location *</label>
                 <input type="text" name="location" value="{{ old('location') }}" placeholder="e.g. Nairobi, Kenya or Online — Zoom link sent on registration" required>
                 @error('location')<p class="form-error">{{ $message }}</p>@enderror
@@ -134,4 +134,5 @@
         </div>
     </form>
 </div>
+<style>.event-form-card{width:100%;max-width:none}.event-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.event-form-grid>.form-group{min-width:0}@media(max-width:1100px){.event-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.event-form-grid{grid-template-columns:1fr}.event-form-grid>.form-group{grid-column:1!important}}</style>
 @endsection

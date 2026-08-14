@@ -8,11 +8,11 @@
     <a href="{{ route('admin.events.index') }}" class="btn btn-secondary">← Back to Events</a>
 </div>
 
-<div class="card" style="max-width:800px;">
+<div class="card event-form-card">
     <form method="POST" action="{{ route('admin.events.update', $event) }}">
         @csrf @method('PUT')
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div class="event-form-grid">
             <div class="form-group" style="grid-column:1/-1;">
                 <label>Title *</label>
                 <input type="text" name="title" value="{{ old('title', $event->title) }}" required>
@@ -41,7 +41,7 @@
                 @error('format')<p class="form-error">{{ $message }}</p>@enderror
             </div>
 
-            <div class="form-group" style="grid-column:1/-1;">
+            <div class="form-group">
                 <label>Location *</label>
                 <input type="text" name="location" value="{{ old('location', $event->location) }}" required>
                 @error('location')<p class="form-error">{{ $message }}</p>@enderror
@@ -135,7 +135,7 @@
     </form>
 </div>
 
-<div class="card" style="max-width:800px;margin-top:20px;border:1px solid #fee2e2;">
+<div class="card" style="width:100%;max-width:none;margin-top:20px;border:1px solid #fee2e2;">
     <h4 style="color:#dc2626;margin-bottom:12px;">Danger Zone</h4>
     <p style="font-size:13px;color:#64748b;margin-bottom:14px;">Deleting this event is permanent and cannot be undone.</p>
     <form method="POST" action="{{ route('admin.events.destroy', $event) }}" onsubmit="return confirm('Permanently delete this event?')">
@@ -143,4 +143,5 @@
         <button type="submit" class="btn btn-danger">Delete Event</button>
     </form>
 </div>
+<style>.event-form-card{width:100%;max-width:none}.event-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.event-form-grid>.form-group{min-width:0}@media(max-width:1100px){.event-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.event-form-grid{grid-template-columns:1fr}.event-form-grid>.form-group{grid-column:1!important}}</style>
 @endsection
