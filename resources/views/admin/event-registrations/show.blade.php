@@ -46,6 +46,23 @@
                 <button class="btn btn-primary" type="submit">Save changes</button>
             </form>
         </section>
+        <section class="card">
+            <span class="eyebrow">Completion credential</span><h2 style="margin:7px 0 10px;font-size:18px;">Certificate</h2>
+            @if($eventRegistration->certificate_issued_at)
+                <p style="color:#64748b;font-size:12px;line-height:1.7">Issued {{ $eventRegistration->certificate_issued_at->format('d M Y, g:i A') }}<br><strong>{{ $eventRegistration->certificate_code }}</strong></p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px"><a class="btn btn-secondary" target="_blank" href="{{ route('certificates.show',$eventRegistration->certificate_code) }}">View certificate</a>
+                @if($eventRegistration->certificate_revoked_at)
+                    <form method="POST" action="{{ route('admin.event-registrations.certificate.restore',$eventRegistration) }}" onsubmit="return confirm('Restore this certificate with its original ID and issue information?')">@csrf<button class="btn btn-primary">Restore certificate</button></form>
+                @else
+                    <form method="POST" action="{{ route('admin.event-registrations.certificate.resend',$eventRegistration) }}" onsubmit="return confirm('Resend this certificate without changing its ID?')">@csrf<button class="btn btn-primary">Resend certificate</button></form>
+                    <form method="POST" action="{{ route('admin.event-registrations.certificate.revoke',$eventRegistration) }}" onsubmit="return confirm('Revoke this certificate? Its ID and issue information will be retained.')">@csrf @method('DELETE')<button class="btn btn-danger">Revoke</button></form>
+                @endif</div>
+            @else
+                <p style="color:#64748b;font-size:12px;line-height:1.6;margin-bottom:14px">Issue a personalized, verifiable certificate and email it to the attendee.</p>
+                <form method="POST" action="{{ route('admin.event-registrations.certificate.issue',$eventRegistration) }}">@csrf<button class="btn btn-primary" @disabled($eventRegistration->status !== 'attended')>Issue &amp; email certificate</button></form>
+                @if($eventRegistration->status !== 'attended')<small style="display:block;margin-top:8px;color:#b45309">First change status to Attended.</small>@endif
+            @endif
+        </section>
     </div>
 </div>
 <style>

@@ -92,6 +92,21 @@
             </div>
 
             <div class="form-group">
+                <label>Certificate signer name</label>
+                <input name="certificate_signer_name" value="{{ old('certificate_signer_name', $event->certificate_signer_name) }}" placeholder="e.g. Grace Sellah">
+            </div>
+            <div class="form-group">
+                <label>Signer title</label>
+                <input name="certificate_signer_title" value="{{ old('certificate_signer_title', $event->certificate_signer_title) }}" placeholder="e.g. Program Director">
+            </div>
+            <div class="form-group" style="grid-column:1/-1;">
+                <label>Certificate message</label>
+                <textarea name="certificate_message" rows="4" maxlength="1000">{{ old('certificate_message', $event->certificate_message ?: \App\Models\SiteEvent::defaultCertificateMessage()) }}</textarea>
+                <div style="margin-top:5px;color:#64748b;font-size:11px;">Use <strong>:event</strong> for the event title and <strong>:company</strong> for “, representing Company Name” when provided. This message appears identically online and in the PDF.</div>
+                @error('certificate_message')<p class="form-error">{{ $message }}</p>@enderror
+            </div>
+
+            <div class="form-group">
                 <label>Status *</label>
                 <select name="status" required>
                     <option value="upcoming"  @selected(old('status', $event->status) === 'upcoming')>Upcoming</option>

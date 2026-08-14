@@ -25,12 +25,19 @@ class EventRegistration extends Model
         'status',
         'admin_notes',
         'read_at',
+        'certificate_code',
+        'certificate_issued_at',
+        'certificate_emailed_at',
+        'certificate_revoked_at',
     ];
 
     protected function casts(): array
     {
         return [
             'read_at' => 'datetime',
+            'certificate_issued_at' => 'datetime',
+            'certificate_emailed_at' => 'datetime',
+            'certificate_revoked_at' => 'datetime',
         ];
     }
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\EventAdminController;
 use App\Http\Controllers\Admin\EventRegistrationAdminController;
 use App\Http\Controllers\GraceSellahController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
 
 // Grace Sellah portfolio
@@ -44,6 +45,9 @@ Route::get('/products', [SiteController::class, 'products']);
 Route::get('/portfolio', [SiteController::class, 'portfolio']);
 Route::get('/events', [SiteController::class, 'events'])->name('events.index');
 Route::post('/events/{event:slug}/register', [SiteController::class, 'registerEvent'])->name('events.register');
+Route::get('/certificates/verify', [CertificateController::class, 'verify'])->name('certificates.verify');
+Route::get('/certificates/{code}/download', [CertificateController::class, 'download'])->name('certificates.download');
+Route::get('/certificates/{code}', [CertificateController::class, 'show'])->name('certificates.show');
 Route::get('/contact', [SiteController::class, 'contact']);
 Route::post('/contact', [SiteController::class, 'submitContact']);
 
@@ -80,6 +84,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 		Route::get('/event-registrations', [EventRegistrationAdminController::class, 'index'])->name('event-registrations.index');
 		Route::get('/event-registrations/{eventRegistration}', [EventRegistrationAdminController::class, 'show'])->name('event-registrations.show');
 		Route::patch('/event-registrations/{eventRegistration}', [EventRegistrationAdminController::class, 'update'])->name('event-registrations.update');
+		Route::post('/event-registrations/{eventRegistration}/certificate', [EventRegistrationAdminController::class, 'issueCertificate'])->name('event-registrations.certificate.issue');
+		Route::post('/event-registrations/{eventRegistration}/certificate/resend', [EventRegistrationAdminController::class, 'resendCertificate'])->name('event-registrations.certificate.resend');
+		Route::post('/event-registrations/{eventRegistration}/certificate/restore', [EventRegistrationAdminController::class, 'restoreCertificate'])->name('event-registrations.certificate.restore');
+		Route::delete('/event-registrations/{eventRegistration}/certificate', [EventRegistrationAdminController::class, 'revokeCertificate'])->name('event-registrations.certificate.revoke');
+		Route::post('/events/{event}/certificates', [EventRegistrationAdminController::class, 'issueCertificates'])->name('events.certificates.issue');
 		Route::post('/event-registrations/reminders/send', [EventRegistrationAdminController::class, 'sendReminder'])->name('event-registrations.reminders.send');
 		Route::get('/events/{event}/attendance', [EventRegistrationAdminController::class, 'attendance'])->name('events.attendance');
 		Route::middleware('throttle:10,1')->group(function () {

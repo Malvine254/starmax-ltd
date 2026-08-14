@@ -6,9 +6,9 @@
     <div>
         <span class="eyebrow">Starmax content workspace</span>
         <h1>Keep the portfolio current.</h1>
-        <p>Manage Grace Sellah’s public portfolio, website enquiries, events, and registrations from one focused workspace.</p>
+        <p>Manage the public portfolio, website enquiries, events, and registrations from one focused workspace.</p>
     </div>
-    <a href="{{ route('grace-sellah.admin.page.edit') }}" class="btn btn-primary">Edit Grace’s portfolio</a>
+    <a href="{{ route('grace-sellah.admin.page.edit') }}" class="btn btn-primary">Edit Vlog page</a>
 </div>
 
 <div class="stat-grid">
@@ -28,7 +28,7 @@
         <div class="stat-meta">{{ $stats['unread_registrations'] }} awaiting review</div>
     </a>
     <a class="stat" href="{{ route('grace-sellah.admin.page.edit') }}">
-        <div class="stat-label">Grace portfolio</div>
+        <div class="stat-label">Portfolio</div>
         <div class="stat-value status-value">{{ $stats['portfolio_ready'] ? 'Live' : 'Draft' }}</div>
         <div class="stat-meta">Public page status</div>
     </a>

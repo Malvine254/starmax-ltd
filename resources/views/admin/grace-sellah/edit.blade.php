@@ -1,5 +1,5 @@
 @extends('admin.layout')
-@section('page-title', 'Grace Sellah Page')
+@section('page-title', 'Vlog Page')
 
 @php
     $pageContent = $content ?? [];
@@ -57,12 +57,12 @@
 </style>
 
 <div class="gs-shell">
-    <h2 style="font-size:16px;font-weight:600;margin-bottom:8px;">Manage Grace Sellah page content</h2>
+    <h2 style="font-size:16px;font-weight:600;margin-bottom:8px;">Manage Vlog page content</h2>
     <p style="font-size:13px;color:#64748b;margin-bottom:16px;max-width:900px;">
         Each tab controls a section of the page. Use the add buttons to create more services, portfolio items, tools, or highlights.
     </p>
 
-    <div class="gs-tabs" role="tablist" aria-label="Grace Sellah page sections">
+    <div class="gs-tabs" role="tablist" aria-label="Vlog page sections">
         <button type="button" class="gs-tab-btn active" data-tab="meta">Meta</button>
         <button type="button" class="gs-tab-btn" data-tab="labels">Page Labels</button>
         <button type="button" class="gs-tab-btn" data-tab="hero">Hero</button>

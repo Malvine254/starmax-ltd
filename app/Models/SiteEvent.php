@@ -28,6 +28,9 @@ class SiteEvent extends Model
         'cta_label',
         'cta_url',
         'event_url',
+        'certificate_signer_name',
+        'certificate_signer_title',
+        'certificate_message',
         'is_featured',
         'status',
         'sort_order',
@@ -45,5 +48,23 @@ class SiteEvent extends Model
     public function registrations(): HasMany
     {
         return $this->hasMany(EventRegistration::class, 'site_event_id');
+    }
+
+    public static function defaultCertificateMessage(): string
+    {
+        return 'for successfully completing :event:company. Awarded in recognition of participation, commitment, and successful completion.';
+    }
+
+    public function certificateMessageHtml(?string $company = null): string
+    {
+        $template = trim((string) $this->certificate_message) ?: self::defaultCertificateMessage();
+        $safeTemplate = e($template);
+        $companyText = trim((string) $company) !== '' ? ', representing '.trim((string) $company) : '';
+
+        return str_replace(
+            [':event', ':company'],
+            ['<strong>'.e($this->title).'</strong>', e($companyText)],
+            $safeTemplate
+        );
     }
 }

@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\EventReminder;
+use App\Mail\CertificateIssued;
 use App\Models\EventRegistration;
 use App\Models\SiteEvent;
 use App\Support\SafeMailDelivery;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class EventRegistrationAdminController extends Controller
@@ -21,7 +23,11 @@ class EventRegistrationAdminController extends Controller
             ->latest()
             ->paginate(25);
 
-        $events = SiteEvent::withCount('registrations')->orderByDesc('starts_at')->get();
+        $events = SiteEvent::withCount([
+            'registrations',
+            'registrations as attended_count' => fn ($query) => $query->where('status', 'attended'),
+            'registrations as certificate_count' => fn ($query) => $query->whereNotNull('certificate_issued_at'),
+        ])->orderByDesc('starts_at')->get();
         $selectedEvent = $request->filled('event')
             ? $events->firstWhere('id', $request->string('event')->toString())
             : null;
@@ -117,5 +123,92 @@ class EventRegistrationAdminController extends Controller
         $event->load(['registrations' => fn ($query) => $query->orderBy('name')]);
 
         return view('admin.event-registrations.attendance', compact('event'));
+    }
+
+    public function issueCertificate(EventRegistration $eventRegistration): RedirectResponse
+    {
+        $eventRegistration->load('event');
+        if ($eventRegistration->status !== 'attended') {
+            return back()->with('error', 'Mark the attendee as attended before issuing a certificate.');
+        }
+
+        $delivered = $this->issueAndEmail($eventRegistration);
+        return back()->with(
+            $delivered ? 'success' : 'error',
+            $delivered
+                ? 'Certificate issued and emailed to '.$eventRegistration->email.'.'
+                : 'Certificate issued, but the email could not be delivered. You can still copy its public link.'
+        );
+    }
+
+    public function issueCertificates(SiteEvent $event): RedirectResponse
+    {
+        $registrations = $event->registrations()->where('status', 'attended')->get();
+        $sent = 0;
+        foreach ($registrations as $registration) {
+            $registration->setRelation('event', $event);
+            if ($this->issueAndEmail($registration)) $sent++;
+        }
+
+        return back()->with('success', "Certificates processed for {$registrations->count()} attendees; {$sent} emails sent.");
+    }
+
+    public function revokeCertificate(EventRegistration $eventRegistration): RedirectResponse
+    {
+        $eventRegistration->update(['certificate_revoked_at' => now()]);
+        return back()->with('success', 'Certificate revoked. Its verification page now shows it as invalid.');
+    }
+
+    public function restoreCertificate(EventRegistration $eventRegistration): RedirectResponse
+    {
+        if (!$eventRegistration->certificate_code || !$eventRegistration->certificate_issued_at) {
+            return back()->with('error', 'This registration does not have an issued certificate to restore.');
+        }
+
+        $eventRegistration->forceFill(['certificate_revoked_at' => null])->save();
+
+        return back()->with('success', 'Certificate restored with its original ID and issuance information.');
+    }
+
+    public function resendCertificate(EventRegistration $eventRegistration): RedirectResponse
+    {
+        $eventRegistration->load('event');
+        if (!$eventRegistration->certificate_code || !$eventRegistration->certificate_issued_at) {
+            return back()->with('error', 'Issue the certificate before resending it.');
+        }
+
+        if ($eventRegistration->certificate_revoked_at) {
+            return back()->with('error', 'Restore the revoked certificate before resending it.');
+        }
+
+        $delivered = $this->emailExistingCertificate($eventRegistration);
+
+        return back()->with(
+            $delivered ? 'success' : 'error',
+            $delivered
+                ? 'Certificate resent to '.$eventRegistration->email.' with the original certificate ID.'
+                : 'The certificate information was preserved, but the email could not be delivered.'
+        );
+    }
+
+    private function issueAndEmail(EventRegistration $registration): bool
+    {
+        if (!$registration->certificate_code) {
+            do { $code = 'SMX-'.strtoupper(Str::random(4).'-'.Str::random(4)); }
+            while (EventRegistration::where('certificate_code', $code)->exists());
+            $registration->forceFill(['certificate_code' => $code, 'certificate_issued_at' => now()]);
+        }
+        $registration->forceFill(['certificate_revoked_at' => null])->save();
+        return $this->emailExistingCertificate($registration);
+    }
+
+    private function emailExistingCertificate(EventRegistration $registration): bool
+    {
+        $delivered = SafeMailDelivery::attempt(
+            fn () => Mail::to($registration->email)->send(new CertificateIssued($registration)),
+            ['flow' => 'certificate-issued', 'registration_id' => $registration->id],
+        );
+        if ($delivered) $registration->forceFill(['certificate_emailed_at' => now()])->save();
+        return $delivered;
     }
 }

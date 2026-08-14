@@ -28,7 +28,7 @@
                     <td>{{ $message->name }}</td>
                     <td><a href="mailto:{{ $message->email }}">{{ $message->email }}</a></td>
                     <td>{{ $message->service ? str($message->service)->headline() : 'General' }}</td>
-                    <td><span class="badge badge-gray">{{ $message->source === 'grace-portfolio' ? 'Grace Portfolio' : 'Starmax Website' }}</span></td>
+                    <td><span class="badge badge-gray">{{ $message->source === 'grace-portfolio' ? 'Portfolio' : 'Starmax Website' }}</span></td>
                     <td>{{ $message->created_at->format('M d, Y H:i') }}</td>
                     <td><a href="{{ route('admin.contact-messages.show', $message) }}" class="btn btn-secondary">Open</a></td>
                 </tr>

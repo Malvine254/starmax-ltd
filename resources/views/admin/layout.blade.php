@@ -6,20 +6,22 @@
     <title>@yield('page-title', 'Portfolio') — Starmax Studio</title>
     <style>
         * { box-sizing:border-box; margin:0; padding:0; }
-        body { min-height:100vh; display:flex; color:#111827; background:#f6f7f9; font-family:Inter,ui-sans-serif,system-ui,sans-serif; }
-        .sidebar { width:248px; flex:0 0 auto; display:flex; flex-direction:column; color:#cbd5e1; background:#070b12; }
+        html,body { height:100%; }
+        body { min-height:100vh; display:flex; overflow:hidden; color:#111827; background:#f6f7f9; font-family:Inter,ui-sans-serif,system-ui,sans-serif; }
+        .sidebar { position:sticky; top:0; width:248px; height:100vh; flex:0 0 auto; display:flex; flex-direction:column; overflow:hidden; color:#cbd5e1; background:#070b12; }
         .sidebar-logo { display:flex; align-items:center; gap:11px; padding:25px 22px; color:#fff; border-bottom:1px solid rgba(255,255,255,.08); }
         .sidebar-logo-mark { width:34px; height:34px; display:grid; place-items:center; border-radius:9px; color:#111827; background:#f59e0b; font-weight:800; }
         .sidebar-logo-copy strong { display:block; font-size:14px; }
         .sidebar-logo-copy small { display:block; margin-top:2px; color:#64748b; font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
         .nav-label { padding:24px 22px 8px; color:#64748b; font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+        .sidebar nav { min-height:0; flex:1; overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#334155 transparent; }
         .sidebar nav a { display:flex; align-items:center; gap:10px; margin:3px 12px; padding:11px 12px; border-radius:8px; color:#94a3b8; text-decoration:none; font-size:13px; font-weight:600; transition:.15s; }
         .sidebar nav a:hover,.sidebar nav a.active { color:#fff; background:#171d28; }
         .sidebar nav a.active { box-shadow:inset 3px 0 #f59e0b; }
         .sidebar-bottom { margin-top:auto; padding:18px 22px; border-top:1px solid rgba(255,255,255,.08); }
-        .main { min-width:0; flex:1; display:flex; flex-direction:column; }
-        .topbar { min-height:62px; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 28px; background:#fff; border-bottom:1px solid #e5e7eb; }
-        .content { flex:1; padding:30px; overflow-y:auto; }
+        .main { min-width:0; height:100vh; flex:1; display:flex; flex-direction:column; overflow:hidden; }
+        .topbar { min-height:62px; flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:14px 28px; background:#fff; border-bottom:1px solid #e5e7eb; }
+        .content { min-height:0; flex:1; padding:30px; overflow-y:auto; overscroll-behavior:contain; }
         .card,.stat { color:inherit; background:#fff; border:1px solid #e2e8f0; border-radius:12px; }
         .card { padding:20px; }
         .stat-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(165px,1fr)); gap:14px; margin-bottom:20px; }
@@ -64,7 +66,7 @@
         .form-error { margin-top:3px; color:#dc2626; font-size:11px; }
         .pagination { display:flex; flex-wrap:wrap; gap:6px; margin-top:16px; }.pagination a,.pagination span { padding:6px 12px; color:#374151; border:1px solid #e2e8f0; border-radius:6px; font-size:12px; text-decoration:none; }
         @media(max-width:900px){.sidebar{width:82px}.sidebar-logo-copy,.nav-label,.sidebar nav a span,.sidebar-bottom .user-name{display:none}.sidebar nav a{justify-content:center}.dashboard-grid{grid-template-columns:1fr}}
-        @media(max-width:640px){body{display:block}.sidebar{width:100%}.sidebar-logo{padding:14px 18px}.sidebar-logo-copy{display:block}.sidebar nav{display:flex;overflow-x:auto;padding:6px}.sidebar nav a{min-width:max-content;margin:2px}.sidebar nav a span{display:inline}.nav-label,.sidebar-bottom{display:none}.topbar{padding:12px 18px}.content{padding:18px}.welcome-panel{align-items:flex-start;flex-direction:column;padding:22px}.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+        @media(max-width:640px){html,body{height:auto}body{min-height:100vh;display:block;overflow:auto}.sidebar{position:sticky;z-index:20;top:0;width:100%;height:auto;overflow:visible}.sidebar-logo{padding:14px 18px}.sidebar-logo-copy{display:block}.sidebar nav{display:flex;overflow-x:auto;overflow-y:hidden;padding:6px}.sidebar nav a{min-width:max-content;margin:2px}.sidebar nav a span{display:inline}.nav-label,.sidebar-bottom{display:none}.main{height:auto;min-height:calc(100vh - 118px);overflow:visible}.topbar{position:sticky;z-index:15;top:0;padding:12px 18px}.content{min-height:0;padding:18px;overflow:visible}.welcome-panel{align-items:flex-start;flex-direction:column;padding:22px}.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     </style>
 </head>
 <body>
@@ -76,7 +78,7 @@
     <nav>
         <div class="nav-label">Workspace</div>
         <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">◫ <span>Overview</span></a>
-        <a href="{{ route('grace-sellah.admin.home') }}" class="{{ request()->routeIs('grace-sellah.admin*') ? 'active' : '' }}">✦ <span>Grace portfolio</span></a>
+        <a href="{{ route('grace-sellah.admin.home') }}" class="{{ request()->routeIs('grace-sellah.admin*') ? 'active' : '' }}">✦ <span>Portfolio</span></a>
         <a href="{{ route('admin.contact-messages.index') }}" class="{{ request()->routeIs('admin.contact-messages*') ? 'active' : '' }}">✉ <span>Enquiries</span></a>
         <a href="{{ route('admin.events.index') }}" class="{{ request()->routeIs('admin.events*') ? 'active' : '' }}">◇ <span>Events</span></a>
         <a href="{{ route('admin.event-registrations.index') }}" class="{{ request()->routeIs('admin.event-registrations*') ? 'active' : '' }}">✓ <span>Registrations</span></a>
@@ -94,7 +96,7 @@
 <div class="main">
     <header class="topbar">
         <span style="font-size:14px;font-weight:700;">@yield('page-title', 'Portfolio')</span>
-        <a href="{{ url('/grace-sellah') }}" target="_blank" rel="noopener" style="color:#475569;font-size:12px;font-weight:600;text-decoration:none;">View Grace’s site ↗</a>
+        <a href="{{ url('/grace-sellah') }}" target="_blank" rel="noopener" style="color:#475569;font-size:12px;font-weight:600;text-decoration:none;">View portfolio ↗</a>
     </header>
     <main class="content">
         @if(session('success'))<div class="alert-success">{{ session('success') }}</div>@endif

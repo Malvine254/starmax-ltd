@@ -60,8 +60,22 @@
         <p style="color:#64748b;font-size:11px;line-height:1.6;">Generate a clean roster with attendee details, status, check-in, and signature columns.</p>
         <div class="roster-count"><b>{{ $selectedEvent->registrations_count }}</b><span>registered attendees</span></div>
         <a href="{{ route('admin.events.attendance', $selectedEvent) }}" target="_blank" rel="noopener" class="btn btn-secondary">Open printable register ↗</a>
+        <form method="POST" action="{{ route('admin.events.certificates.issue',$selectedEvent) }}" style="margin-top:10px" onsubmit="return confirm('Issue and email certificates to every attendee marked Attended?')">
+            @csrf <button class="btn btn-primary">Issue certificates to attended</button>
+        </form>
     </section>
 </div>
+<section class="card" style="display:flex;align-items:center;gap:28px;margin-bottom:18px;border-left:4px solid #d97706;flex-wrap:wrap">
+    <div style="flex:1;min-width:260px">
+        <span class="eyebrow">Mass certificate delivery</span>
+        <h2 style="margin:6px 0;font-size:19px">Send completion certificates</h2>
+        <p style="color:#64748b;font-size:11px;line-height:1.6">Generate an authentic PDF for every attendee marked <strong>Attended</strong>. Each PDF includes a unique certificate ID and QR code linked to online verification.</p>
+    </div>
+    <div><strong style="font-size:24px">{{ $selectedEvent->attended_count }}</strong> <small>eligible</small><br><strong>{{ $selectedEvent->certificate_count }}</strong> <small>already issued</small></div>
+    <form method="POST" action="{{ route('admin.events.certificates.issue',$selectedEvent) }}" onsubmit="return confirm('Generate and email PDF certificate links to all attended participants?')">
+        @csrf <button class="btn btn-primary" @disabled($selectedEvent->attended_count === 0)>Send certificates to all attended</button>
+    </form>
+</section>
 @endif
 
 <div class="card" style="overflow-x:auto;">

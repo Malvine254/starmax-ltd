@@ -170,7 +170,7 @@ class GraceSellahPageController extends Controller
             'content' => $content,
         ]);
 
-        return back()->with('success', 'Grace Sellah page content updated.');
+        return back()->with('success', 'Vlog page content updated.');
     }
 
     private function linesToArray(string $text): array
