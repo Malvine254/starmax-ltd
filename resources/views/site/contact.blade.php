@@ -135,7 +135,7 @@
                         </div>
                         <div class="form-group">
                             <label>Message <span style="color:#ef4444;">*</span></label>
-                            <textarea name="message" rows="5" required placeholder="Tell us about your project — what you're building, your timeline, and any key requirements...">{{ old('message') }}</textarea>
+                            <textarea name="message" rows="5" required placeholder="Tell us about your project — what you're building, your timeline, and any key requirements...">{{ old('message', request('request') === 'demo' ? 'I would like to request a live demo of TenantPro. Please contact me to arrange a suitable time.' : '') }}</textarea>
                             @error('message')<p class="error-text">{{ $message }}</p>@enderror
                         </div>
                         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px 24px;">

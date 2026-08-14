@@ -197,7 +197,7 @@
                     <span class="platform-badge"><i data-lucide="wifi-off"></i> Offline-first</span>
                 </div>
                 <div class="prod-actions" style="margin-top:24px;">
-                    <a href="{{ config('app.tenant_demo_url') }}" class="btn btn-primary" target="_blank" rel="noopener noreferrer"><i data-lucide="external-link"></i> Try Live Demo</a>
+                    <a href="{{ url('/contact').'?service=tenant&request=demo' }}" class="btn btn-primary"><i data-lucide="message-circle"></i> Request Live Demo</a>
                     <a href="/contact" class="btn btn-secondary">Request APK</a>
                 </div>
             </div>
