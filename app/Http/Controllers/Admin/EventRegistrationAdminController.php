@@ -57,6 +57,11 @@ class EventRegistrationAdminController extends Controller
     public function update(Request $request, EventRegistration $eventRegistration): RedirectResponse
     {
         $validated = $request->validate([
+            'name' => ['sometimes', 'required', 'string', 'max:255'],
+            'email' => ['sometimes', 'required', 'email', 'max:255'],
+            'phone' => ['sometimes', 'nullable', 'string', 'max:40'],
+            'company' => ['sometimes', 'nullable', 'string', 'max:255'],
+            'message' => ['sometimes', 'nullable', 'string', 'max:5000'],
             'status' => ['required', 'in:new,confirmed,attended,cancelled'],
             'admin_notes' => ['nullable', 'string', 'max:5000'],
         ]);

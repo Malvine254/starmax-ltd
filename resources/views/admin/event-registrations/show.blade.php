@@ -38,9 +38,14 @@
             @endif
         </section>
         <section class="card">
-            <span class="eyebrow">Internal workflow</span><h2 style="margin:7px 0 16px;font-size:18px;">Update registration</h2>
+            <span class="eyebrow">Attendee record</span><h2 style="margin:7px 0 16px;font-size:18px;">Edit attendee details</h2>
             <form method="POST" action="{{ route('admin.event-registrations.update', $eventRegistration) }}">
                 @csrf @method('PATCH')
+                <div class="form-group"><label for="name">Full name</label><input id="name" name="name" value="{{ old('name',$eventRegistration->name) }}" required>@error('name')<div class="form-error">{{ $message }}</div>@enderror</div>
+                <div class="form-group"><label for="email">Email address</label><input id="email" type="email" name="email" value="{{ old('email',$eventRegistration->email) }}" required>@error('email')<div class="form-error">{{ $message }}</div>@enderror</div>
+                <div class="form-group"><label for="phone">Phone</label><input id="phone" name="phone" value="{{ old('phone',$eventRegistration->phone) }}">@error('phone')<div class="form-error">{{ $message }}</div>@enderror</div>
+                <div class="form-group"><label for="company">Company</label><input id="company" name="company" value="{{ old('company',$eventRegistration->company) }}">@error('company')<div class="form-error">{{ $message }}</div>@enderror</div>
+                <div class="form-group"><label for="message">Attendee message</label><textarea id="message" name="message" rows="4">{{ old('message',$eventRegistration->message) }}</textarea>@error('message')<div class="form-error">{{ $message }}</div>@enderror</div>
                 <div class="form-group"><label for="status">Status</label><select id="status" name="status">@foreach(['new'=>'New','confirmed'=>'Confirmed','attended'=>'Attended','cancelled'=>'Cancelled'] as $value=>$label)<option value="{{ $value }}" @selected(old('status',$eventRegistration->status)===$value)>{{ $label }}</option>@endforeach</select></div>
                 <div class="form-group"><label for="admin_notes">Private admin notes</label><textarea id="admin_notes" name="admin_notes" rows="6">{{ old('admin_notes',$eventRegistration->admin_notes) }}</textarea>@error('admin_notes')<div class="form-error">{{ $message }}</div>@enderror</div>
                 <button class="btn btn-primary" type="submit">Save changes</button>
