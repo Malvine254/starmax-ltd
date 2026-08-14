@@ -19,7 +19,7 @@ h1,h2,h3,h4,.brand,.footer-brand-name{font-family:Manrope,Inter,sans-serif!impor
 .about-hero,.services-hero,.prod-hero,.port-hero,.contact-pg-hero{padding:clamp(78px,10vw,132px) 0 64px!important}
 .nx-hero:before,.about-hero:after,.services-hero:after,.sd-hero:after,.prod-hero:after,.port-hero:after,.contact-pg-hero:after{content:""!important;position:absolute!important;inset:0!important;background:radial-gradient(circle at 86% 10%,rgba(217,154,49,.18),transparent 29%),linear-gradient(110deg,rgba(255,255,255,.035),transparent 38%)!important;pointer-events:none!important}
 .nx-hero-grid{padding:clamp(78px,9vw,126px) 0!important}
-.nx-hero h1,.about-hero h2,.services-hero-title,.sd-hero h1,.prod-hero h2,.port-hero h2,.contact-pg-hero h2{color:#fff!important;font-size:clamp(44px,6vw,78px)!important;line-height:1!important;letter-spacing:-.06em!important}
+.nx-hero h1,.about-hero h2,.services-hero-title,.sd-hero h1,.prod-hero h2,.port-hero h2,.contact-pg-hero h2,.events-title{color:#fff!important;font-size:clamp(36px,5vw,62px)!important;line-height:1.06!important;letter-spacing:-.05em!important}
 .nx-hero p,.about-hero p,.services-hero-sub,.sd-hero-desc,.prod-hero p,.port-hero p,.contact-pg-hero p{color:#aeb6c2!important}
 .nx-chip,.sd-badge{border-color:rgba(255,255,255,.16)!important;color:#f1b75b!important;background:rgba(255,255,255,.05)!important}
 .nx-hero-actions .btn-primary{border-color:var(--sx-gold)!important;background:var(--sx-gold)!important;color:#15120d!important}
@@ -59,11 +59,11 @@ h1,h2,h3,h4,.brand,.footer-brand-name{font-family:Manrope,Inter,sans-serif!impor
 .contact-pg-hero{min-height:500px!important;display:flex!important;align-items:center!important;padding:96px 0!important}
 .contact-hero-inner{position:relative;z-index:1;text-align:left!important}
 .contact-hero-kicker{display:block!important;margin:0 0 20px!important;color:#f0b95d!important;font-size:11px!important;font-weight:800!important;line-height:1.2!important;letter-spacing:.16em!important;text-transform:uppercase!important}
-.contact-hero-title{width:min(100%,900px)!important;max-width:none!important;margin:0!important;color:#fff!important;font:800 clamp(48px,7vw,88px)/1.06 Manrope,Inter,sans-serif!important;letter-spacing:-.055em!important;text-wrap:balance}
+.contact-hero-title{width:min(100%,900px)!important;max-width:none!important;margin:0!important;color:#fff!important;font:800 clamp(38px,5.5vw,68px)/1.08 Manrope,Inter,sans-serif!important;letter-spacing:-.05em!important;text-wrap:balance}
 .contact-hero-copy{width:min(100%,620px)!important;max-width:none!important;margin:25px 0 0!important;color:#aeb6c2!important;font-size:16px!important;line-height:1.75!important}
 input,select,textarea{border-color:#d0cbc2!important;border-radius:8px!important}input:focus,select:focus,textarea:focus{border-color:var(--sx-gold)!important;box-shadow:0 0 0 3px rgba(217,154,49,.12)!important}
 
 /* Footer */
 .site-footer{background:#0d1118!important}.footer-tagline,.footer-links,.footer-links a{color:#929aa7!important}.footer-links a:hover{color:#f0b65a!important}.footer-primary-link{color:#f0b65a!important}.footer-badge{border-color:#343943!important;color:#b9c0ca!important;background:#171b22!important}
 
-@media(max-width:768px){.about-hero,.services-hero,.prod-hero,.port-hero{padding:64px 0 50px!important}.contact-pg-hero{min-height:440px!important;padding:70px 0!important}.contact-hero-title{font-size:clamp(44px,12vw,64px)!important;line-height:1.08!important}.nx-hero-grid{padding:64px 0!important}.nx-hero h1,.about-hero h2,.services-hero-title,.sd-hero h1,.prod-hero h2,.port-hero h2{font-size:clamp(38px,11vw,56px)!important}.nx-section{padding:68px 0!important}}
+@media(max-width:768px){.about-hero,.services-hero,.prod-hero,.port-hero{padding:64px 0 50px!important}.contact-pg-hero{min-height:440px!important;padding:70px 0!important}.contact-hero-title{font-size:clamp(34px,9vw,48px)!important;line-height:1.1!important}.nx-hero-grid{padding:64px 0!important}.nx-hero h1,.about-hero h2,.services-hero-title,.sd-hero h1,.prod-hero h2,.port-hero h2,.events-title{font-size:clamp(32px,8.5vw,44px)!important}.nx-section{padding:68px 0!important}}
