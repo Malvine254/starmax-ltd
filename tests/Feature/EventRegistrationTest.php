@@ -62,6 +62,7 @@ class EventRegistrationTest extends TestCase
             'title' => 'Admin Managed Workshop',
             'slug' => 'admin-managed-workshop',
             'category' => 'Workshop',
+            'format' => 'In-Person',
             'location' => 'Nairobi',
             'starts_at' => now()->addWeek(),
             'excerpt' => 'A managed workshop.',
@@ -164,9 +165,10 @@ class EventRegistrationTest extends TestCase
 
         Mail::assertSent(EventReminder::class, 2);
         Mail::assertSent(EventReminder::class, fn (EventReminder $mail) =>
-            $mail->eventUrl === 'https://meet.example.com/reminder'
+            $mail->eventUrl === null
             && $mail->registration->name === 'Attendee 1'
             && $mail->hasTo('first@example.com')
+            && ! str_contains($mail->render(), 'Open event link')
         );
 
         $this->actingAs($admin)->post(route('admin.event-registrations.reminders.send'), [
@@ -179,7 +181,7 @@ class EventRegistrationTest extends TestCase
             $mail->reminderSubject === 'Reminder for Attendee 1'
             && str_contains($mail->reminderMessage, 'Hello Attendee 1.')
             && str_contains($mail->reminderMessage, 'Reminder Workshop at Nairobi')
-            && str_contains($mail->reminderMessage, 'https://meet.example.com/reminder')
+            && ! str_contains($mail->reminderMessage, 'https://meet.example.com/reminder')
             && $mail->hasTo('first@example.com')
         );
 

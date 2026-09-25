@@ -57,7 +57,8 @@ class EventInvitationTest extends TestCase
             return $mail->hasTo('jane@example.com') && count($mail->to) === 1
                 && $mail->invitationSubject === 'Join Invitation Workshop, Jane'
                 && str_contains($mail->invitationMessage, 'Example Ltd')
-                && str_contains($mail->render(), 'View event details');
+                && $mail->eventUrl === null
+                && ! str_contains($mail->render(), 'Open event link');
         });
         $this->assertDatabaseCount('event_registrations', 2);
         $this->assertDatabaseHas('event_registrations', ['site_event_id' => $event->id, 'email' => 'jane@example.com', 'name' => 'Jane', 'company' => 'Example Ltd']);
@@ -85,6 +86,18 @@ class EventInvitationTest extends TestCase
         } finally {
             @unlink($path);
         }
+    }
+
+    public function test_online_invitation_includes_the_configured_event_link(): void
+    {
+        $event = $this->event();
+        $event->update(['format' => 'Online', 'event_url' => 'https://meet.example.com/invitation']);
+        $recipient = ['name' => 'Jane', 'email' => 'jane@example.com', 'phone' => '', 'company' => ''];
+        $mail = new EventInvitation($event, $recipient, 'Invitation', 'Join here: {{event_url}}');
+
+        $this->assertSame('https://meet.example.com/invitation', $mail->eventUrl);
+        $this->assertStringContainsString('https://meet.example.com/invitation', $mail->invitationMessage);
+        $this->assertStringContainsString('Open event link', $mail->render());
     }
 
     public function test_missing_email_header_is_rejected(): void

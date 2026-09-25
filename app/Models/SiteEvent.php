@@ -50,6 +50,13 @@ class SiteEvent extends Model
         return $this->hasMany(EventRegistration::class, 'site_event_id');
     }
 
+    public function onlineEventUrl(): ?string
+    {
+        return strcasecmp(trim((string) $this->format), 'Online') === 0 && filled($this->event_url)
+            ? $this->event_url
+            : null;
+    }
+
     public static function defaultCertificateMessage(): string
     {
         return 'for successfully completing :event:company. Awarded in recognition of participation, commitment, and successful completion.';

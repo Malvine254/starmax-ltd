@@ -37,7 +37,7 @@ class EventRegistrationAdminController extends Controller
         ];
         $defaultReminder = 'This is a friendly reminder about {{event}} on {{date}} at {{location}}. We look forward to seeing you there.';
         $defaultInvitationSubject = 'You are invited: '.($selectedEvent?->title ?? '{{event}}');
-        $defaultInvitationMessage = 'Hello {{name}}, you are invited to {{event}} on {{date}} at {{location}}. We would love to see you there. Your place has been registered. Please follow the link below for event details.';
+        $defaultInvitationMessage = 'Hello {{name}}, you are invited to {{event}} on {{date}} at {{location}}. We would love to see you there. Your place has been registered.';
 
         return view('admin.event-registrations.index', compact(
             'registrations',
@@ -88,9 +88,7 @@ class EventRegistrationAdminController extends Controller
             return back()->with('error', 'This event has no registered attendees.');
         }
 
-        $eventUrl = filled($event->event_url)
-            ? $event->event_url
-            : route('events.index', ['event' => $event->slug]).'#schedule';
+        $eventUrl = $event->onlineEventUrl();
         $sent = 0;
         $failed = 0;
 
@@ -103,7 +101,7 @@ class EventRegistrationAdminController extends Controller
                 '{{event}}' => $event->title,
                 '{{date}}' => $event->starts_at?->format('D, d M Y · g:i A') ?? 'To be confirmed',
                 '{{location}}' => $event->location ?: 'To be confirmed',
-                '{{event_url}}' => $eventUrl,
+                '{{event_url}}' => $eventUrl ?? '',
             ];
             $personalizedSubject = strtr($validated['subject'], $replacements);
             $personalizedMessage = strtr($validated['message'], $replacements);

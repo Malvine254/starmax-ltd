@@ -5,6 +5,6 @@
     <h1>Hello {{ $recipient['name'] }},</h1>
     <div style="white-space:pre-line;line-height:1.7">{{ $invitationMessage }}</div>
     <p><strong>{{ $event->title }}</strong><br>{{ $event->starts_at?->format('D, d M Y, g:i A') }}<br>{{ $event->location }}</p>
-    <p><a href="{{ $eventUrl }}">View event details</a></p>
+    @if($eventUrl)<p><a href="{{ $eventUrl }}">Open event link</a></p>@endif
 </div>
 </body></html>

@@ -17,7 +17,7 @@ class EventReminder extends Mailable
         public EventRegistration $registration,
         public string $reminderSubject,
         public string $reminderMessage,
-        public string $eventUrl,
+        public ?string $eventUrl,
     ) {
     }
 

@@ -11,7 +11,7 @@
     <h2>Sample email</h2>
     <p><strong>{{ $sample['invitationSubject'] }}</strong></p>
     <p style="white-space:pre-line">{{ $sample['invitationMessage'] }}</p>
-    <p><a href="{{ $sample['eventUrl'] }}">View event details</a></p>
+    @if($sample['eventUrl'])<p><a href="{{ $sample['eventUrl'] }}">Open event link</a></p>@endif
     <div style="overflow:auto;max-height:400px;margin:20px 0"><table>
         <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Company</th></tr></thead>
         <tbody>@foreach($draft['recipients'] as $recipient)<tr>@foreach($recipient as $value)<td>{{ $value }}</td>@endforeach</tr>@endforeach</tbody>

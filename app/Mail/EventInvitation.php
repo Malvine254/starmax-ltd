@@ -21,16 +21,16 @@ class EventInvitation extends Mailable
 
     public string $invitationMessage;
 
-    public string $eventUrl;
+    public ?string $eventUrl;
 
     public function __construct(public SiteEvent $event, public array $recipient, string $subject, string $message)
     {
-        $this->eventUrl = route('events.index', ['event' => $event->slug]).'#schedule';
+        $this->eventUrl = $event->onlineEventUrl();
         $fields = [
             '{{name}}' => $recipient['name'], '{{email}}' => $recipient['email'],
             '{{phone}}' => $recipient['phone'], '{{company}}' => $recipient['company'],
             '{{event}}' => $event->title, '{{date}}' => $event->starts_at?->format('D, d M Y, g:i A') ?? 'To be confirmed',
-            '{{location}}' => $event->location ?: 'To be confirmed', '{{event_url}}' => $this->eventUrl,
+            '{{location}}' => $event->location ?: 'To be confirmed', '{{event_url}}' => $this->eventUrl ?? '',
         ];
         $this->invitationSubject = str_replace(["\r", "\n"], ' ', strtr($subject, $fields));
         $this->invitationMessage = strtr($message, $fields);
