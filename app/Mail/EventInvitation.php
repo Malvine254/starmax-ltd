@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\SiteEvent;
+use App\Support\EmailHtml;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -34,7 +35,7 @@ class EventInvitation extends Mailable
             '{{event_url}}' => $this->eventUrl ?? '',
         ];
         $this->invitationSubject = str_replace(["\r", "\n"], ' ', strtr($subject, $fields));
-        $this->invitationMessage = strtr($message, $fields);
+        $this->invitationMessage = EmailHtml::sanitize(strtr($message, $fields));
     }
 
     public function envelope(): Envelope

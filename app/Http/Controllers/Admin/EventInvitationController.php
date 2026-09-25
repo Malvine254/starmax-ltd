@@ -19,7 +19,7 @@ class EventInvitationController extends Controller
         $data = $request->validate([
             'site_event_id' => 'required|exists:site_events,id',
             'subject' => 'required|string|max:180|not_regex:/[\r\n]/',
-            'message' => 'required|string|max:5000',
+            'message' => 'required|string|max:20000',
             'recipients_file' => 'required|file|extensions:csv,xlsx|mimes:csv,txt,xlsx|max:5120',
         ]);
         $event = SiteEvent::findOrFail($data['site_event_id']);

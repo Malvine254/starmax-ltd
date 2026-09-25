@@ -161,7 +161,7 @@ class EventRegistrationTest extends TestCase
             ->assertSee('data-tab="attendance"', false)
             ->assertSee('class="invitation-fields"', false)
             ->assertSee('Personalization fields')
-            ->assertSee('Program:')
+            ->assertSee('The event program is included below.')
             ->assertSee('9:00 AM - 9:20 AM: Arrival and registration')
             ->assertSee('{{name}}');
 
@@ -179,7 +179,7 @@ class EventRegistrationTest extends TestCase
             && $mail->registration->name === 'Attendee 1'
             && $mail->hasTo('first@example.com')
             && ! str_contains($mail->render(), 'Open event link')
-            && $mail->reminderMessage === 'Please remember to attend.  Please arrive on time.'
+            && str_contains($mail->reminderMessage, '<p>Please remember to attend.  Please arrive on time.</p>')
             && ! str_contains($mail->reminderMessage, 'Arrival and registration')
             && str_contains($mail->render(), 'Event program')
             && str_contains($mail->render(), '9:00 AM - 9:20 AM')

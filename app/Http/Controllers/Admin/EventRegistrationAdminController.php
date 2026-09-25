@@ -35,11 +35,10 @@ class EventRegistrationAdminController extends Controller
             '{{name}}', '{{email}}', '{{phone}}', '{{company}}',
             '{{event}}', '{{date}}', '{{location}}', '{{program}}', '{{event_url}}',
         ];
-        $defaultReminder = 'This is a friendly reminder about {{event}} on {{date}} at {{location}}. We look forward to seeing you there.';
-        $defaultReminder .= "\n\nProgram:\n".($selectedEvent?->program ?: SiteEvent::defaultProgram());
+        $defaultReminder = '<p>This is a friendly reminder about <strong>{{event}}</strong> on {{date}} at {{location}}. We look forward to seeing you there.</p><p><strong>The event program is included below.</strong></p>';
         $defaultInvitationSubject = 'You are invited: '.($selectedEvent?->title ?? '{{event}}');
-        $defaultInvitationMessage = 'Hello {{name}}, you are invited to {{event}} on {{date}} at {{location}}. We would love to see you there. Your place has been registered.';
-        $defaultInvitationMessage .= "\n\nProgram:\n".($selectedEvent?->program ?: SiteEvent::defaultProgram());
+        $defaultInvitationMessage = '<p>Hello {{name}}, you are invited to <strong>{{event}}</strong> on {{date}} at {{location}}. We would love to see you there. Your place has been registered.</p>';
+        $defaultInvitationMessage .= '<h3>Program</h3><p>'.nl2br(e($selectedEvent?->program ?: SiteEvent::defaultProgram()), false).'</p>';
 
         return view('admin.event-registrations.index', compact(
             'registrations',
@@ -82,7 +81,7 @@ class EventRegistrationAdminController extends Controller
         $validated = $request->validate([
             'site_event_id' => ['required', 'exists:site_events,id'],
             'subject' => ['required', 'string', 'max:180'],
-            'message' => ['required', 'string', 'max:5000'],
+            'message' => ['required', 'string', 'max:20000'],
         ]);
 
         $event = SiteEvent::with('registrations')->findOrFail($validated['site_event_id']);

@@ -5,7 +5,7 @@
     <div style="padding:28px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;">
         <p style="margin:0 0 8px;color:#a5680b;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;">Starmax event reminder</p>
         <h1 style="margin:0 0 14px;font-size:24px;">Hello {{ $registration->name }},</h1>
-        <div style="color:#475569;font-size:14px;line-height:1.7;white-space:pre-line;">{{ $reminderMessage }}</div>
+        <div style="color:#475569;font-size:14px;line-height:1.7;">{!! $reminderMessage !!}</div>
 
         @if($programItems)
             <div style="margin:24px 0;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">

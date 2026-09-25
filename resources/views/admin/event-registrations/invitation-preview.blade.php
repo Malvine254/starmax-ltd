@@ -10,7 +10,7 @@
     @php($sample = (array) new \App\Mail\EventInvitation($event, $draft['recipients'][0], $draft['subject'], $draft['message']))
     <h2>Sample email</h2>
     <p><strong>{{ $sample['invitationSubject'] }}</strong></p>
-    <p style="white-space:pre-line">{{ $sample['invitationMessage'] }}</p>
+    <div style="line-height:1.7">{!! $sample['invitationMessage'] !!}</div>
     @if($sample['eventUrl'])<p><a href="{{ $sample['eventUrl'] }}">Open event link</a></p>@endif
     <div style="overflow:auto;max-height:400px;margin:20px 0"><table>
         <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Company</th></tr></thead>

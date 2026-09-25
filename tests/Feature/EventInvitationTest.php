@@ -44,6 +44,7 @@ class EventInvitationTest extends TestCase
         $this->actingAs($this->admin())->get(route('admin.event-registrations.index'))
             ->assertOk()
             ->assertSee('Upload and preview invitations')
+            ->assertSee('ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js', false)
             ->assertSee('9:00 AM - 10:00 AM: Arrival and registration');
         $response = $this->post(route('admin.event-invitations.preview'), [
             'site_event_id' => $event->id, 'subject' => 'Join {{event}}, {{name}}',
@@ -103,6 +104,22 @@ class EventInvitationTest extends TestCase
         $this->assertStringContainsString('Open event link', $mail->render());
     }
 
+    public function test_rich_invitation_html_is_formatted_and_sanitized(): void
+    {
+        $recipient = ['name' => 'Jane', 'email' => 'jane@example.com', 'phone' => '', 'company' => ''];
+        $message = '<p onclick="alert(1)">Hello <strong>{{name}}</strong></p>'
+            .'<ul><li>Bring your laptop</li><li>Bring your ID</li></ul>'
+            .'<a href="javascript:alert(1)">Unsafe link</a><script>alert(1)</script>';
+        $mail = new EventInvitation($this->event(), $recipient, 'Invitation', $message);
+
+        $this->assertStringContainsString('<strong>Jane</strong>', $mail->invitationMessage);
+        $this->assertStringContainsString('<ul style="margin:0 0 16px;padding-left:24px;">', $mail->invitationMessage);
+        $this->assertStringContainsString('Bring your laptop</li>', $mail->invitationMessage);
+        $this->assertStringNotContainsString('onclick', $mail->invitationMessage);
+        $this->assertStringNotContainsString('javascript:', $mail->invitationMessage);
+        $this->assertStringNotContainsString('<script', $mail->invitationMessage);
+    }
+
     public function test_selected_event_program_is_auto_filled_and_available_for_personalization(): void
     {
         $event = $this->event();
@@ -111,7 +128,7 @@ class EventInvitationTest extends TestCase
         $this->actingAs($this->admin())
             ->get(route('admin.event-registrations.index', ['event' => $event->id]).'#invite')
             ->assertOk()
-            ->assertSee('Program:')
+            ->assertSee('Program')
             ->assertSee('9:00 AM - 10:00 AM: Arrival')
             ->assertSee('{{program}}');
 

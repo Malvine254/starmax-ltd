@@ -46,7 +46,7 @@
             <div class="form-group"><label for="recipients-file">Recipient file</label><input id="recipients-file" type="file" name="recipients_file" accept=".csv,.xlsx" required></div>
             <div class="form-group"><label for="invite-subject">Subject</label><input id="invite-subject" name="subject" value="{{ old('subject', $defaultInvitationSubject) }}" maxlength="180" required></div>
         </div>
-        <div class="form-group"><label for="invite-message">Invitation message</label><textarea id="invite-message" name="message" rows="5" maxlength="5000" required>{{ old('message', $defaultInvitationMessage) }}</textarea></div>
+        <div class="form-group"><label for="invite-message">Invitation message</label><textarea id="invite-message" class="rich-email-editor" name="message" rows="7" maxlength="20000" required>{{ old('message', $defaultInvitationMessage) }}</textarea></div>
         <p style="margin-bottom:12px">Personalization: @foreach($personalizationFields as $field)<code>{{ $field }}</code> @endforeach</p>
         <button type="submit" class="btn btn-primary">Upload and preview invitations</button>
     </form>
@@ -69,7 +69,7 @@
             </div>
             <div class="form-group">
                 <label for="message">Reminder message</label>
-                <textarea id="message" name="message" rows="7" required placeholder="Add arrival instructions, what to bring, or any schedule updates…">{{ old('message', $defaultReminder) }}</textarea>
+                <textarea id="message" class="rich-email-editor" name="message" rows="9" maxlength="20000" required placeholder="Add arrival instructions, what to bring, or any schedule updates…">{{ old('message', $defaultReminder) }}</textarea>
                 @error('message')<div class="form-error">{{ $message }}</div>@enderror
             </div>
             <div class="merge-fields" aria-label="Available personalization fields">
@@ -164,8 +164,9 @@
 @if($registrations->hasPages())<div class="pagination">{{ $registrations->links() }}</div>@endif
 </section>
 <style>
-.registration-tabs{display:flex;gap:4px;margin-bottom:18px;padding:4px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;width:max-content;max-width:100%;overflow-x:auto}.registration-tab{min-height:36px;padding:8px 14px;border:0;border-radius:6px;background:transparent;color:#475569;font:inherit;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}.registration-tab.active{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,.12)}.registration-panel{display:none}.registration-panel.active{display:block}.invitation-fields{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(240px,1.2fr) minmax(240px,1.2fr);gap:14px}.invitation-fields>.form-group{min-width:0}.invitation-fields input,.invitation-fields select{min-height:42px}.attendance-grid{display:grid;grid-template-columns:minmax(280px,1fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:0}.roster-count span{color:#64748b;font-size:10px}.merge-fields{margin:-4px 0 18px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.5}.merge-fields strong,.merge-fields span{display:block}.merge-fields strong{color:#334155}.merge-fields div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.merge-fields code{padding:3px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#7c3aed;font-size:10px}@media(max-width:900px){.invitation-fields{grid-template-columns:1fr 1fr}.invitation-fields>.form-group:last-child{grid-column:1/-1}}@media(max-width:620px){.invitation-fields{grid-template-columns:1fr}.invitation-fields>.form-group:last-child{grid-column:auto}.registration-tabs{width:100%}}
+.registration-tabs{display:flex;gap:4px;margin-bottom:18px;padding:4px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;width:max-content;max-width:100%;overflow-x:auto}.registration-tab{min-height:36px;padding:8px 14px;border:0;border-radius:6px;background:transparent;color:#475569;font:inherit;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}.registration-tab.active{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,.12)}.registration-panel{display:none}.registration-panel.active{display:block}.invitation-fields{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(240px,1.2fr) minmax(240px,1.2fr);gap:14px}.invitation-fields>.form-group{min-width:0}.invitation-fields input,.invitation-fields select{min-height:42px}.ck-editor__editable_inline{min-height:190px}.attendance-grid{display:grid;grid-template-columns:minmax(280px,1fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:0}.roster-count span{color:#64748b;font-size:10px}.merge-fields{margin:-4px 0 18px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.5}.merge-fields strong,.merge-fields span{display:block}.merge-fields strong{color:#334155}.merge-fields div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.merge-fields code{padding:3px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#7c3aed;font-size:10px}@media(max-width:900px){.invitation-fields{grid-template-columns:1fr 1fr}.invitation-fields>.form-group:last-child{grid-column:1/-1}}@media(max-width:620px){.invitation-fields{grid-template-columns:1fr}.invitation-fields>.form-group:last-child{grid-column:auto}.registration-tabs{width:100%}}
 </style>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 <script>
 (() => {
     const tabs = [...document.querySelectorAll('.registration-tab')];
@@ -191,6 +192,13 @@
         ? 'invite'
         : window.location.hash.replace('#', '') || 'attendees';
     showTab(initialTab, false);
+
+    if (!window.ClassicEditor) return;
+    document.querySelectorAll('.rich-email-editor').forEach(editor => {
+        ClassicEditor.create(editor, {
+            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo']
+        }).catch(error => console.error('Unable to start the email editor.', error));
+    });
 })();
 </script>
 @endsection
