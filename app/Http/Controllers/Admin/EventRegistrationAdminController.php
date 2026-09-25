@@ -33,11 +33,14 @@ class EventRegistrationAdminController extends Controller
             : null;
         $personalizationFields = [
             '{{name}}', '{{email}}', '{{phone}}', '{{company}}',
-            '{{event}}', '{{date}}', '{{location}}', '{{event_url}}',
+            '{{event}}', '{{date}}', '{{location}}', '{{program}}', '{{event_url}}',
         ];
         $defaultReminder = 'This is a friendly reminder about {{event}} on {{date}} at {{location}}. We look forward to seeing you there.';
         $defaultInvitationSubject = 'You are invited: '.($selectedEvent?->title ?? '{{event}}');
         $defaultInvitationMessage = 'Hello {{name}}, you are invited to {{event}} on {{date}} at {{location}}. We would love to see you there. Your place has been registered.';
+        if (filled($selectedEvent?->program)) {
+            $defaultInvitationMessage .= "\n\nProgram:\n".$selectedEvent->program;
+        }
 
         return view('admin.event-registrations.index', compact(
             'registrations',
@@ -101,6 +104,7 @@ class EventRegistrationAdminController extends Controller
                 '{{event}}' => $event->title,
                 '{{date}}' => $event->starts_at?->format('D, d M Y · g:i A') ?? 'To be confirmed',
                 '{{location}}' => $event->location ?: 'To be confirmed',
+                '{{program}}' => $event->program ?: 'To be confirmed',
                 '{{event_url}}' => $eventUrl ?? '',
             ];
             $personalizedSubject = strtr($validated['subject'], $replacements);

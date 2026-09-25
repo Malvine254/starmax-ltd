@@ -71,6 +71,13 @@
                 @error('description')<p class="form-error">{{ $message }}</p>@enderror
             </div>
 
+            <div class="form-group" style="grid-column:1/-1;">
+                <label>Program / Agenda</label>
+                <textarea name="program" rows="6" maxlength="10000" placeholder="9:00 AM - 10:00 AM: Arrival and registration&#10;10:00 AM - 11:00 AM: Opening session">{{ old('program', $event->program) }}</textarea>
+                <div style="margin-top:5px;color:#64748b;font-size:11px;">Enter one schedule item per line. This is automatically included in bulk invitation templates.</div>
+                @error('program')<p class="form-error">{{ $message }}</p>@enderror
+            </div>
+
             <div class="form-group">
                 <label>CTA Button Label *</label>
                 <input type="text" name="cta_label" value="{{ old('cta_label', $event->cta_label) }}" required>

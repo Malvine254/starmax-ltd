@@ -30,7 +30,8 @@ class EventInvitation extends Mailable
             '{{name}}' => $recipient['name'], '{{email}}' => $recipient['email'],
             '{{phone}}' => $recipient['phone'], '{{company}}' => $recipient['company'],
             '{{event}}' => $event->title, '{{date}}' => $event->starts_at?->format('D, d M Y, g:i A') ?? 'To be confirmed',
-            '{{location}}' => $event->location ?: 'To be confirmed', '{{event_url}}' => $this->eventUrl ?? '',
+            '{{location}}' => $event->location ?: 'To be confirmed', '{{program}}' => $event->program ?: 'To be confirmed',
+            '{{event_url}}' => $this->eventUrl ?? '',
         ];
         $this->invitationSubject = str_replace(["\r", "\n"], ' ', strtr($subject, $fields));
         $this->invitationMessage = strtr($message, $fields);

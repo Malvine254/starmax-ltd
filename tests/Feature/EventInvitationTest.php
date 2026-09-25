@@ -100,6 +100,49 @@ class EventInvitationTest extends TestCase
         $this->assertStringContainsString('Open event link', $mail->render());
     }
 
+    public function test_selected_event_program_is_auto_filled_and_available_for_personalization(): void
+    {
+        $event = $this->event();
+        $event->update(['program' => "9:00 AM - 10:00 AM: Arrival\n10:00 AM - 11:00 AM: Opening session"]);
+
+        $this->actingAs($this->admin())
+            ->get(route('admin.event-registrations.index', ['event' => $event->id]).'#invite')
+            ->assertOk()
+            ->assertSee('Program:')
+            ->assertSee('9:00 AM - 10:00 AM: Arrival')
+            ->assertSee('{{program}}');
+
+        $recipient = ['name' => 'Jane', 'email' => 'jane@example.com', 'phone' => '', 'company' => ''];
+        $mail = new EventInvitation($event, $recipient, 'Invitation', "Event program:\n{{program}}");
+
+        $this->assertStringContainsString('9:00 AM - 10:00 AM: Arrival', $mail->invitationMessage);
+        $this->assertStringNotContainsString('{{program}}', $mail->invitationMessage);
+    }
+
+    public function test_admin_can_save_an_event_program(): void
+    {
+        $this->actingAs($this->admin())->post(route('admin.events.store'), [
+            'title' => 'Programmed Workshop',
+            'category' => 'Workshop',
+            'format' => 'In-Person',
+            'location' => 'Thika, Kenya',
+            'starts_at' => now()->addWeek()->format('Y-m-d H:i:s'),
+            'ends_at' => now()->addWeek()->addHours(3)->format('Y-m-d H:i:s'),
+            'excerpt' => 'A workshop with a detailed program.',
+            'description' => 'Workshop details.',
+            'program' => "9:00 AM - 10:00 AM: Arrival\n10:00 AM - 11:00 AM: Opening session",
+            'cta_label' => 'Request Invite',
+            'cta_url' => '/contact',
+            'status' => 'upcoming',
+            'sort_order' => 0,
+        ])->assertRedirect(route('admin.events.index'));
+
+        $this->assertDatabaseHas('site_events', [
+            'title' => 'Programmed Workshop',
+            'program' => "9:00 AM - 10:00 AM: Arrival\n10:00 AM - 11:00 AM: Opening session",
+        ]);
+    }
+
     public function test_missing_email_header_is_rejected(): void
     {
         $this->actingAs($this->admin())->post(route('admin.event-invitations.preview'), [

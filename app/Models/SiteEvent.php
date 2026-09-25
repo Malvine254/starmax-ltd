@@ -25,6 +25,7 @@ class SiteEvent extends Model
         'ends_at',
         'excerpt',
         'description',
+        'program',
         'cta_label',
         'cta_url',
         'event_url',
