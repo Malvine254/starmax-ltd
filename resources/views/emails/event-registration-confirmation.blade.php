@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"><head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>@media only screen and (max-width:600px){.email-shell{padding:8px 6px!important}.email-card{padding:18px 14px!important;border-radius:8px!important}}</style>
+</head>
 <body style="margin:0;background:#f3f4f6;font-family:Arial,sans-serif;color:#111827;">
-    <div style="max-width:640px;margin:0 auto;padding:32px 20px;">
-        <div style="background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;padding:28px;">
+    <div class="email-shell" style="max-width:640px;margin:0 auto;padding:32px 20px;">
+        <div class="email-card" style="background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;padding:28px;">
             <p style="margin:0 0 8px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;">Starmax Ltd</p>
             <h1 style="margin:0 0 14px;font-size:24px;line-height:1.25;">Registration confirmed, {{ $registration->name }}.</h1>
             <p style="margin:0 0 20px;line-height:1.65;color:#475569;">Thanks for registering. Your seat is now reserved and the event access link is ready below.</p>

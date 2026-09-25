@@ -102,6 +102,7 @@ class EventInvitationTest extends TestCase
         $this->assertSame('https://meet.example.com/invitation', $mail->eventUrl);
         $this->assertStringContainsString('https://meet.example.com/invitation', $mail->invitationMessage);
         $this->assertStringContainsString('Open event link', $mail->render());
+        $this->assertStringContainsString('.email-shell{padding:8px 6px!important}', $mail->render());
     }
 
     public function test_rich_invitation_html_is_formatted_and_sanitized(): void

@@ -184,6 +184,7 @@ class EventRegistrationTest extends TestCase
             && str_contains($mail->render(), 'Event program')
             && str_contains($mail->render(), '9:00 AM - 9:20 AM')
             && str_contains($mail->render(), 'Arrival and registration')
+            && str_contains($mail->render(), '.email-shell{padding:8px 6px!important}')
             && substr_count($mail->render(), 'Arrival and registration') === 1
         );
 
