@@ -140,6 +140,7 @@ class EventRegistrationTest extends TestCase
             'starts_at' => now()->addWeek(),
             'excerpt' => 'Reminder test.',
             'description' => 'Reminder test event.',
+            'program' => "9:00 AM - 9:20 AM: Arrival and registration\n9:20 AM - 10:00 AM: Opening session",
             'event_url' => 'https://meet.example.com/reminder',
             'status' => 'upcoming',
         ]);
@@ -161,13 +162,13 @@ class EventRegistrationTest extends TestCase
             ->assertSee('class="invitation-fields"', false)
             ->assertSee('Personalization fields')
             ->assertSee('Program:')
-            ->assertSee('9:00 AM - 10:00 AM: Arrival and registration')
+            ->assertSee('9:00 AM - 9:20 AM: Arrival and registration')
             ->assertSee('{{name}}');
 
         $this->actingAs($admin)->post(route('admin.event-registrations.reminders.send'), [
             'site_event_id' => $event->id,
             'subject' => 'Event reminder',
-            'message' => 'Please remember to attend.',
+            'message' => "Please remember to attend.\n\nProgram:\n{$event->program}",
         ])->assertSessionHas('success', 'Reminder completed: 2 sent, 0 failed.');
 
         Mail::assertSent(EventReminder::class, 2);
@@ -176,6 +177,11 @@ class EventRegistrationTest extends TestCase
             && $mail->registration->name === 'Attendee 1'
             && $mail->hasTo('first@example.com')
             && ! str_contains($mail->render(), 'Open event link')
+            && $mail->reminderMessage === 'Please remember to attend.'
+            && str_contains($mail->render(), 'Event program')
+            && str_contains($mail->render(), '9:00 AM - 9:20 AM')
+            && str_contains($mail->render(), 'Arrival and registration')
+            && substr_count($mail->render(), 'Arrival and registration') === 1
         );
 
         $this->actingAs($admin)->post(route('admin.event-registrations.reminders.send'), [

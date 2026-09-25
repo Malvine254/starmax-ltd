@@ -91,6 +91,7 @@ class EventRegistrationAdminController extends Controller
         }
 
         $eventUrl = $event->onlineEventUrl();
+        $program = $event->program ?: SiteEvent::defaultProgram();
         $sent = 0;
         $failed = 0;
 
@@ -108,10 +109,11 @@ class EventRegistrationAdminController extends Controller
             ];
             $personalizedSubject = strtr($validated['subject'], $replacements);
             $personalizedMessage = strtr($validated['message'], $replacements);
+            $personalizedMessage = trim(str_replace("Program:\n{$program}", '', str_replace("\r\n", "\n", $personalizedMessage)));
 
             $delivered = SafeMailDelivery::attempt(
                 fn () => Mail::to($registration->email)->send(
-                    new EventReminder($registration, $personalizedSubject, $personalizedMessage, $eventUrl)
+                    new EventReminder($registration, $personalizedSubject, $personalizedMessage, $eventUrl, $program)
                 ),
                 [
                     'flow' => 'event-bulk-reminder',

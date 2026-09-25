@@ -7,6 +7,22 @@
         <h1 style="margin:0 0 14px;font-size:24px;">Hello {{ $registration->name }},</h1>
         <div style="color:#475569;font-size:14px;line-height:1.7;white-space:pre-line;">{{ $reminderMessage }}</div>
 
+        @if($programItems)
+            <div style="margin:24px 0;border:1px solid #e5e7eb;border-radius:8px;overflow:hidden;">
+                <div style="padding:13px 16px;background:#111827;color:#fff;">
+                    <p style="margin:0;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;">Event program</p>
+                </div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;background:#fff;">
+                    @foreach($programItems as $item)
+                        <tr>
+                            <td style="width:165px;padding:13px 16px;border-bottom:1px solid #e5e7eb;color:#a5680b;font-size:12px;font-weight:700;vertical-align:top;">{{ $item['time'] ?: 'Session' }}</td>
+                            <td style="padding:13px 16px;border-bottom:1px solid #e5e7eb;color:#334155;font-size:13px;line-height:1.5;vertical-align:top;">{{ $item['session'] }}</td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+        @endif
+
         <div style="margin:22px 0;padding:16px;border-radius:8px;background:#f9fafb;">
             <p style="margin:0 0 7px;"><strong>Event:</strong> {{ $registration->event?->title ?? 'Starmax Event' }}</p>
             <p style="margin:0 0 7px;"><strong>Date:</strong> {{ $registration->event?->starts_at?->format('D, d M Y · g:i A') ?? 'To be confirmed' }}</p>
