@@ -58,6 +58,14 @@ class SiteEvent extends Model
             : null;
     }
 
+    public static function defaultProgram(): string
+    {
+        return "9:00 AM - 10:00 AM: Arrival and registration\n"
+            ."10:00 AM - 11:00 AM: Opening session\n"
+            ."11:00 AM - 12:00 PM: Main program\n"
+            ."12:00 PM - 1:00 PM: Closing and networking";
+    }
+
     public static function defaultCertificateMessage(): string
     {
         return 'for successfully completing :event:company. Awarded in recognition of participation, commitment, and successful completion.';

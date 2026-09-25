@@ -41,7 +41,10 @@ class EventInvitationTest extends TestCase
     {
         Mail::fake();
         $event = $this->event();
-        $this->actingAs($this->admin())->get(route('admin.event-registrations.index'))->assertOk()->assertSee('Upload and preview invitations');
+        $this->actingAs($this->admin())->get(route('admin.event-registrations.index'))
+            ->assertOk()
+            ->assertSee('Upload and preview invitations')
+            ->assertSee('9:00 AM - 10:00 AM: Arrival and registration');
         $response = $this->post(route('admin.event-invitations.preview'), [
             'site_event_id' => $event->id, 'subject' => 'Join {{event}}, {{name}}',
             'message' => 'Welcome {{company}}: {{event_url}}',
