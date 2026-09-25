@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'deployment' => [
+        'tool_token' => env('DEPLOYMENT_TOOL_TOKEN', ''),
+    ],
+
 ];

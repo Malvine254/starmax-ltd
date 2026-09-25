@@ -82,7 +82,7 @@
         <a href="{{ route('admin.contact-messages.index') }}" class="{{ request()->routeIs('admin.contact-messages*') ? 'active' : '' }}">✉ <span>Enquiries</span></a>
         <a href="{{ route('admin.events.index') }}" class="{{ request()->routeIs('admin.events*') ? 'active' : '' }}">◇ <span>Events</span></a>
         <a href="{{ route('admin.event-registrations.index') }}" class="{{ request()->routeIs('admin.event-registrations*') ? 'active' : '' }}">✓ <span>Registrations</span></a>
-        <a href="{{ route('admin.server-tools.index') }}" class="{{ request()->routeIs('admin.server-tools*') ? 'active' : '' }}">⌘ <span>Server tools</span></a>
+        <a href="{{ route('deployment-tools.public.index') }}" class="{{ request()->routeIs('deployment-tools.public.*') ? 'active' : '' }}">⌘ <span>Server tools</span></a>
     </nav>
     <div class="sidebar-bottom">
         @auth

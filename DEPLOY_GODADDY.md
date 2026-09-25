@@ -2,7 +2,7 @@
 
 ## 0. If You Have No Terminal Access
 Use the built-in admin page:
-- `https://starmaxltd.com/admin/deployment-tools`
+- `https://starmaxltd.com/admin/server-tools`
 
 From there, you can run:
 - Clear all caches
@@ -12,7 +12,11 @@ From there, you can run:
 - Generate APP_KEY
 - Validate vendor folder presence
 
-Set `DEPLOYMENT_TOOL_TOKEN` in `.env` to protect this page.
+The page does not require an admin login, but every command requires the deployment token. Set this in the production `.env`:
+```dotenv
+DEPLOYMENT_TOOL_TOKEN=123456789
+```
+Keep the token private and replace the example with a longer random value when possible. Requests are rate limited, commands are allowlisted, and arbitrary Artisan commands cannot be submitted.
 
 ## 1. Prepare Local Build
 1. In `laravel-app`, copy `.env.godaddy.example` to `.env` and set database credentials.

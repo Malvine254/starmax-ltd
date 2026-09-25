@@ -51,12 +51,13 @@ Route::get('/certificates/{code}', [CertificateController::class, 'show'])->name
 Route::get('/contact', [SiteController::class, 'contact']);
 Route::post('/contact', [SiteController::class, 'submitContact']);
 
-// Publicly reachable maintenance page. Production command execution still
-// requires DEPLOYMENT_TOOL_TOKEN and all actions are strictly allowlisted.
-Route::middleware('throttle:10,1')->group(function () {
-	Route::get('/server-tools', [DeploymentToolsController::class, 'index'])->name('server-tools.public.index');
-	Route::post('/server-tools/run', [DeploymentToolsController::class, 'run'])->name('server-tools.public.run');
+// Publicly reachable for shared hosting without shell access. Every command
+// requires DEPLOYMENT_TOOL_TOKEN and remains strictly allowlisted.
+Route::prefix('admin')->middleware('throttle:10,1')->group(function () {
+	Route::get('/server-tools', [DeploymentToolsController::class, 'publicIndex'])->name('deployment-tools.public.index');
+	Route::post('/server-tools/run', [DeploymentToolsController::class, 'publicRun'])->name('deployment-tools.public.run');
 });
+Route::redirect('/server-tools', '/admin/server-tools');
 
 // Admin auth routes
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -94,9 +95,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
 		Route::post('/event-registrations/reminders/send', [EventRegistrationAdminController::class, 'sendReminder'])->name('event-registrations.reminders.send');
 		Route::get('/events/{event}/attendance', [EventRegistrationAdminController::class, 'attendance'])->name('events.attendance');
 		Route::post('/events/{event}/attendance/confirm', [EventRegistrationAdminController::class, 'confirmAttendance'])->name('events.attendance.confirm');
-		Route::middleware('throttle:10,1')->group(function () {
-			Route::get('/server-tools', [DeploymentToolsController::class, 'index'])->name('server-tools.index');
-			Route::post('/server-tools/run', [DeploymentToolsController::class, 'run'])->name('server-tools.run');
-		});
 	});
 });

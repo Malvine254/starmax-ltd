@@ -37,14 +37,8 @@ class DeploymentToolsController extends Controller
 
     public function publicIndex(Request $request): View
     {
-        $token = (string) $request->query('token', '');
-        $noTokenMode = $this->publicNoTokenEnabled();
-
         return view('deployment-tools-public', [
-            'isConfigured' => $noTokenMode ? true : $this->publicTokenConfigured(),
-            'isValidToken' => $noTokenMode ? true : $this->publicTokenValid($token),
-            'noTokenMode' => $noTokenMode,
-            'token' => $token,
+            'isConfigured' => $this->publicTokenConfigured(),
             'status' => $this->statusSnapshot(),
             'availableActions' => $this->publicAvailableActions(),
         ]);
@@ -52,21 +46,19 @@ class DeploymentToolsController extends Controller
 
     public function publicRun(Request $request): RedirectResponse
     {
-        $noTokenMode = $this->publicNoTokenEnabled();
-
         $request->validate([
             'action' => 'required|string',
-            'token' => $noTokenMode ? 'nullable|string' : 'required|string',
+            'token' => 'required|string',
         ]);
 
         $token = (string) $request->input('token', '');
         $action = (string) $request->input('action', '');
 
-        if (!$noTokenMode && !$this->publicTokenConfigured()) {
-            return back()->with('error', 'DEPLOYMENT_PUBLIC_TOKEN is not configured in .env.');
+        if (!$this->publicTokenConfigured()) {
+            return back()->with('error', 'DEPLOYMENT_TOOL_TOKEN is not configured in .env.');
         }
 
-        if (!$noTokenMode && !$this->publicTokenValid($token)) {
+        if (!$this->publicTokenValid($token)) {
             return back()->with('error', 'Invalid deployment token.');
         }
 
@@ -231,6 +223,7 @@ class DeploymentToolsController extends Controller
             'cache_views' => $this->runArtisanCommand('view:cache'),
             'storage_link' => $this->runArtisanCommand('storage:link'),
             'migrate_force' => $this->runArtisanCommand('migrate', ['--force' => true]),
+            'seed_force' => $this->runArtisanCommand('db:seed', ['--force' => true]),
             default => throw new \RuntimeException('Unknown action.'),
         };
     }
@@ -426,7 +419,7 @@ class DeploymentToolsController extends Controller
 
     private function publicTokenValue(): string
     {
-        return (string) env('DEPLOYMENT_PUBLIC_TOKEN', env('DEPLOYMENT_TOOL_TOKEN', ''));
+        return (string) config('services.deployment.tool_token', '');
     }
 
     private function publicNoTokenEnabled(): bool

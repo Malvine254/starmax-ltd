@@ -46,7 +46,6 @@
         <h2>Access Check</h2>
         <table>
             <tr><th>Token configured in .env</th><td>{!! $isConfigured ? '<span class="ok">Yes</span>' : '<span class="bad">No</span>' !!}</td></tr>
-            <tr><th>Token valid in request</th><td>{!! $isValidToken ? '<span class="ok">Yes</span>' : '<span class="bad">No</span>' !!}</td></tr>
         </table>
     </div>
 
@@ -70,7 +69,7 @@
             @csrf
             <div class="field">
                 <label for="token">Deployment Token</label>
-                <input id="token" type="password" name="token" value="{{ $token }}" required placeholder="DEPLOYMENT_PUBLIC_TOKEN">
+                <input id="token" type="password" name="token" required autocomplete="off" placeholder="DEPLOYMENT_TOOL_TOKEN">
             </div>
 
             <div class="actions">
