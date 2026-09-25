@@ -109,7 +109,7 @@ class EventRegistrationAdminController extends Controller
             ];
             $personalizedSubject = strtr($validated['subject'], $replacements);
             $personalizedMessage = strtr($validated['message'], $replacements);
-            $personalizedMessage = trim(str_replace("Program:\n{$program}", '', str_replace("\r\n", "\n", $personalizedMessage)));
+            $personalizedMessage = $this->removeProgramBlock($personalizedMessage, $program);
 
             $delivered = SafeMailDelivery::attempt(
                 fn () => Mail::to($registration->email)->send(
@@ -128,6 +128,20 @@ class EventRegistrationAdminController extends Controller
             $failed === 0 ? 'success' : 'warning',
             "Reminder completed: {$sent} sent, {$failed} failed."
         );
+    }
+
+    private function removeProgramBlock(string $message, string $program): string
+    {
+        $normalizedMessage = str_replace(["\r\n", "\r"], "\n", $message);
+        $programPattern = preg_replace('/\s+/', '\\s+', preg_quote(trim($program), '/'));
+        $cleaned = preg_replace(
+            '/(?:Event\s+)?Program\s*:?\s*'.$programPattern.'/iu',
+            '',
+            $normalizedMessage,
+            1,
+        );
+
+        return trim($cleaned ?? $normalizedMessage);
     }
 
     public function attendance(SiteEvent $event): View

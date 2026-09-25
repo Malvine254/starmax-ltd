@@ -168,7 +168,9 @@ class EventRegistrationTest extends TestCase
         $this->actingAs($admin)->post(route('admin.event-registrations.reminders.send'), [
             'site_event_id' => $event->id,
             'subject' => 'Event reminder',
-            'message' => "Please remember to attend.\n\nProgram:\n{$event->program}",
+            'message' => 'Please remember to attend. Event Program '
+                .preg_replace('/\s+/', ' ', $event->program)
+                .' Please arrive on time.',
         ])->assertSessionHas('success', 'Reminder completed: 2 sent, 0 failed.');
 
         Mail::assertSent(EventReminder::class, 2);
@@ -177,7 +179,8 @@ class EventRegistrationTest extends TestCase
             && $mail->registration->name === 'Attendee 1'
             && $mail->hasTo('first@example.com')
             && ! str_contains($mail->render(), 'Open event link')
-            && $mail->reminderMessage === 'Please remember to attend.'
+            && $mail->reminderMessage === 'Please remember to attend.  Please arrive on time.'
+            && ! str_contains($mail->reminderMessage, 'Arrival and registration')
             && str_contains($mail->render(), 'Event program')
             && str_contains($mail->render(), '9:00 AM - 9:20 AM')
             && str_contains($mail->render(), 'Arrival and registration')
