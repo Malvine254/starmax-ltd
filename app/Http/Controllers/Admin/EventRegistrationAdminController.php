@@ -36,6 +36,7 @@ class EventRegistrationAdminController extends Controller
             '{{event}}', '{{date}}', '{{location}}', '{{program}}', '{{event_url}}',
         ];
         $defaultReminder = 'This is a friendly reminder about {{event}} on {{date}} at {{location}}. We look forward to seeing you there.';
+        $defaultReminder .= "\n\nProgram:\n".($selectedEvent?->program ?: SiteEvent::defaultProgram());
         $defaultInvitationSubject = 'You are invited: '.($selectedEvent?->title ?? '{{event}}');
         $defaultInvitationMessage = 'Hello {{name}}, you are invited to {{event}} on {{date}} at {{location}}. We would love to see you there. Your place has been registered.';
         $defaultInvitationMessage .= "\n\nProgram:\n".($selectedEvent?->program ?: SiteEvent::defaultProgram());

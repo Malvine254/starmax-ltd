@@ -160,6 +160,8 @@ class EventRegistrationTest extends TestCase
             ->assertSee('data-tab="attendance"', false)
             ->assertSee('class="invitation-fields"', false)
             ->assertSee('Personalization fields')
+            ->assertSee('Program:')
+            ->assertSee('9:00 AM - 10:00 AM: Arrival and registration')
             ->assertSee('{{name}}');
 
         $this->actingAs($admin)->post(route('admin.event-registrations.reminders.send'), [
