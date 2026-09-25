@@ -154,6 +154,11 @@ class EventRegistrationTest extends TestCase
         $this->actingAs($admin)
             ->get(route('admin.event-registrations.index', ['event' => $event->id]))
             ->assertOk()
+            ->assertSee('data-tab="attendees"', false)
+            ->assertSee('data-tab="invite"', false)
+            ->assertSee('data-tab="reminders"', false)
+            ->assertSee('data-tab="attendance"', false)
+            ->assertSee('class="invitation-fields"', false)
             ->assertSee('Personalization fields')
             ->assertSee('{{name}}');
 

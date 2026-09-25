@@ -23,7 +23,17 @@
     </form>
 </div>
 
-<section class="card" style="margin-bottom:18px">
+<div class="registration-tabs" role="tablist" aria-label="Event registration tools">
+    <button type="button" class="registration-tab active" role="tab" aria-selected="true" aria-controls="attendees-panel" data-tab="attendees">Attendees</button>
+    <button type="button" class="registration-tab" role="tab" aria-selected="false" aria-controls="invite-panel" data-tab="invite">Invite</button>
+    @if($selectedEvent)
+        <button type="button" class="registration-tab" role="tab" aria-selected="false" aria-controls="reminders-panel" data-tab="reminders">Reminders</button>
+        <button type="button" class="registration-tab" role="tab" aria-selected="false" aria-controls="attendance-panel" data-tab="attendance">Attendance</button>
+    @endif
+</div>
+
+<section id="invite-panel" class="registration-panel" role="tabpanel" data-panel="invite" hidden>
+<div class="card">
     <span class="eyebrow">Bulk invitations</span>
     <h2>Invite people from a CSV or Excel file</h2>
     <p style="margin:12px 0;color:#64748b">Upload a UTF-8 CSV or .xlsx file (up to 5 MB and 1,000 rows). Include an email column; name, phone and company are optional. Excel imports use the first worksheet. You can review recipients before sending.</p>
@@ -31,17 +41,20 @@
     <form method="POST" enctype="multipart/form-data" action="{{ route('admin.event-invitations.preview') }}" style="margin-top:16px">
         @csrf
         @if($errors->any())<div class="alert-error"><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
-        <div class="form-group"><label for="invite-event">Event</label><select id="invite-event" name="site_event_id" required><option value="">Choose event</option>@foreach($events as $event)<option value="{{ $event->id }}" @selected(old('site_event_id', $selectedEvent?->id) === $event->id)>{{ $event->title }}</option>@endforeach</select></div>
-        <div class="form-group"><label for="recipients-file">Recipient file</label><input id="recipients-file" type="file" name="recipients_file" accept=".csv,.xlsx" required></div>
-        <div class="form-group"><label for="invite-subject">Subject</label><input id="invite-subject" name="subject" value="{{ old('subject', $defaultInvitationSubject) }}" maxlength="180" required></div>
+        <div class="invitation-fields">
+            <div class="form-group"><label for="invite-event">Event</label><select id="invite-event" name="site_event_id" required><option value="">Choose event</option>@foreach($events as $event)<option value="{{ $event->id }}" @selected(old('site_event_id', $selectedEvent?->id) === $event->id)>{{ $event->title }}</option>@endforeach</select></div>
+            <div class="form-group"><label for="recipients-file">Recipient file</label><input id="recipients-file" type="file" name="recipients_file" accept=".csv,.xlsx" required></div>
+            <div class="form-group"><label for="invite-subject">Subject</label><input id="invite-subject" name="subject" value="{{ old('subject', $defaultInvitationSubject) }}" maxlength="180" required></div>
+        </div>
         <div class="form-group"><label for="invite-message">Invitation message</label><textarea id="invite-message" name="message" rows="5" maxlength="5000" required>{{ old('message', $defaultInvitationMessage) }}</textarea></div>
         <p style="margin-bottom:12px">Personalization: @foreach($personalizationFields as $field)<code>{{ $field }}</code> @endforeach</p>
         <button type="submit" class="btn btn-primary">Upload and preview invitations</button>
     </form>
+</div>
 </section>
 
 @if($selectedEvent)
-<div class="reminder-grid">
+<section id="reminders-panel" class="registration-panel" role="tabpanel" data-panel="reminders" hidden>
     <section class="card">
         <span class="eyebrow">Bulk communication</span>
         <h2 style="margin:6px 0 7px;font-size:19px;">Email all {{ $selectedEvent->registrations_count }} attendees</h2>
@@ -71,6 +84,9 @@
             <button class="btn btn-primary" type="submit">Send reminder to all</button>
         </form>
     </section>
+</section>
+<section id="attendance-panel" class="registration-panel" role="tabpanel" data-panel="attendance" hidden>
+    <div class="attendance-grid">
     <section class="card roster-card">
         <span class="eyebrow">Attendance</span>
         <h2 style="margin:6px 0 7px;font-size:19px;">Printable attendance register</h2>
@@ -81,7 +97,7 @@
             @csrf <button class="btn btn-primary">Issue certificates to attended</button>
         </form>
     </section>
-</div>
+    </div>
 <section class="card" style="display:flex;align-items:center;gap:28px;margin-bottom:18px;border-left:4px solid #d97706;flex-wrap:wrap">
     <div style="flex:1;min-width:260px">
         <span class="eyebrow">Mass certificate delivery</span>
@@ -97,8 +113,10 @@
     <div style="flex:1;min-width:260px"><span class="eyebrow">Bulk attendance</span><h2 style="margin:6px 0;font-size:19px">Confirm event attendance</h2><p style="color:#64748b;font-size:11px;line-height:1.6">Mark every new or confirmed registration as attended. Cancelled registrations are excluded.</p></div>
     <form method="POST" action="{{ route('admin.events.attendance.confirm',$selectedEvent) }}" onsubmit="return confirm('Mark all non-cancelled registrations for this event as attended?')">@csrf<button class="btn btn-primary">Confirm attendance for all</button></form>
 </section>
+</section>
 @endif
 
+<section id="attendees-panel" class="registration-panel active" role="tabpanel" data-panel="attendees">
 @if(!$selectedEvent)
 <div style="display:grid;gap:12px">
 @forelse($events->filter(fn($event) => $event->registrations_count > 0) as $event)
@@ -144,7 +162,35 @@
 </div>
 @endif
 @if($registrations->hasPages())<div class="pagination">{{ $registrations->links() }}</div>@endif
+</section>
 <style>
-.reminder-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(280px,.7fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:-.05em}.roster-count span{color:#64748b;font-size:10px}.merge-fields{margin:-4px 0 18px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.5}.merge-fields strong,.merge-fields span{display:block}.merge-fields strong{color:#334155}.merge-fields div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.merge-fields code{padding:3px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#7c3aed;font-size:10px}@media(max-width:800px){.reminder-grid{grid-template-columns:1fr}}
+.registration-tabs{display:flex;gap:4px;margin-bottom:18px;padding:4px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;width:max-content;max-width:100%;overflow-x:auto}.registration-tab{min-height:36px;padding:8px 14px;border:0;border-radius:6px;background:transparent;color:#475569;font:inherit;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}.registration-tab.active{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,.12)}.registration-panel{display:none}.registration-panel.active{display:block}.invitation-fields{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(240px,1.2fr) minmax(240px,1.2fr);gap:14px}.invitation-fields>.form-group{min-width:0}.invitation-fields input,.invitation-fields select{min-height:42px}.attendance-grid{display:grid;grid-template-columns:minmax(280px,1fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:0}.roster-count span{color:#64748b;font-size:10px}.merge-fields{margin:-4px 0 18px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.5}.merge-fields strong,.merge-fields span{display:block}.merge-fields strong{color:#334155}.merge-fields div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.merge-fields code{padding:3px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#7c3aed;font-size:10px}@media(max-width:900px){.invitation-fields{grid-template-columns:1fr 1fr}.invitation-fields>.form-group:last-child{grid-column:1/-1}}@media(max-width:620px){.invitation-fields{grid-template-columns:1fr}.invitation-fields>.form-group:last-child{grid-column:auto}.registration-tabs{width:100%}}
 </style>
+<script>
+(() => {
+    const tabs = [...document.querySelectorAll('.registration-tab')];
+    const panels = [...document.querySelectorAll('.registration-panel')];
+
+    function showTab(name, updateHash = true) {
+        if (!tabs.some(tab => tab.dataset.tab === name)) return;
+        tabs.forEach(tab => {
+            const active = tab.dataset.tab === name;
+            tab.classList.toggle('active', active);
+            tab.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        panels.forEach(panel => {
+            const active = panel.dataset.panel === name;
+            panel.classList.toggle('active', active);
+            panel.hidden = !active;
+        });
+        if (updateHash) history.replaceState(null, '', `#${name}`);
+    }
+
+    tabs.forEach(tab => tab.addEventListener('click', () => showTab(tab.dataset.tab)));
+    const initialTab = document.querySelector('#invite-panel .alert-error')
+        ? 'invite'
+        : window.location.hash.replace('#', '') || 'attendees';
+    showTab(initialTab, false);
+})();
+</script>
 @endsection
