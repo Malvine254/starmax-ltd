@@ -209,4 +209,37 @@ class EventRegistrationTest extends TestCase
             ->assertSee('Attendee 2')
             ->assertSee('Print attendance register');
     }
+
+    public function test_registration_pagination_uses_compact_text_controls(): void
+    {
+        $role = Role::create(['name' => 'ADMIN']);
+        $admin = User::factory()->create(['role_id' => $role->id, 'is_active' => true]);
+        $event = SiteEvent::create([
+            'title' => 'Pagination Workshop', 'slug' => 'pagination-workshop',
+            'category' => 'Workshop', 'location' => 'Nairobi', 'starts_at' => now()->addWeek(),
+            'excerpt' => 'Pagination test.', 'description' => 'Pagination test.', 'status' => 'upcoming',
+        ]);
+        foreach (range(1, 26) as $number) {
+            $event->registrations()->create([
+                'name' => 'Attendee '.$number,
+                'email' => "attendee{$number}@example.com",
+            ]);
+        }
+
+        $this->actingAs($admin)
+            ->get(route('admin.event-registrations.index', ['event' => $event->id]))
+            ->assertOk()
+            ->assertSee('data-ajax-pagination', false)
+            ->assertSee('aria-label="Pagination"', false)
+            ->assertSee('Next &rsaquo;', false)
+            ->assertSee('page=2', false)
+            ->assertSee('Showing')
+            ->assertSee('26')
+            ->assertDontSee('<svg', false);
+
+        $this->actingAs($admin)
+            ->get(route('admin.event-registrations.index', ['event' => $event->id, 'page' => 2]))
+            ->assertOk()
+            ->assertSee('Showing <strong>26</strong> to <strong>26</strong>', false);
+    }
 }

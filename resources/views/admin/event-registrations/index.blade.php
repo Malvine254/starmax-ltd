@@ -116,7 +116,7 @@
 </section>
 @endif
 
-<section id="attendees-panel" class="registration-panel active" role="tabpanel" data-panel="attendees">
+<section id="attendees-panel" class="registration-panel active" role="tabpanel" data-panel="attendees" data-ajax-pagination>
 @if(!$selectedEvent)
 <div style="display:grid;gap:12px">
 @forelse($events->filter(fn($event) => $event->registrations_count > 0) as $event)
@@ -164,7 +164,7 @@
 @if($registrations->hasPages())<div class="pagination">{{ $registrations->links() }}</div>@endif
 </section>
 <style>
-.registration-tabs{display:flex;gap:4px;margin-bottom:18px;padding:4px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;width:max-content;max-width:100%;overflow-x:auto}.registration-tab{min-height:36px;padding:8px 14px;border:0;border-radius:6px;background:transparent;color:#475569;font:inherit;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}.registration-tab.active{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,.12)}.registration-panel{display:none}.registration-panel.active{display:block}.invitation-fields{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(240px,1.2fr) minmax(240px,1.2fr);gap:14px}.invitation-fields>.form-group{min-width:0}.invitation-fields input,.invitation-fields select{min-height:42px}.ck-editor__editable_inline{min-height:190px}.attendance-grid{display:grid;grid-template-columns:minmax(280px,1fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:0}.roster-count span{color:#64748b;font-size:10px}.merge-fields{margin:-4px 0 18px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.5}.merge-fields strong,.merge-fields span{display:block}.merge-fields strong{color:#334155}.merge-fields div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.merge-fields code{padding:3px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#7c3aed;font-size:10px}@media(max-width:900px){.invitation-fields{grid-template-columns:1fr 1fr}.invitation-fields>.form-group:last-child{grid-column:1/-1}}@media(max-width:620px){.invitation-fields{grid-template-columns:1fr}.invitation-fields>.form-group:last-child{grid-column:auto}.registration-tabs{width:100%}}
+.registration-tabs{display:flex;gap:4px;margin-bottom:18px;padding:4px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;width:max-content;max-width:100%;overflow-x:auto}.registration-tab{min-height:36px;padding:8px 14px;border:0;border-radius:6px;background:transparent;color:#475569;font:inherit;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer}.registration-tab.active{background:#fff;color:#0f172a;box-shadow:0 1px 3px rgba(15,23,42,.12)}.registration-panel{display:none}.registration-panel.active{display:block}.registration-panel.is-loading{opacity:.55;pointer-events:none}.invitation-fields{display:grid;grid-template-columns:minmax(180px,.8fr) minmax(240px,1.2fr) minmax(240px,1.2fr);gap:14px}.invitation-fields>.form-group{min-width:0}.invitation-fields input,.invitation-fields select{min-height:42px}.ck-editor__editable_inline{min-height:190px}.attendance-grid{display:grid;grid-template-columns:minmax(280px,1fr);gap:18px;margin-bottom:18px}.roster-card{display:flex;align-items:flex-start;flex-direction:column}.roster-count{display:flex;align-items:baseline;gap:8px;margin:25px 0}.roster-count b{font-size:34px;letter-spacing:0}.roster-count span{color:#64748b;font-size:10px}.merge-fields{margin:-4px 0 18px;padding:12px;border:1px solid #e2e8f0;border-radius:8px;background:#f8fafc;color:#64748b;font-size:11px;line-height:1.5}.merge-fields strong,.merge-fields span{display:block}.merge-fields strong{color:#334155}.merge-fields div{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.merge-fields code{padding:3px 6px;border:1px solid #cbd5e1;border-radius:5px;background:#fff;color:#7c3aed;font-size:10px}@media(max-width:900px){.invitation-fields{grid-template-columns:1fr 1fr}.invitation-fields>.form-group:last-child{grid-column:1/-1}}@media(max-width:620px){.invitation-fields{grid-template-columns:1fr}.invitation-fields>.form-group:last-child{grid-column:auto}.registration-tabs{width:100%}}
 </style>
 <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
 <script>
@@ -192,6 +192,42 @@
         ? 'invite'
         : window.location.hash.replace('#', '') || 'attendees';
     showTab(initialTab, false);
+
+    const attendeesPanel = document.querySelector('[data-ajax-pagination]');
+    async function loadAttendeesPage(url, updateHistory = true) {
+        if (!attendeesPanel) return;
+        attendeesPanel.classList.add('is-loading');
+        attendeesPanel.setAttribute('aria-busy', 'true');
+        try {
+            const response = await fetch(url, {headers: {'X-Requested-With': 'XMLHttpRequest'}});
+            if (!response.ok) throw new Error(`Pagination request failed: ${response.status}`);
+            const documentCopy = new DOMParser().parseFromString(await response.text(), 'text/html');
+            const nextPanel = documentCopy.querySelector('[data-ajax-pagination]');
+            if (!nextPanel) throw new Error('Pagination response did not contain the attendees panel.');
+            attendeesPanel.innerHTML = nextPanel.innerHTML;
+            if (updateHistory) {
+                const nextUrl = new URL(url, window.location.href);
+                nextUrl.hash = 'attendees';
+                history.pushState({attendeesPage: true}, '', nextUrl);
+            }
+            attendeesPanel.scrollIntoView({behavior: 'smooth', block: 'start'});
+        } catch (error) {
+            window.location.assign(url);
+        } finally {
+            attendeesPanel.classList.remove('is-loading');
+            attendeesPanel.removeAttribute('aria-busy');
+        }
+    }
+
+    attendeesPanel?.addEventListener('click', event => {
+        const link = event.target.closest('.admin-pagination a');
+        if (!link) return;
+        event.preventDefault();
+        loadAttendeesPage(link.href);
+    });
+    window.addEventListener('popstate', event => {
+        if (event.state?.attendeesPage) loadAttendeesPage(window.location.href, false);
+    });
 
     if (!window.ClassicEditor) return;
     document.querySelectorAll('.rich-email-editor').forEach(editor => {
