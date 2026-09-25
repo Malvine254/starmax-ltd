@@ -23,6 +23,23 @@
     </form>
 </div>
 
+<section class="card" style="margin-bottom:18px">
+    <span class="eyebrow">Bulk invitations</span>
+    <h2>Invite people from a CSV or Excel file</h2>
+    <p style="margin:12px 0;color:#64748b">Upload a UTF-8 CSV or .xlsx file (up to 5 MB and 1,000 rows). Include an email column; name, phone and company are optional. Excel imports use the first worksheet. You can review recipients before sending.</p>
+    <a href="data:text/csv;charset=utf-8,name%2Cemail%2Cphone%2Ccompany%0AJane%20Doe%2Cjane%40example.com%2C%2CExample%20Ltd%0A" download="invitation-template.csv">Download CSV template</a>
+    <form method="POST" enctype="multipart/form-data" action="{{ route('admin.event-invitations.preview') }}" style="margin-top:16px">
+        @csrf
+        @if($errors->any())<div class="alert-error"><ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+        <div class="form-group"><label for="invite-event">Event</label><select id="invite-event" name="site_event_id" required><option value="">Choose event</option>@foreach($events as $event)<option value="{{ $event->id }}" @selected(old('site_event_id', $selectedEvent?->id) === $event->id)>{{ $event->title }}</option>@endforeach</select></div>
+        <div class="form-group"><label for="recipients-file">Recipient file</label><input id="recipients-file" type="file" name="recipients_file" accept=".csv,.xlsx" required></div>
+        <div class="form-group"><label for="invite-subject">Subject</label><input id="invite-subject" name="subject" value="{{ old('subject', $defaultInvitationSubject) }}" maxlength="180" required></div>
+        <div class="form-group"><label for="invite-message">Invitation message</label><textarea id="invite-message" name="message" rows="5" maxlength="5000" required>{{ old('message', $defaultInvitationMessage) }}</textarea></div>
+        <p style="margin-bottom:12px">Personalization: @foreach($personalizationFields as $field)<code>{{ $field }}</code> @endforeach</p>
+        <button type="submit" class="btn btn-primary">Upload and preview invitations</button>
+    </form>
+</section>
+
 @if($selectedEvent)
 <div class="reminder-grid">
     <section class="card">

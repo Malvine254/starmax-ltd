@@ -82,6 +82,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
 			'destroy' => 'events.destroy',
 		]);
 		Route::get('/event-registrations', [EventRegistrationAdminController::class, 'index'])->name('event-registrations.index');
+		Route::post('/event-invitations/preview', [\App\Http\Controllers\Admin\EventInvitationController::class, 'preview'])->name('event-invitations.preview');
+		Route::post('/event-invitations/send', [\App\Http\Controllers\Admin\EventInvitationController::class, 'send'])->block(120, 120)->name('event-invitations.send');
 		Route::get('/event-registrations/{eventRegistration}', [EventRegistrationAdminController::class, 'show'])->name('event-registrations.show');
 		Route::patch('/event-registrations/{eventRegistration}', [EventRegistrationAdminController::class, 'update'])->name('event-registrations.update');
 		Route::post('/event-registrations/{eventRegistration}/certificate', [EventRegistrationAdminController::class, 'issueCertificate'])->name('event-registrations.certificate.issue');

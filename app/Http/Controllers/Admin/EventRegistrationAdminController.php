@@ -36,6 +36,8 @@ class EventRegistrationAdminController extends Controller
             '{{event}}', '{{date}}', '{{location}}', '{{event_url}}',
         ];
         $defaultReminder = 'This is a friendly reminder about {{event}} on {{date}} at {{location}}. We look forward to seeing you there.';
+        $defaultInvitationSubject = 'You are invited: '.($selectedEvent?->title ?? '{{event}}');
+        $defaultInvitationMessage = 'Hello {{name}}, you are invited to {{event}} on {{date}} at {{location}}. We would love to see you there. Your place has been registered. Please follow the link below for event details.';
 
         return view('admin.event-registrations.index', compact(
             'registrations',
@@ -43,6 +45,8 @@ class EventRegistrationAdminController extends Controller
             'selectedEvent',
             'personalizationFields',
             'defaultReminder',
+            'defaultInvitationSubject',
+            'defaultInvitationMessage',
         ));
     }
 
