@@ -120,25 +120,6 @@
             <div class="proj-card-top">
                 <div class="proj-card-meta">
                     <span class="proj-type proj-type-web">Web App</span>
-                    <span class="proj-industry">Property Management</span>
-                </div>
-                <h3>TenantPro Admin Dashboard</h3>
-                <p>Full-featured admin console for landlords — property management, invoicing, maintenance tracking, tenant onboarding, and analytics. Built with Next.js server components and a NestJS API.</p>
-            </div>
-            <div class="proj-card-bottom">
-                <div class="proj-tech-row">
-                    <span class="proj-tech">Next.js</span>
-                    <span class="proj-tech">NestJS</span>
-                    <span class="proj-tech">PostgreSQL</span>
-                    <span class="proj-tech">Prisma</span>
-                </div>
-                <div class="proj-outcome"><i data-lucide="trending-up"></i> Live in production — active daily users</div>
-            </div>
-        </article>
-        <article class="proj-card reveal">
-            <div class="proj-card-top">
-                <div class="proj-card-meta">
-                    <span class="proj-type proj-type-web">Web App</span>
                     <span class="proj-industry">Retail</span>
                 </div>
                 <h3>E-Commerce Platform</h3>
@@ -182,25 +163,6 @@
         <i data-lucide="smartphone" style="width:14px;height:14px;"></i> Android Development
     </div>
     <div class="proj-grid">
-        <article class="proj-card reveal">
-            <div class="proj-card-top">
-                <div class="proj-card-meta">
-                    <span class="proj-type proj-type-mobile">Android</span>
-                    <span class="proj-industry">Property</span>
-                </div>
-                <h3>TenantPro Mobile</h3>
-                <p>Tenant self-service app with invoice viewing, payment tracking, maintenance requests, and direct messaging. Clean MVVM architecture with Hilt DI and offline support.</p>
-            </div>
-            <div class="proj-card-bottom">
-                <div class="proj-tech-row">
-                    <span class="proj-tech">Kotlin</span>
-                    <span class="proj-tech">Jetpack Compose</span>
-                    <span class="proj-tech">Hilt</span>
-                    <span class="proj-tech">Retrofit</span>
-                </div>
-                <div class="proj-outcome"><i data-lucide="trending-up"></i> Material 3 — works offline</div>
-            </div>
-        </article>
         <article class="proj-card reveal">
             <div class="proj-card-top">
                 <div class="proj-card-meta">

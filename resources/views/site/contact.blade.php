@@ -123,19 +123,24 @@
                             <label>Service Interest</label>
                             <select name="service">
                                 <option value="">Select a service (optional)</option>
-                                <option value="web"        @selected(old('service', request('service')) === 'web')>Web Application Development</option>
+                                <option value="web"        @selected(old('service', request('service')) === 'web')>Website Design & Web Development</option>
+                                <option value="e-commerce" @selected(old('service', request('service')) === 'e-commerce')>E-Commerce & B2B Stores</option>
                                 <option value="android"    @selected(old('service', request('service')) === 'android')>Android App Development</option>
+                                <option value="cross-platform-mobile" @selected(old('service', request('service')) === 'cross-platform-mobile')>Cross-Platform Mobile Development</option>
                                 <option value="ai"         @selected(old('service', request('service')) === 'ai')>AI Agents & Automation</option>
                                 <option value="consulting" @selected(old('service', request('service')) === 'consulting')>IT Consulting & Strategy</option>
-                                <option value="tenant"     @selected(old('service', request('service')) === 'tenant')>Tenant & Property Management</option>
                                 <option value="custom"     @selected(old('service', request('service')) === 'custom')>Custom Business Software</option>
+                                <option value="real-estate-technology" @selected(old('service', request('service')) === 'real-estate-technology')>Real Estate Websites & Property Technology</option>
+                                <option value="api-integration" @selected(old('service', request('service')) === 'api-integration')>API & Systems Integration</option>
+                                <option value="cloud-maintenance" @selected(old('service', request('service')) === 'cloud-maintenance')>Deployment, Maintenance & Support</option>
+                                <option value="ui-ux-design" @selected(old('service', request('service')) === 'ui-ux-design')>UI/UX Design & Prototyping</option>
                                 <option value="other"      @selected(old('service', request('service')) === 'other')>Other / Not sure yet</option>
                             </select>
                             @error('service')<p class="error-text">{{ $message }}</p>@enderror
                         </div>
                         <div class="form-group">
                             <label>Message <span style="color:#ef4444;">*</span></label>
-                            <textarea name="message" rows="5" required placeholder="Tell us about your project — what you're building, your timeline, and any key requirements...">{{ old('message', request('request') === 'demo' ? 'I would like to request a live demo of TenantPro. Please contact me to arrange a suitable time.' : '') }}</textarea>
+                            <textarea name="message" rows="5" required placeholder="Tell us about your project — what you're building, your timeline, and any key requirements...">{{ old('message') }}</textarea>
                             @error('message')<p class="error-text">{{ $message }}</p>@enderror
                         </div>
                         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:14px 24px;">
@@ -160,7 +165,7 @@
                     <div class="info-card-icon"><i data-lucide="phone"></i></div>
                     <div>
                         <p class="info-card-label">Phone</p>
-                        <p class="info-card-value"><a href="tel:+254700123456">+254 700 123 456</a></p>
+                        <p class="info-card-value"><a href="tel:+254790925248">+254 790 925 248</a></p>
                     </div>
                 </article>
                 <article class="info-card">
@@ -197,7 +202,6 @@
                     <a href="/services/web-development"    class="quick-svc"><i data-lucide="globe"></i> Web Dev</a>
                     <a href="/services/android-apps"       class="quick-svc"><i data-lucide="smartphone"></i> Android</a>
                     <a href="/services/ai-automation"      class="quick-svc"><i data-lucide="bot"></i> AI Agents</a>
-                    <a href="/services/tenant-management"  class="quick-svc"><i data-lucide="building-2"></i> Tenant Mgmt</a>
                     <a href="/services/it-consulting"      class="quick-svc"><i data-lucide="briefcase"></i> Consulting</a>
                     <a href="/services/custom-software"    class="quick-svc"><i data-lucide="zap"></i> Custom Software</a>
                 </div>

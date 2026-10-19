@@ -11,22 +11,6 @@ class SiteEventSeeder extends Seeder
     {
         $events = [
             [
-                'title'       => 'TenantPro Live Walkthrough',
-                'slug'        => 'tenantpro-live-walkthrough',
-                'category'    => 'Product Demo',
-                'format'      => 'Online',
-                'location'    => 'Online — Zoom link sent on registration',
-                'starts_at'   => '2026-07-09 11:00:00',
-                'ends_at'     => '2026-07-09 12:00:00',
-                'excerpt'     => 'See the landlord dashboard and tenant mobile workflow from onboarding through maintenance.',
-                'description' => 'A guided product session for landlords and property managers who want to understand how TenantPro handles units, invoices, payments, tenant communication, and support requests. Includes live Q&A.',
-                'cta_label'   => 'Request Demo Invite',
-                'cta_url'     => '/contact?service=tenant',
-                'is_featured' => true,
-                'status'      => 'upcoming',
-                'sort_order'  => 1,
-            ],
-            [
                 'title'       => 'AI Automation For Operations Teams',
                 'slug'        => 'ai-automation-for-operations',
                 'category'    => 'Workshop',
@@ -89,22 +73,6 @@ class SiteEventSeeder extends Seeder
                 'is_featured' => false,
                 'status'      => 'upcoming',
                 'sort_order'  => 5,
-            ],
-            [
-                'title'       => 'TenantPro Q4 Feature Preview',
-                'slug'        => 'tenantpro-q4-feature-preview',
-                'category'    => 'Product Demo',
-                'format'      => 'Online',
-                'location'    => 'Online — Zoom link sent on registration',
-                'starts_at'   => '2026-10-07 11:00:00',
-                'ends_at'     => '2026-10-07 12:00:00',
-                'excerpt'     => 'Preview the M-Pesa integration, AI support agent, and portfolio analytics module shipping in Q4.',
-                'description' => 'Existing TenantPro clients and prospects get an exclusive first look at Q4 features: native M-Pesa STK push payments, the AI tenant support agent, and the new investor-ready portfolio analytics dashboard. Feedback session included.',
-                'cta_label'   => 'Request Preview Access',
-                'cta_url'     => '/contact?service=tenant',
-                'is_featured' => false,
-                'status'      => 'upcoming',
-                'sort_order'  => 6,
             ],
         ];
 

@@ -322,10 +322,10 @@
             <p>Architecture reviews, technology strategy, and transformation guidance.</p>
             <span class="about-svc-link">Explore <i data-lucide="arrow-right"></i></span>
         </a>
-        <a href="/services/tenant-management" class="about-svc-card reveal">
+        <a href="/services/real-estate-technology" class="about-svc-card reveal">
             <div class="card-icon emerald"><i data-lucide="building-2"></i></div>
-            <h4>Tenant Management</h4>
-            <p>Property operations platform with invoicing, maintenance, and self-service.</p>
+            <h4>Real Estate Technology</h4>
+            <p>Custom listing websites, property search, and enquiry workflows.</p>
             <span class="about-svc-link">Explore <i data-lucide="arrow-right"></i></span>
         </a>
         <a href="/services/custom-software" class="about-svc-card reveal">

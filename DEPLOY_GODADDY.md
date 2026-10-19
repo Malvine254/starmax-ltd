@@ -1,4 +1,4 @@
-# Deploy Laravel TenantPro on GoDaddy Shared Hosting
+# Deploy the Starmax Website on GoDaddy Shared Hosting
 
 ## 0. If You Have No Terminal Access
 Use the built-in admin page:
@@ -19,7 +19,7 @@ DEPLOYMENT_TOOL_TOKEN=123456789
 Keep the token private and replace the example with a longer random value when possible. Requests are rate limited, commands are allowlisted, and arbitrary Artisan commands cannot be submitted.
 
 ## 1. Prepare Local Build
-1. In `laravel-app`, copy `.env.godaddy.example` to `.env` and set database credentials.
+1. In the project root, copy `.env.example` to `.env` and set database and mail credentials.
 2. Generate key:
    ```bash
    php artisan key:generate
@@ -42,7 +42,7 @@ Keep the token private and replace the example with a longer random value when p
 
 ## 2. Upload to GoDaddy (cPanel)
 1. Create folder `laravel` in your account root (one level above `public_html`).
-2. Upload all files from `laravel-app` into that `laravel` folder.
+2. Upload the application into that `laravel` folder. When updating an existing deployment, remove files deleted from the repository as well as uploading changed files; an overlay-only upload leaves retired code behind.
 3. Copy contents of `laravel/public` into `public_html`.
 4. Edit `public_html/index.php` paths:
    - `../vendor/autoload.php` -> `../laravel/vendor/autoload.php`
@@ -58,22 +58,38 @@ php artisan migrate --force
 php artisan db:seed --force
 ```
 
-If terminal is unavailable, run these from `/admin/deployment-tools`.
+If terminal is unavailable, run these from `/admin/server-tools`.
 
-## 4. Default Admin Login
-- Email: `admin@starmaxltd.com`
-- Password: `ChangeMe123!`
+After installing dependencies and uploading code, refresh cached providers and routes:
 
-Change password immediately after first login.
+```bash
+php artisan optimize:clear
+php artisan package:discover
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+When removing the old API dependency, stale generated `bootstrap/cache/packages.php`
+and `bootstrap/cache/services.php` files can reference Sanctum. If Artisan cannot
+boot, remove only those two generated cache files, then run the commands above.
+Never upload an old vendor archive over a fresh Composer installation.
+
+## 4. Admin Login
+Set `ADMIN_LOGIN_EMAIL` and `ADMIN_LOGIN_PASSWORD` before seeding.
+The password must contain at least 12 characters. No default credentials are supplied.
 
 ## 5. Verify
 - Public site: `https://starmaxltd.com/`
 - Admin login: `https://starmaxltd.com/admin/login`
-- API auth login: `POST https://starmaxltd.com/api/auth/login`
+- Grace Sellah portfolio: `https://starmaxltd.com/grace-sellah`
+- Grace Sellah editor: `https://starmaxltd.com/grace-sellah/admin`
+- Retired API paths such as `/api/auth/login` should return 404.
 
 ## 6. Important Notes
-- Android app can keep using API endpoints under `/api/*`.
-- If Sanctum migration is missing, ensure `personal_access_tokens` table exists.
+- This deployment serves the company website and its admin plus Grace Sellah's portfolio. It no longer hosts the Tenant Pro API or rental-management application.
+- Historical migrations and database records are preserved. Do not drop old tables or run `migrate:fresh` as part of this update.
+- Old promotional events saved in the database are not automatically deleted; review them in the admin.
 - Keep `APP_DEBUG=false` in production.
 # Bulk event invitations
 

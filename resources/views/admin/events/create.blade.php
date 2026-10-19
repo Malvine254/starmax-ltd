@@ -15,7 +15,7 @@
         <div class="event-form-grid">
             <div class="form-group" style="grid-column:1/-1;">
                 <label>Title *</label>
-                <input type="text" name="title" value="{{ old('title') }}" placeholder="e.g. TenantPro Live Walkthrough" required>
+                <input type="text" name="title" value="{{ old('title') }}" placeholder="e.g. Modern Web Platform Workshop" required>
                 @error('title')<p class="form-error">{{ $message }}</p>@enderror
             </div>
 
@@ -86,7 +86,7 @@
 
             <div class="form-group">
                 <label>Public CTA URL *</label>
-                <input type="text" name="cta_url" value="{{ old('cta_url', '/contact') }}" placeholder="e.g. /contact?service=tenant" required>
+                <input type="text" name="cta_url" value="{{ old('cta_url', '/contact') }}" placeholder="e.g. /contact?service=web" required>
                 <div class="gs-hint">Public marketing link. This is not the private meeting/access link.</div>
                 @error('cta_url')<p class="form-error">{{ $message }}</p>@enderror
             </div>

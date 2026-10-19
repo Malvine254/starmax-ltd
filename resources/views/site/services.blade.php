@@ -1,6 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'Services — Starmax Ltd')
+@section('description', 'Explore website development, e-commerce, mobile apps, AI automation, APIs, UI/UX, and application maintenance services from Starmax Ltd in Nairobi, Kenya.')
 
 @section('content')
 <style>
@@ -206,8 +207,8 @@
     <section class="services-hero">
         <div class="container">
             <p class="eyebrow">Our Services</p>
-            <h1 class="services-hero-title">Simple packages. Serious engineering.</h1>
-            <p class="services-hero-sub">Choose the capability you need now, and expand when your operations grow. Every service is built for reliability, clean delivery, and measurable business impact.</p>
+            <h1 class="services-hero-title">Practical digital solutions, from first idea to ongoing care.</h1>
+            <p class="services-hero-sub">Build a professional website, connect your business systems, or plan a mobile product. Our Nairobi-based team helps you define the right scope, choose maintainable technology, and launch with a clear handover.</p>
             <div class="services-stats">
                 <div class="services-stat">
                     <strong>{{ $serviceStats['total'] }}</strong>
@@ -233,7 +234,7 @@
                         <div class="card-icon {{ $service['color'] }}"><i data-lucide="{{ $service['icon'] }}"></i></div>
                         <span class="service-pill {{ $service['badge'] ? 'flagship' : '' }}">{{ $service['badge'] ?? $service['category'] }}</span>
                     </div>
-                    <h3 class="service-title">{{ $service['title'] }}</h3>
+                    <h2 class="service-title">{{ $service['title'] }}</h2>
                     <p class="service-copy">{{ $service['tagline'] }}</p>
                     <ul class="service-points">
                         @foreach($service['features'] as $feature)
@@ -262,7 +263,6 @@
             </div>
             <a href="/contact" class="btn btn-white">Talk to our team</a>
         </div>
-    </div>
     </section>
 </div>
 

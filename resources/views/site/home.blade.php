@@ -489,12 +489,12 @@
                 <img src="{{ asset('images/landing-web-platform.png') }}" alt="Modern product dashboard built by Starmax">
             </div>
             <div class="nx-feature-copy reveal">
-                <span class="pill">Featured Portfolio Product</span>
-                <h3>TenantPro is one solution in the Starmax portfolio.</h3>
-                <p>From invoice generation and maintenance requests to tenant communication and analytics, TenantPro helps teams run portfolios with less manual overhead.</p>
+                <span class="pill">Our Work</span>
+                <h3>Digital solutions built around your business.</h3>
+                <p>Explore our web platforms, mobile applications, and automation projects, designed to simplify workflows and help teams grow.</p>
                 <div class="stack">
-                    <a href="/products" class="btn btn-primary">Explore TenantPro <i data-lucide="arrow-up-right"></i></a>
-                    <a href="{{ config('app.tenant_demo_url') }}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Request TenantPro Demo ↗</a>
+                    <a href="/portfolio" class="btn btn-primary">Explore Our Work <i data-lucide="arrow-up-right"></i></a>
+                    <a href="/contact" class="btn btn-secondary">Discuss Your Project</a>
                 </div>
             </div>
         </div>

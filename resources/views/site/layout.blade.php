@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@yield('title', 'Starmax Ltd — Innovative Digital Solutions')</title>
+    <meta name="description" content="@yield('description', 'Starmax Ltd in Nairobi, Kenya develops business websites, mobile applications, custom software, and practical automation solutions.')" />
+    <link rel="canonical" href="{{ url()->current() }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="@yield('title', 'Starmax Ltd - Digital Solutions')" />
+    <meta property="og:description" content="@yield('description', 'Business websites, mobile applications, custom software, and practical automation from Starmax Ltd in Nairobi, Kenya.')" />
+    <meta property="og:url" content="{{ url()->current() }}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -61,16 +67,10 @@
         }
         .brand-wordmark span { color: #d99a31; }
         /* nav */
-        .main-nav { display: flex; align-items: center; gap: 2px; }
-        .nav-item { position: relative; }
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 100%;
-            height: 12px;
-        }
+        .header-inner { position:relative; }
+        .main-nav { display:flex; align-items:stretch; gap:2px; height:100%; }
+        .main-nav > .nav-link { align-self:center; }
+        .nav-item { display:flex; align-items:center; }
         .nav-link {
             display: flex; align-items: center; gap: 4px; padding: 8px 14px; border-radius: 8px;
             font-size: 14px; font-weight: 500; color: var(--text-muted); text-decoration: none;
@@ -79,7 +79,7 @@
         .nav-link svg { width: 14px; height: 14px; flex-shrink: 0; transition: transform var(--tr); }
         .nav-link:hover, .nav-link.active { color: var(--text); background: #f1f5f9; }
         .nav-link.active { color: var(--brand); background: var(--brand-light); font-weight: 600; }
-        .nav-item:hover .nav-link svg, .nav-item.open .nav-link svg { transform: rotate(180deg); }
+        .nav-item.open .nav-link svg { transform: rotate(180deg); }
 
         /* dropdown */
         .nav-dropdown {
@@ -88,9 +88,8 @@
             padding: 8px; box-shadow: var(--shadow-xl); z-index: 1000;
             opacity: 0; visibility: hidden; transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
             pointer-events: none;
+            max-height:calc(100dvh - 100px); overflow-y:auto;
         }
-        .nav-item:hover .nav-dropdown,
-        .nav-item:focus-within .nav-dropdown,
         .nav-item.open .nav-dropdown {
             opacity: 1;
             visibility: visible;
@@ -122,6 +121,30 @@
         .dropdown-text strong { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 1px; }
         .dropdown-text span { font-size: 12px; color: var(--text-muted); }
         .dropdown-divider { height: 1px; background: var(--border); margin: 6px 4px; }
+        .mega-menu { top:calc(100% - 1px); width:min(1060px,calc(100vw - 48px)); padding:0; }
+        .mega-menu-heading { display:flex; justify-content:space-between; align-items:center; gap:24px; padding:26px 30px 22px; border-bottom:1px solid var(--border); }
+        .mega-menu-eyebrow { color:var(--sx-gold-dark,#9d650d); font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.14em; margin-bottom:6px; }
+        .mega-menu-title { font-size:21px; font-weight:700; line-height:1.3; color:var(--text); }
+        .mega-menu-overview { display:inline-flex; align-items:center; gap:8px; color:var(--text); font-size:12px; font-weight:700; white-space:nowrap; text-decoration:none; }
+        .mega-menu-overview svg { width:16px; height:16px; }
+        .mega-menu-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); padding:22px 18px; }
+        .mega-menu-group { padding:0 12px; min-width:0; }
+        .mega-menu-group + .mega-menu-group { border-left:1px solid var(--border); }
+        .mega-menu-label { font-size:10px; letter-spacing:.1em; text-transform:uppercase; font-weight:800; color:var(--text-muted); margin:0 10px 12px; }
+        .mega-menu .dropdown-item { white-space:normal; align-items:flex-start; gap:10px; padding:12px 10px; }
+        .mega-menu .dropdown-icon { width:36px; height:36px; border-radius:10px; }
+        .mega-menu .dropdown-text { flex:1; min-width:0; }
+        .mega-menu .dropdown-text strong { font-size:13px; line-height:1.4; margin:0 0 4px; }
+        .mega-menu .dropdown-text > span { display:block; font-size:11px; line-height:1.5; }
+        .mega-menu-arrow { flex-shrink:0; width:14px; height:14px; margin-top:3px; color:var(--text-muted); opacity:0; transition:opacity .2s; }
+        .mega-menu .dropdown-item:hover .mega-menu-arrow, .mega-menu .dropdown-item:focus-visible .mega-menu-arrow { opacity:1; }
+        .mega-menu-footer { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:18px 30px; border-top:1px solid var(--border); background:var(--sx-cream,#f3efe6); }
+        .mega-menu-footer p { color:var(--text-muted); font-size:12px; }
+        .mega-menu-footer strong { color:var(--text); }
+        .mega-menu-footer a { display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:var(--text); text-decoration:none; }
+        .mega-menu-footer svg { width:16px; height:16px; }
+        .main-nav button:focus-visible, .mega-menu a:focus-visible { outline:2px solid var(--sx-gold-dark,#9d650d); outline-offset:3px; }
+        @media(prefers-reduced-motion:reduce) { .nav-dropdown, .nav-link svg, .mega-menu-arrow { transition:none; } }
 
         /* header CTA */
         .header-cta { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
@@ -1205,6 +1228,10 @@
         }
 
         /* ── RESPONSIVE ──────────────────────────────── */
+        @media(max-width:1100px) {
+            .main-nav, .header-cta { display:none; }
+            .menu-toggle { display:flex; }
+        }
         @media (max-width: 1024px) {
             .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
             .grid-3, .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1251,7 +1278,6 @@
     <link rel="stylesheet" href="{{ asset('css/starmax-unified.css') }}?v={{ filemtime(public_path('css/starmax-unified.css')) }}">
 </head>
 <body>
-@php($tenantDemoUrl = url('/contact').'?service=tenant&request=demo')
 
 <header class="site-header" id="site-header">
     <div class="header-inner">
@@ -1263,60 +1289,64 @@
             <a href="/" class="nav-link {{ request()->is('/') ? 'active' : '' }}">Home</a>
             <a href="/about" class="nav-link {{ request()->is('about') ? 'active' : '' }}">About</a>
 
-            {{-- Services dropdown --}}
             <div class="nav-item">
-                <button class="nav-link {{ request()->is('services') ? 'active' : '' }}" type="button">
-                    Services <i data-lucide="chevron-down"></i>
+                <button class="nav-link {{ request()->is('services', 'services/*') ? 'active' : '' }}" type="button" id="services-menu-trigger" aria-expanded="false" aria-controls="services-menu">
+                    Services <i data-lucide="chevron-down" aria-hidden="true"></i>
                 </button>
-                <div class="nav-dropdown">
-                    <a href="/services/web-development" class="dropdown-item">
-                        <div class="dropdown-icon purple"><i data-lucide="globe"></i></div>
-                        <div class="dropdown-text"><strong>Web Development</strong><span>Laravel, Next.js, NestJS</span></div>
-                    </a>
-                    <a href="/services/android-apps" class="dropdown-item">
-                        <div class="dropdown-icon blue"><i data-lucide="smartphone"></i></div>
-                        <div class="dropdown-text"><strong>Android Apps</strong><span>Kotlin & Jetpack Compose</span></div>
-                    </a>
-                    <a href="/services/ai-automation" class="dropdown-item">
-                        <div class="dropdown-icon cyan"><i data-lucide="bot"></i></div>
-                        <div class="dropdown-text"><strong>AI & Automation</strong><span>LLMs, RAG, Agents</span></div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="/services/it-consulting" class="dropdown-item">
-                        <div class="dropdown-icon amber"><i data-lucide="briefcase"></i></div>
-                        <div class="dropdown-text"><strong>IT Consulting</strong><span>Strategy & architecture</span></div>
-                    </a>
-                    <a href="/services/tenant-management" class="dropdown-item">
-                        <div class="dropdown-icon emerald"><i data-lucide="building-2"></i></div>
-                        <div class="dropdown-text"><strong>Tenant Management</strong><span>Property ops platform</span></div>
-                    </a>
-                    <a href="/services/custom-software" class="dropdown-item">
-                        <div class="dropdown-icon rose"><i data-lucide="zap"></i></div>
-                        <div class="dropdown-text"><strong>Custom Software</strong><span>CRM, ERP, integrations</span></div>
-                    </a>
-                </div>
+                @include('site.partials.mega-menu', [
+                    'id' => 'services-menu',
+                    'title' => 'Services',
+                    'description' => 'The right expertise for your next step.',
+                    'overviewUrl' => '/services',
+                    'groups' => [
+                        ['label' => 'Web & Business', 'links' => [
+                            ['url' => '/services/web-development', 'icon' => 'globe', 'title' => 'Website & Web Development', 'description' => 'Business websites, CMS, and customer portals.'],
+                            ['url' => '/services/e-commerce', 'icon' => 'shopping-cart', 'title' => 'E-Commerce & B2B Stores', 'description' => 'Product discovery, checkout, and quote requests.'],
+                            ['url' => '/services/custom-software', 'icon' => 'layers', 'title' => 'Custom Business Software', 'description' => 'Tools that fit the way your team works.'],
+                            ['url' => '/services/real-estate-technology', 'icon' => 'building-2', 'title' => 'Real Estate Technology', 'description' => 'Property listings and enquiry workflows.'],
+                        ]],
+                        ['label' => 'Mobile & Intelligence', 'links' => [
+                            ['url' => '/services/android-apps', 'icon' => 'smartphone', 'title' => 'Native Android Apps', 'description' => 'Kotlin apps with focused device integration.'],
+                            ['url' => '/services/cross-platform-mobile', 'icon' => 'tablet-smartphone', 'title' => 'Cross-Platform Mobile', 'description' => 'Plan a shared Android and iOS experience.'],
+                            ['url' => '/services/ai-automation', 'icon' => 'bot', 'title' => 'AI & Automation', 'description' => 'Grounded assistants and controlled workflows.'],
+                            ['url' => '/services/api-integration', 'icon' => 'plug', 'title' => 'API & Systems Integration', 'description' => 'Connect your data, tools, and teams.'],
+                        ]],
+                        ['label' => 'Design, Delivery & Care', 'links' => [
+                            ['url' => '/services/ui-ux-design', 'icon' => 'pen-tool', 'title' => 'UI/UX Design', 'description' => 'Research, prototypes, and usable interfaces.'],
+                            ['url' => '/services/cloud-maintenance', 'icon' => 'cloud', 'title' => 'Deployment & Maintenance', 'description' => 'Launch confidently and keep improving.'],
+                            ['url' => '/services/it-consulting', 'icon' => 'briefcase', 'title' => 'IT Consulting & Strategy', 'description' => 'Clear decisions and practical roadmaps.'],
+                        ]],
+                    ],
+                ])
             </div>
 
-            {{-- Products dropdown --}}
             <div class="nav-item">
-                <button class="nav-link {{ request()->is('products') ? 'active' : '' }}" type="button">
-                    Products <i data-lucide="chevron-down"></i>
+                <button class="nav-link {{ request()->is('products') ? 'active' : '' }}" type="button" id="products-menu-trigger" aria-expanded="false" aria-controls="products-menu">
+                    Products <i data-lucide="chevron-down" aria-hidden="true"></i>
                 </button>
-                <div class="nav-dropdown" style="min-width:220px;">
-                    <a href="/products#tenantpro" class="dropdown-item">
-                        <div class="dropdown-icon emerald"><i data-lucide="layout-dashboard"></i></div>
-                        <div class="dropdown-text"><strong>TenantPro Dashboard</strong><span>Web admin portal</span></div>
-                    </a>
-                    <a href="/products#mobile" class="dropdown-item">
-                        <div class="dropdown-icon blue"><i data-lucide="smartphone"></i></div>
-                        <div class="dropdown-text"><strong>TenantPro Mobile</strong><span>Android tenant app</span></div>
-                    </a>
-                    <div class="dropdown-divider"></div>
-                    <a href="{{ $tenantDemoUrl }}" class="dropdown-item">
-                        <div class="dropdown-icon indigo"><i data-lucide="external-link"></i></div>
-                        <div class="dropdown-text"><strong>Live Demo</strong><span>Try it now →</span></div>
-                    </a>
-                </div>
+                @include('site.partials.mega-menu', [
+                    'id' => 'products-menu',
+                    'title' => 'Products',
+                    'description' => 'Turn your business idea into useful software.',
+                    'overviewUrl' => '/products',
+                    'groups' => [
+                        ['label' => 'Product Development', 'links' => [
+                            ['url' => '/products#web-platforms', 'icon' => 'monitor', 'title' => 'Web Platforms', 'description' => 'Portals, publishing tools, and business systems.'],
+                            ['url' => '/products#mobile-applications', 'icon' => 'smartphone', 'title' => 'Mobile Applications', 'description' => 'Native and cross-platform product options.'],
+                            ['url' => '/products#automation-tools', 'icon' => 'bot', 'title' => 'Automation Tools', 'description' => 'Practical AI with evaluation and oversight.'],
+                        ]],
+                        ['label' => 'Solutions for Your Business', 'links' => [
+                            ['url' => '/services/e-commerce', 'icon' => 'shopping-cart', 'title' => 'Commerce Experiences', 'description' => 'Retail stores and B2B procurement journeys.'],
+                            ['url' => '/services/real-estate-technology', 'icon' => 'building-2', 'title' => 'Property Websites', 'description' => 'Listings, search, and customer enquiries.'],
+                            ['url' => '/services/custom-software', 'icon' => 'workflow', 'title' => 'Internal Business Tools', 'description' => 'Approvals, inventory, scheduling, and reporting.'],
+                        ]],
+                        ['label' => 'Explore the Work', 'links' => [
+                            ['url' => '/products#implementation-examples', 'icon' => 'app-window', 'title' => 'Site Implementations', 'description' => 'Explore examples supported by this website.'],
+                            ['url' => '/products#team-experience', 'icon' => 'users', 'title' => 'Team Contribution Experience', 'description' => 'Armely references with clear attribution.'],
+                            ['url' => '/grace-sellah', 'icon' => 'user-round', 'title' => "Grace Sellah's Portfolio", 'description' => 'A dedicated, editable portfolio experience.'],
+                        ]],
+                    ],
+                ])
             </div>
 
             <a href="/portfolio" class="nav-link {{ request()->is('portfolio') ? 'active' : '' }}">Portfolio</a>
@@ -1325,7 +1355,6 @@
         </nav>
 
         <div class="header-cta">
-            <a href="{{ $tenantDemoUrl }}" class="btn-cta btn-cta-ghost">Live Demo ↗</a>
             <a href="/contact" class="btn-cta btn-cta-primary">
                 <i data-lucide="rocket"></i> Get Started
             </a>
@@ -1343,10 +1372,16 @@
     <a href="/about" class="mobile-nav-link {{ request()->is('about') ? 'active' : '' }}"><i data-lucide="info"></i> About</a>
     <div class="mobile-section-label">Services</div>
     <a href="/services/web-development" class="mobile-sub-link"><i data-lucide="globe"></i> Web Development</a>
+    <a href="/services/e-commerce" class="mobile-sub-link"><i data-lucide="shopping-cart"></i> E-Commerce</a>
     <a href="/services/android-apps" class="mobile-sub-link"><i data-lucide="smartphone"></i> Android Apps</a>
+    <a href="/services/cross-platform-mobile" class="mobile-sub-link"><i data-lucide="tablet-smartphone"></i> Cross-Platform Mobile</a>
     <a href="/services/ai-automation" class="mobile-sub-link"><i data-lucide="bot"></i> AI & Automation</a>
     <a href="/services/it-consulting" class="mobile-sub-link"><i data-lucide="briefcase"></i> IT Consulting</a>
-    <a href="/services/tenant-management" class="mobile-sub-link"><i data-lucide="building-2"></i> Tenant Management</a>
+    <a href="/services/custom-software" class="mobile-sub-link"><i data-lucide="zap"></i> Custom Software</a>
+    <a href="/services/real-estate-technology" class="mobile-sub-link"><i data-lucide="building-2"></i> Real Estate Technology</a>
+    <a href="/services/api-integration" class="mobile-sub-link"><i data-lucide="plug"></i> API & Systems Integration</a>
+    <a href="/services/cloud-maintenance" class="mobile-sub-link"><i data-lucide="cloud"></i> Deployment & Maintenance</a>
+    <a href="/services/ui-ux-design" class="mobile-sub-link"><i data-lucide="pen-tool"></i> UI/UX Design</a>
     <a href="/services" class="mobile-nav-link"><i data-lucide="layers"></i> All Services</a>
     <div class="mobile-divider"></div>
     <a href="/products" class="mobile-nav-link {{ request()->is('products') ? 'active' : '' }}"><i data-lucide="package"></i> Products</a>
@@ -1364,7 +1399,7 @@
     <div class="footer-top">
         <div>
             <p class="footer-brand-name">Starmax</p>
-            <p class="footer-tagline">Building modern digital experiences for property teams, enterprises, and mobile-first audiences across East Africa.</p>
+            <p class="footer-tagline">Building practical digital solutions that help businesses connect with customers, simplify operations, and grow.</p>
             <div class="footer-socials">
                 <a href="#" class="social-btn" aria-label="Twitter/X"><i data-lucide="twitter"></i></a>
                 <a href="#" class="social-btn" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
@@ -1387,7 +1422,7 @@
                 <li><a href="/services/web-development">Web Development</a></li>
                 <li><a href="/services/android-apps">Android Apps</a></li>
                 <li><a href="/services/ai-automation">AI Agents</a></li>
-                <li><a href="/services/tenant-management">Tenant Management</a></li>
+                <li><a href="/services/custom-software">Custom Software</a></li>
                 <li><a href="/services/it-consulting">IT Consulting</a></li>
             </ul>
         </div>
@@ -1395,7 +1430,7 @@
             <p class="footer-heading">Get In Touch</p>
             <ul class="footer-links">
                 <li><a href="mailto:info@starmaxltd.com">info@starmaxltd.com</a></li>
-                <li><a href="tel:+254700123456">+254 700 123 456</a></li>
+                <li><a href="tel:+254790925248">+254 790 925 248</a></li>
                 <li>Nairobi, Kenya</li>
                 <li style="margin-top:16px;"><a href="/contact" class="footer-primary-link">Start a project <i data-lucide="arrow-right"></i></a></li>
             </ul>
@@ -1414,6 +1449,53 @@
     window.addEventListener('scroll', function() {
         header.classList.toggle('scrolled', window.scrollY > 24);
     }, { passive: true });
+
+    const navItems = [...document.querySelectorAll('.main-nav .nav-item')];
+    function setMenuOpen(item, open) {
+        item.classList.toggle('open', open);
+        item.querySelector('button').setAttribute('aria-expanded', String(open));
+    }
+    function closeMenus(except) {
+        navItems.forEach(item => { if (item !== except) setMenuOpen(item, false); });
+    }
+    navItems.forEach(item => {
+        const button = item.querySelector('button');
+        const panel = item.querySelector('.mega-menu');
+        const open = () => { closeMenus(item); setMenuOpen(item, true); };
+        button.addEventListener('click', () => {
+            const wasOpen = item.classList.contains('open');
+            closeMenus();
+            if (!wasOpen) open();
+        });
+        item.addEventListener('mouseenter', () => {
+            if (window.matchMedia('(hover: hover)').matches) open();
+        });
+        item.addEventListener('mouseleave', () => {
+            if (!item.contains(document.activeElement)) setMenuOpen(item, false);
+        });
+        item.addEventListener('focusout', event => {
+            if (!item.contains(event.relatedTarget)) setMenuOpen(item, false);
+        });
+        button.addEventListener('keydown', event => {
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                open();
+                panel.querySelector('a').focus();
+            }
+        });
+        item.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                event.preventDefault();
+                setMenuOpen(item, false);
+                button.focus();
+            }
+        });
+        panel.querySelectorAll('a').forEach(link => link.addEventListener('click', () => closeMenus()));
+    });
+    document.addEventListener('click', event => {
+        if (!navItems.some(item => item.contains(event.target))) closeMenus();
+    });
+    window.matchMedia('(max-width:1100px)').addEventListener('change', () => closeMenus());
 
     // Mobile menu
     const toggle = document.getElementById('menu-toggle');
